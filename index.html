@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="ds/classical.scoped.css">
+  <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+    <defs>
+      <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 6c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"></path><path d="M2 12c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"></path><path d="M2 18c1.5-2 3.5-2 5 0s3.5 2 5 0 3.5-2 5 0 3.5 2 5 0"></path></symbol>
+      <symbol id="i-anchor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"></circle><line x1="12" y1="7" x2="12" y2="21"></line><line x1="8" y1="10" x2="16" y2="10"></line><path d="M5 13a7 7 0 0 0 14 0"></path></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"></path></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"></path></symbol>
+      <symbol id="i-crown" viewBox="0 0 24 24"><path d="M3 8l4 4 5-7 5 7 4-4-2 10H5z"></path></symbol>
+      <symbol id="i-book-open" viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1v13c3-1 6-.5 8 1 2-1.5 5-2 8-1V5c-3-1-6-.5-8 1z"></path><line x1="12" y1="6" x2="12" y2="19"></line></symbol>
+      <symbol id="i-landmark" viewBox="0 0 24 24"><line x1="4" y1="21" x2="20" y2="21"></line><path d="M5 21V10"></path><path d="M9 21V10"></path><path d="M15 21V10"></path><path d="M19 21V10"></path><path d="M3 10l9-6 9 6"></path></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"></circle><path d="M3 20c0-3.5 2.5-6 6-6s6 2.5 6 6"></path><circle cx="17" cy="9" r="2.5"></circle><path d="M15.5 14c2.5.3 4.5 2.5 4.5 6"></path></symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24"><line x1="5" y1="3" x2="5" y2="21"></line><path d="M5 4h11l-3 4 3 4H5z"></path></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path><path d="M3 17l9 5 9-5"></path></symbol>
+      <symbol id="i-gem" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z"></path><path d="M2 9h20"></path></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"></path><path d="M6 10v10h12V10"></path></symbol>
+      <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15 9l-2 6-6 2 2-6z"></path></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"></path></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"></polyline></symbol>
+      <symbol id="i-chevron-left" viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"></polyline></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.5 2.5 4 5.5 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.5-4-9s1.5-6.5 4-9z"></path></symbol>
+    </defs>
+  </svg>
+  <style>
+    html,body{margin:0;}
+    @keyframes silSway{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-6px) rotate(.6deg);}}
+    @keyframes scanSweep{0%{transform:translateX(-140%);}100%{transform:translateX(140%);}}
+    @keyframes glowPulse{0%,100%{opacity:.28;}50%{opacity:.55;}}
+    .era-fig{position:relative;width:120px;height:190px;margin:0 auto;flex:none;}
+    .era-fig .head{position:absolute;left:50%;top:0;width:48px;height:48px;border-radius:50%;transform:translateX(-50%);animation:silSway 4.5s ease-in-out infinite;}
+    .era-fig .body{position:absolute;left:50%;top:44px;width:88px;height:130px;transform:translateX(-50%);animation:silSway 4.5s ease-in-out infinite;animation-delay:.15s;}
+    .era-fig .sweep-wrap{position:absolute;inset:0;overflow:hidden;}
+    .era-fig .sweep{position:absolute;top:0;bottom:0;width:36%;animation:scanSweep 3.4s ease-in-out infinite;}
+    .era-bg-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:glowPulse 5s ease-in-out infinite;}
+    .era-bg-icon svg{width:220px;height:220px;}
+    .lm-icon-btn{cursor:pointer;border:none;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;background:none;font-family:inherit;}
+    .lm-icon-circle{display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;transition:transform .18s ease;}
+    .lm-icon-btn:hover .lm-icon-circle{transform:scale(1.08);}
+    .era-node[data-active="true"]{background:var(--color-accent);border-color:var(--color-accent);color:var(--color-bg);transform:scale(1.12);box-shadow:0 0 0 6px color-mix(in srgb, var(--color-accent) 16%, transparent);}
+    .lm-icon-btn:hover .era-node{transform:scale(1.08);}
+    .lm-icon-btn:hover .era-node[data-active="true"]{transform:scale(1.16);}
+  </style>
+</helmet>
+
+<div class="ds-classical" dir="{{ dir }}" lang="{{ lang }}" style="min-height:100vh;">
+
+  <x-import component-from-global-scope="image-slot" from="./image-slot.js" hint-size="1,1" style="position:absolute;width:0;height:0;overflow:hidden;"></x-import>
+
+  <nav class="nav">
+    <div class="nav-brand">{{ t.brand }}</div>
+    <sc-for list="{{ nav }}" as="item" hint-placeholder-count="6">
+      <a href="{{ item.href }}">{{ item.label }}</a>
+    </sc-for>
+    <button class="btn btn-secondary" onClick="{{ toggleLang }}" style="display:flex;align-items:center;gap:6px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><use href="#i-globe"></use></svg>{{ langBtn }}
+    </button>
+  </nav>
+
+  <header id="home" style="padding:var(--space-8) var(--space-8) var(--space-6);text-align:center;">
+    <div class="tag tag-outline" style="margin-bottom:var(--space-3);">{{ t.heroKicker }}</div>
+    <h1 style="font-size:60px;max-width:860px;margin:0 auto var(--space-3);">{{ t.heroTitle }}</h1>
+    <p style="max-width:680px;margin:0 auto var(--space-6);font-size:17px;opacity:.85;">{{ t.heroSubtitle }}</p>
+    <div style="display:flex;justify-content:center;gap:var(--space-8);border-top:1px solid var(--color-divider);padding-top:var(--space-4);max-width:720px;margin:0 auto;">
+      <sc-for list="{{ stats }}" as="item" hint-placeholder-count="4">
+        <div>
+          <div style="font-family:var(--font-heading);font-size:32px;font-weight:600;color:var(--color-accent-700);">{{ item.n }}</div>
+          <div style="font-size:13px;opacity:.65;">{{ item.l }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </header>
+
+  <hr class="hr" style="margin-inline:var(--space-8);">
+
+  <section id="landmarks" style="padding:var(--space-8);">
+    <div class="tag tag-accent" style="margin-bottom:var(--space-2);">{{ t.landmarksKicker }}</div>
+    <h2>{{ t.landmarksTitle }}</h2>
+    <p class="text-muted" style="max-width:600px;">{{ t.landmarksSub }}</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);margin-top:var(--space-6);">
+      <sc-for list="{{ landmarks }}" as="item" hint-placeholder-count="12">
+        <button class="lm-icon-btn" onClick="{{ openL }}" data-id="{{ item.id }}" style="padding:var(--space-4);border:1px solid var(--color-divider);border-radius:var(--radius-md);">
+          <div style="width:80px;height:80px;border-radius:50%;overflow:hidden;border:1.5px solid var(--color-accent);">
+            <image-slot id="{{ item.slotId }}" shape="circle" placeholder="{{ item.name }}"></image-slot>
+          </div>
+          <div class="card-title" style="font-size:14px;">{{ item.name }}</div>
+          <div class="card-meta">{{ item.cat }}</div>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <sc-if value="{{ openLandmark }}" hint-placeholder-val="{{ false }}">
+    <div class="dialog-backdrop" onClick="{{ closeL }}">
+      <div class="dialog" onClick="{{ stop }}">
+        <div style="width:100%;height:180px;border-radius:var(--radius-md);overflow:hidden;margin-bottom:var(--space-3);">
+          <image-slot id="{{ openLandmark.dialogSlotId }}" shape="rect" placeholder="{{ openLandmark.name }}"></image-slot>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div>
+            <div class="dialog-title">{{ openLandmark.name }}</div>
+            <div class="tag tag-outline">{{ openLandmark.cat }}</div>
+          </div>
+        </div>
+        <p class="dialog-body">{{ openLandmark.desc }}</p>
+        <div class="dialog-actions">
+          <button class="btn btn-secondary" onClick="{{ closeL }}">{{ t.close }}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <hr class="hr" style="margin-inline:var(--space-8);">
+
+  <section id="timeline" style="padding:var(--space-8);">
+    <div class="tag tag-accent" style="margin-bottom:var(--space-2);">{{ t.timelineKicker }}</div>
+    <h2>{{ t.timelineTitle }}</h2>
+    <p class="text-muted" style="max-width:600px;">{{ t.timelineSub }}</p>
+
+    <div style="position:relative;padding:var(--space-6) 0 var(--space-2);margin-top:var(--space-2);overflow-x:auto;">
+      <div style="position:absolute;top:48px;left:var(--space-6);right:var(--space-6);height:2px;background:var(--color-divider);"></div>
+      <div style="display:flex;gap:2px;position:relative;min-width:max-content;padding:0 var(--space-2);">
+        <sc-for list="{{ eras }}" as="item" hint-placeholder-count="9">
+          <button class="lm-icon-btn" onClick="{{ setEra }}" data-idx="{{ item.$index }}" style="flex:none;width:108px;">
+            <div class="era-node" data-active="{{ item.active }}" style="width:64px;height:64px;border-radius:50%;overflow:hidden;border:2px solid var(--color-accent);background:{{ item.grad }};display:flex;align-items:center;justify-content:center;transition:all .2s ease;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px;opacity:.92;"><use href="#i-{{ item.icon }}"></use></svg>
+            </div>
+            <div style="font-size:10px;opacity:.55;margin-top:6px;">{{ item.year }}</div>
+            <div class="card-title" style="font-size:12px;line-height:1.25;">{{ item.title }}</div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:var(--space-6);align-items:start;background:var(--color-surface);border:1px solid var(--color-divider);border-radius:var(--radius-lg);padding:var(--space-6);margin-top:var(--space-4);">
+      <div style="width:220px;height:280px;border-radius:var(--radius-lg);overflow:hidden;position:relative;flex:none;">
+        <sc-if value="{{ activeEra.hasImg }}" hint-placeholder-val="{{ false }}">
+          <image-slot id="{{ activeEra.slotId }}" shape="rect" placeholder="{{ activeEra.title }}"></image-slot>
+        </sc-if>
+        <sc-if value="{{ activeEra.noImg }}" hint-placeholder-val="{{ true }}">
+          <div style="width:100%;height:100%;background:{{ activeEra.grad }};position:relative;">
+            <div class="era-bg-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-{{ activeEra.icon }}"></use></svg>
+            </div>
+          </div>
+        </sc-if>
+        <div style="position:absolute;top:10px;left:10px;width:34px;height:34px;border-radius:50%;background:color-mix(in srgb, var(--color-bg) 80%, transparent);display:flex;align-items:center;justify-content:center;color:var(--color-accent-700);pointer-events:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><use href="#i-{{ activeEra.icon }}"></use></svg>
+        </div>
+      </div>
+      <div>
+        <div class="card-meta" style="margin-bottom:6px;">{{ t.eraLabel }} {{ activeEra.index }}/{{ activeEra.total }} · {{ activeEra.year }}</div>
+        <h3>{{ activeEra.title }}</h3>
+        <p style="font-size:14.5px;opacity:.85;">{{ activeEra.desc }}</p>
+        <div style="display:flex;gap:var(--space-2);align-items:center;">
+          <div style="margin-inline-start:auto;display:flex;gap:6px;">
+            <button class="btn btn-icon btn-secondary" onClick="{{ prevEra }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><use href="#i-chevron-right"></use></svg></button>
+            <button class="btn btn-icon btn-secondary" onClick="{{ nextEra }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><use href="#i-chevron-left"></use></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ isKhalifaEra }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:var(--space-6);">
+        <div class="card-meta" style="margin-bottom:var(--space-2);">{{ rulersLabel }}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <sc-for list="{{ rulers }}" as="item" hint-placeholder-count="14">
+            <button class="lm-icon-btn" onClick="{{ openR }}" data-id="{{ item.id }}" style="width:84px;">
+              <div class="lm-icon-circle" style="width:44px;height:44px;position:relative;overflow:hidden;border:1.5px solid var(--color-accent);color:var(--color-accent-700);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><use href="#i-{{ item.icon }}"></use></svg>
+                <sc-if value="{{ item.hasImg }}" hint-placeholder-val="{{ false }}">
+                  <img src="uploads/201378.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                </sc-if>
+                <sc-if value="{{ item.hasKingImg }}" hint-placeholder-val="{{ false }}">
+                  <img src="uploads/OIP (2).webp" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                </sc-if>
+                <sc-if value="{{ item.hasIsa2Img }}" hint-placeholder-val="{{ false }}">
+                  <img src="uploads/OIP (3).webp" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                </sc-if>
+                <sc-if value="{{ item.hasSalman2Img }}" hint-placeholder-val="{{ false }}">
+                  <img src="uploads/b24564bdda93b3c5e69d24e502ae93b1.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                </sc-if>
+                <sc-if value="{{ item.hasHamad1Img }}" hint-placeholder-val="{{ false }}">
+                  <img src="uploads/Hamad_bin_Isa_Al_Khalifa_(1872-1942).png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                </sc-if>
+                <sc-if value="{{ item.hasIsa1Img }}" hint-placeholder-val="{{ false }}">
+                  <img src="uploads/OIP (4).webp" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+                </sc-if>
+              </div>
+              <div class="card-meta" style="font-size:10px;line-height:1.3;">{{ item.name }}</div>
+            </button>
+          </sc-for>
+        </div>
+        <div class="card-meta" style="margin:var(--space-4) 0 var(--space-2);">{{ battlesLabel }}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <sc-for list="{{ battles }}" as="item" hint-placeholder-count="13">
+            <button class="lm-icon-btn" onClick="{{ openB }}" data-id="{{ item.id }}" style="width:84px;">
+              <div class="lm-icon-circle" style="width:44px;height:44px;overflow:hidden;border:1.5px solid var(--color-accent-2);">
+                <img src="uploads/1842e56583e36b1debef3e1f900f57f2.jpg" style="width:100%;height:100%;object-fit:cover;">
+              </div>
+              <div class="card-meta" style="font-size:10px;line-height:1.3;">{{ item.name }}</div>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ openRuler }}" hint-placeholder-val="{{ false }}">
+      <div class="dialog-backdrop" onClick="{{ closeR }}">
+        <div class="dialog" onClick="{{ stop }}">
+          <sc-if value="{{ openRuler.hasImg }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;height:160px;border-radius:var(--radius-md);overflow:hidden;">
+              <img src="uploads/201378.jpg" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </sc-if>
+          <sc-if value="{{ openRuler.hasKingImg }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;height:160px;border-radius:var(--radius-md);overflow:hidden;">
+              <img src="uploads/OIP (2).webp" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </sc-if>
+          <sc-if value="{{ openRuler.hasIsa2Img }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;height:160px;border-radius:var(--radius-md);overflow:hidden;">
+              <img src="uploads/OIP (3).webp" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </sc-if>
+          <sc-if value="{{ openRuler.hasSalman2Img }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;height:160px;border-radius:var(--radius-md);overflow:hidden;">
+              <img src="uploads/b24564bdda93b3c5e69d24e502ae93b1.jpg" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </sc-if>
+          <sc-if value="{{ openRuler.hasHamad1Img }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;height:160px;border-radius:var(--radius-md);overflow:hidden;">
+              <img src="uploads/Hamad_bin_Isa_Al_Khalifa_(1872-1942).png" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </sc-if>
+          <sc-if value="{{ openRuler.hasIsa1Img }}" hint-placeholder-val="{{ false }}">
+            <div style="width:100%;height:160px;border-radius:var(--radius-md);overflow:hidden;">
+              <img src="uploads/OIP (4).webp" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </sc-if>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="lm-icon-circle" style="width:44px;height:44px;position:relative;overflow:hidden;border:1.5px solid var(--color-accent);color:var(--color-accent-700);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><use href="#i-{{ openRuler.icon }}"></use></svg>
+            </div>
+            <div>
+              <div class="dialog-title">{{ openRuler.name }}</div>
+              <div class="tag tag-outline">{{ openRuler.period }}</div>
+            </div>
+          </div>
+          <p class="dialog-body">{{ openRuler.desc }}</p>
+          <div class="dialog-actions"><button class="btn btn-secondary" onClick="{{ closeR }}">{{ t.close }}</button></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ openBattle }}" hint-placeholder-val="{{ false }}">
+      <div class="dialog-backdrop" onClick="{{ closeB }}">
+        <div class="dialog" onClick="{{ stop }}">
+          <div style="width:100%;height:160px;border-radius:var(--radius-md);overflow:hidden;">
+            <img src="uploads/1842e56583e36b1debef3e1f900f57f2.jpg" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div>
+              <div class="dialog-title">{{ openBattle.name }}</div>
+              <div class="tag tag-outline">{{ openBattle.year }}</div>
+            </div>
+          </div>
+          <p class="dialog-body">{{ openBattle.desc }}</p>
+          <div class="dialog-actions"><button class="btn btn-secondary" onClick="{{ closeB }}">{{ t.close }}</button></div>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+
+  <hr class="hr" style="margin-inline:var(--space-8);">
+
+  <section id="library" style="padding:var(--space-8);">
+    <div class="tag tag-accent-2" style="margin-bottom:var(--space-2);">{{ t.libraryKicker }}</div>
+    <h3>{{ t.libraryTitle }}</h3>
+    <p class="text-muted" style="max-width:600px;">{{ manuscriptsLabel }}</p>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-4);margin:var(--space-4) 0 var(--space-6);">
+      <sc-for list="{{ manuscripts }}" as="item" hint-placeholder-count="10">
+        <button class="lm-icon-btn" onClick="{{ openM }}" data-id="{{ item.id }}" style="padding:var(--space-3);border:1px solid var(--color-divider);border-radius:var(--radius-md);">
+          <div style="width:64px;height:64px;border-radius:50%;overflow:hidden;border:1.5px solid var(--color-accent-2);">
+            <sc-if value="{{ item.noImg }}" hint-placeholder-val="{{ true }}">
+              <image-slot id="{{ item.slotId }}" shape="circle" placeholder="{{ item.title }}"></image-slot>
+            </sc-if>
+            <sc-if value="{{ item.isMs1 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/PHOTO-2024-06-23-01-48-05.jpg" style="width:100%;height:100%;object-fit:cover;">
+            </sc-if>
+            <sc-if value="{{ item.isMs2 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/PHOTO-2024-06-23-01-48-15.jpg" style="width:100%;height:100%;object-fit:cover;">
+            </sc-if>
+            <sc-if value="{{ item.isMs3 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/الزبدة 3.png" style="width:100%;height:100%;object-fit:cover;">
+            </sc-if>
+            <sc-if value="{{ item.isMs4 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/EaRKXBuXsAEaEmb.jpg" style="width:100%;height:100%;object-fit:cover;">
+            </sc-if>
+            <sc-if value="{{ item.isMs5 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/وثيقة مهة.jfif" style="width:100%;height:100%;object-fit:cover;">
+            </sc-if>
+          </div>
+          <div class="card-title" style="font-size:12px;text-align:center;">{{ item.title }}</div>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);">
+      <div>
+        <div class="tag tag-accent-2" style="margin-bottom:var(--space-2);">{{ t.libraryKicker }}</div>
+        <h4 style="margin:0 0 var(--space-2);">{{ t.libraryTitle }}</h4>
+        <ul style="padding-inline-start:18px;font-size:14px;opacity:.85;margin:var(--space-2) 0;">
+          <sc-for list="{{ t.libraryItems }}" as="item" hint-placeholder-count="4">
+            <li style="margin-bottom:6px;">{{ item }}</li>
+          </sc-for>
+        </ul>
+      </div>
+      <div>
+        <div class="tag tag-accent-2" style="margin-bottom:var(--space-2);">{{ t.eventsKicker }}</div>
+        <h3>{{ t.eventsTitle }}</h3>
+        <div class="card elev-sm">
+          <div class="card-meta">{{ t.eventDate }}</div>
+          <div class="card-title">{{ t.eventName }}</div>
+          <p class="card-body">{{ t.eventDesc }}</p>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ openManuscript }}" hint-placeholder-val="{{ false }}">
+      <div class="dialog-backdrop" onClick="{{ closeM }}">
+        <div class="dialog" onClick="{{ stop }}">
+          <div style="width:100%;height:260px;border-radius:var(--radius-md);overflow:hidden;margin-bottom:var(--space-3);">
+            <sc-if value="{{ openManuscript.noImg }}" hint-placeholder-val="{{ true }}">
+              <image-slot id="{{ openManuscript.docSlotId }}" shape="rect" placeholder="{{ openManuscript.title }}"></image-slot>
+            </sc-if>
+            <sc-if value="{{ openManuscript.isMs1 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/PHOTO-2024-06-23-01-48-05.jpg" style="width:100%;height:100%;object-fit:contain;background:var(--color-surface);">
+            </sc-if>
+            <sc-if value="{{ openManuscript.isMs2 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/PHOTO-2024-06-23-01-48-15.jpg" style="width:100%;height:100%;object-fit:contain;background:var(--color-surface);">
+            </sc-if>
+            <sc-if value="{{ openManuscript.isMs3 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/الزبدة 3.png" style="width:100%;height:100%;object-fit:contain;background:var(--color-surface);">
+            </sc-if>
+            <sc-if value="{{ openManuscript.isMs4 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/EaRKXBuXsAEaEmb.jpg" style="width:100%;height:100%;object-fit:contain;background:var(--color-surface);">
+            </sc-if>
+            <sc-if value="{{ openManuscript.isMs5 }}" hint-placeholder-val="{{ false }}">
+              <img src="uploads/وثيقة مهة.jfif" style="width:100%;height:100%;object-fit:contain;background:var(--color-surface);">
+            </sc-if>
+          </div>
+          <div class="dialog-title">{{ openManuscript.title }}</div>
+          <p class="dialog-body">{{ openManuscript.meta }}</p>
+          <div class="dialog-actions"><button class="btn btn-secondary" onClick="{{ closeM }}">{{ t.close }}</button></div>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+
+  <hr class="hr" style="margin-inline:var(--space-8);">
+
+  <section id="theses" style="padding:var(--space-8);">
+    <div class="tag tag-accent-2" style="margin-bottom:var(--space-2);">{{ t.thesesKicker }}</div>
+    <h2>{{ t.thesesTitle }}</h2>
+    <p class="text-muted" style="max-width:680px;">{{ t.thesesSub }}</p>
+
+    <input type="text" placeholder="{{ t.thesesSearchPh }}" onInput="{{ setThesesQuery }}"
+      style="width:100%;max-width:520px;margin:var(--space-4) 0;padding:10px 14px;border:1px solid var(--color-divider);border-radius:var(--radius-md);font:inherit;background:var(--color-bg);color:inherit;">
+
+    <p class="text-muted" style="font-size:13px;margin-bottom:var(--space-4);">{{ thesesResultsLabel }}</p>
+
+    <sc-if value="{{ thesesEmpty }}" hint-placeholder-val="{{ false }}">
+      <p class="text-muted">{{ t.thesesNoResults }}</p>
+    </sc-if>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);">
+      <sc-for list="{{ filteredTheses }}" as="item" hint-placeholder-count="6">
+        <div class="card elev-sm" style="padding:var(--space-4);">
+          <div class="card-title" style="font-size:15px;line-height:1.5;">{{ item.title }}</div>
+          <sc-if value="{{ item.titleEn }}" hint-placeholder-val="{{ false }}">
+            <div class="card-meta" style="font-style:italic;margin-top:2px;">{{ item.titleEn }}</div>
+          </sc-if>
+          <div class="card-meta" style="margin-top:8px;">{{ t.thesesResearcher }}: {{ item.researcher }}</div>
+          <div class="card-meta">{{ item.degreeYear }}</div>
+          <a href="{{ item.url }}" target="_blank" rel="noopener" class="tag tag-outline" style="display:inline-block;margin-top:8px;text-decoration:none;">{{ t.thesesViewSource }}</a>
+        </div>
+      </sc-for>
+    </div>
+
+    <p class="text-muted" style="font-size:12px;margin-top:var(--space-6);">
+      {{ t.thesesSourceNote }} <a href="{{ thesesSourceUrl }}" target="_blank" rel="noopener">{{ t.thesesSourceLinkLabel }}</a>.
+    </p>
+
+    <div style="margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--color-divider);display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);">
+      <div>
+        <div class="tag tag-accent-2" style="margin-bottom:var(--space-2);">{{ t.thesesHowKicker }}</div>
+        <p style="font-size:14px;opacity:.85;">{{ t.thesesHowAr }}</p>
+      </div>
+      <div>
+        <div class="tag tag-accent-2" style="margin-bottom:var(--space-2);">{{ t.thesesHowIntlTitle }}</div>
+        <ul style="padding-inline-start:18px;font-size:14px;opacity:.85;margin:var(--space-2) 0;">
+          <li style="margin-bottom:8px;">{{ t.thesesHowUK }} — <a href="https://ethos.bl.uk/Home.do" target="_blank" rel="noopener">ethos.bl.uk</a></li>
+          <li>{{ t.thesesHowUS }} — <a href="https://www.proquest.com/en-US/products/dissertations/disexpress.shtml" target="_blank" rel="noopener">proquest.com</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin-inline:var(--space-8);">
+
+  <section id="about" style="padding:var(--space-8);background:var(--color-surface);">
+    <div class="tag tag-accent" style="margin-bottom:var(--space-2);">{{ t.aboutKicker }}</div>
+    <h2>{{ t.aboutTitle }}</h2>
+    <p style="max-width:680px;font-size:15px;opacity:.85;">{{ t.aboutText }}</p>
+    <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-4);">
+      <sc-for list="{{ t.goals }}" as="item" hint-placeholder-count="4">
+        <span class="tag tag-outline">{{ item }}</span>
+      </sc-for>
+    </div>
+    <p class="text-muted" style="margin-top:var(--space-6);font-size:13px;">{{ aboutCredit }}</p>
+  </section>
+
+  <section id="contact" style="padding:var(--space-8);max-width:520px;">
+    <div class="tag tag-accent" style="margin-bottom:var(--space-2);">{{ t.contactKicker }}</div>
+    <h3>{{ t.contactTitle }}</h3>
+    <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-3);">
+      <div class="field"><input class="input" id="contactName" placeholder="{{ t.namePh }}"></div>
+      <div class="field"><input class="input" id="contactEmail" placeholder="{{ t.emailPh }}"></div>
+      <div class="field"><textarea class="input" id="contactMsg" placeholder="{{ t.msgPh }}"></textarea></div>
+      <button class="btn btn-primary btn-block" onClick="{{ sendMessage }}">{{ t.send }}</button>
+    </div>
+  </section>
+
+  <footer style="padding:var(--space-6) var(--space-8);border-top:1px solid var(--color-divider);display:flex;justify-content:space-between;align-items:center;">
+    <div class="text-muted" style="font-size:12px;max-width:480px;">{{ t.footerText }}</div>
+    <div style="font-size:12px;opacity:.6;">{{ t.footerRights }}</div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;aboutCredit&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;إعداد الدكتور أحمد بن عبدالرحمن العسيري — الأستاذ المشارك بجامعة البحرين، كلية محمد بن جابر الأنصاري&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;About&quot;},&quot;aboutCreditEn&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Prepared by Dr. Ahmed bin Abdulrahman Alaseeri — Associate Professor, University of Bahrain, Mohammed bin Jaber Al-Ansari College&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;About&quot;}}">
+const ERA_HAS_IMG = { dilmun:true, khalifa:true };
+
+const ERAS = [
+  {id:'dilmun', icon:'waves', grad:'linear-gradient(135deg,#8a6428,#c99a4a)', yearAr:'٣٠٠٠–٦٠٠ ق.م', yearEn:'3000–600 BCE',
+   tAr:'دلمون', tEn:'Dilmun',
+   dAr:'شكّلت جزر أوال قلب حضارة دلمون، إحدى أقدم الحضارات التجارية في العالم، حيث ازدهرت كمحطة وسيطة تربط بلاد الرافدين بوادي السند عبر الخليج. وصفتها الألواح السومرية بأرض الخلود، وارتبطت في ملحمة جلجامش بالفردوس الذي يسكنه أوتنابشتيم الخالد. خلّفت هذه الحقبة آلاف التلال الجنائزية المنتشرة في عالي، من أكبر حقول الدفن القديمة في العالم.',
+   dEn:"Bahrain's islands were the heart of Dilmun, one of the ancient world's great trading civilizations — a way-station linking Mesopotamia to the Indus Valley. Sumerian tablets called it the 'land of the living', and it appears in the Epic of Gilgamesh as a paradise. Thousands of burial mounds at A'ali survive from this era."},
+  {id:'tylos', icon:'anchor', grad:'linear-gradient(135deg,#2d6a6a,#5aa39c)', yearAr:'٣٠٠ ق.م–٣٠٠ م', yearEn:'300 BCE–300 CE',
+   tAr:'تايلوس', tEn:'Tylos',
+   dAr:'بعد أفول دلمون، عرف الإغريق الجزيرة باسم "تايلوس"، ووثّقها جغرافيون مثل سترابون وبطليموس. ازدهرت في هذه الحقبة الهلنستية والفرثية تجارة اللؤلؤ، التي بقيت عماد اقتصاد أوال لقرون. تعكس مقابر هذا العصر تمازجًا بين التقاليد المحلية والتأثيرات اليونانية والفارسية.',
+   dEn:"After Dilmun's decline, Greek geographers such as Strabo and Ptolemy recorded the island as 'Tylos'. Through the Hellenistic and Parthian periods it prospered on the pearl trade that would anchor Awal's economy for centuries, its tombs blending local and Greco-Persian traditions."},
+  {id:'islamic', icon:'moon', grad:'linear-gradient(135deg,#1f5c3f,#4a9268)', yearAr:'٦٢٨ م', yearEn:'628 CE',
+   tAr:'الفتح الإسلامي', tEn:'Islamic Conquest',
+   dAr:'في السنة السادسة للهجرة، بعث النبي محمد ﷺ برسالة إلى المنذر بن ساوى التميمي، حاكم إقليم البحرين آنذاك، يدعوه إلى الإسلام. استجاب المنذر وأهل البحرين طوعًا دون قتال، لتكون من أوائل الأقاليم التي دخلت الإسلام سلمًا.',
+   dEn:'In the sixth year after the Hijra, the Prophet Muhammad sent word to Al-Mundhir bin Sawa Al-Tamimi, ruler of the Bahrain region, inviting him to Islam. He and his people accepted peacefully — one of the first regions to embrace Islam without conflict.'},
+  {id:'rashidun', icon:'shield', grad:'linear-gradient(135deg,#2c4a6b,#557fab)', yearAr:'١١–٤٠ هـ', yearEn:'632–661 CE',
+   tAr:'الخلفاء الراشدون', tEn:'The Rashidun Caliphs',
+   dAr:'بعد وفاة النبي ﷺ، ارتدّ بعض القبائل عن الإسلام، فأُرسل العلاء بن الحضرمي لإخماد الردة في معركة جواثى الشهيرة. ثبت أهل البحرين على إسلامهم بعدها، وشاركت موانئ الجزيرة في حركة الفتوحات البحرية الأولى نحو فارس والهند.',
+   dEn:"Following the Prophet's death, some tribes wavered during the Ridda wars; Al-Ala' Al-Hadrami restored order at the Battle of Juwatha. Bahrain then held firm to Islam, its ports supporting the earliest naval campaigns toward Persia and India."},
+  {id:'umayyad', icon:'crown', grad:'linear-gradient(135deg,#5b3a63,#8f6299)', yearAr:'٤١–١٣٢ هـ', yearEn:'661–750 CE',
+   tAr:'الدولة الأموية', tEn:'The Umayyad State',
+   dAr:'أُدير إقليم البحرين ضمن ولاية واسعة تابعة للخلافة الأموية، وشهدت الجزيرة استقرارًا نسبيًا انعكس على ازدهار الزراعة والملاحة التجارية عبر موانئها، محافظة على دورها كمحطة عبور تصل البصرة بالهند وشرق أفريقيا.',
+   dEn:"Under Umayyad rule the region was administered within a wider caliphal province. Relative stability supported agriculture and maritime trade, keeping Awal's ports linked to routes from Basra to India and East Africa."},
+  {id:'abbasid', icon:'book-open', grad:'linear-gradient(135deg,#2b2b2e,#57534f)', yearAr:'١٣٢–٤٦٩ هـ', yearEn:'750–1076 CE',
+   tAr:'الدولة العباسية', tEn:'The Abbasid State',
+   dAr:'استمر الإقليم تحت الإدارة العباسية قرونًا، قبل أن تشهد المنطقة عام ٨٩٩م قيام دولة القرامطة التي اتخذت منه قاعدة لها وتحدّت سلطة الخلافة المركزية أكثر من قرن ونصف، في حقبة من أكثر حقب المنطقة اضطرابًا.',
+   dEn:'The region remained under Abbasid administration for centuries until, in 899 CE, the Qarmatian state arose from within it — challenging Abbasid central authority for over a century and a half.'},
+  {id:'uyunid', icon:'landmark', grad:'linear-gradient(135deg,#7d4a2e,#b2764a)', yearAr:'٤٦٩–٦٣٦ هـ', yearEn:'1076–1238 CE',
+   tAr:'الدولة العيونية', tEn:'The Uyunid State',
+   dAr:'عام ١٠٧٦م، أطاح بنو عيون بحكم القرامطة بدعم من الخلافة العباسية وقبائل بني عبد القيس، وأسسوا دولة اتخذت الأحساء عاصمة امتد نفوذها ليشمل أوال. حكمت الدولة العيونية الإقليم قرابة قرنين.',
+   dEn:'In 1076 CE the Uyunid dynasty overthrew Qarmatian rule with Abbasid and tribal backing, founding a state centered on Al-Hasa whose authority extended over Awal for roughly two centuries.'},
+  {id:'awal', icon:'users', grad:'linear-gradient(135deg,#6b5220,#a3803a)', yearAr:'٦٣٦–٩٠٠ هـ تقريبًا', yearEn:'c. 1238–1500 CE',
+   tAr:'تأييد أهل أوال', tEn:"Awal's Local Support",
+   dAr:'بعد أفول الدولة العيونية، تعاقبت على الإقليم إمارات محلية، أبرزها الأسرة العصفورية ثم الجروانية، استمدت شرعيتها من دعم أهل أوال وتحالف القبائل المحلية، محافظة على النسيج الاجتماعي والهوية عبر تعاقب السلطات.',
+   dEn:'After the Uyunid state waned, local emirates rose in succession — chiefly the Usfurid then Jarwanid houses — drawing legitimacy from the backing of Awal\'s own people, preserving the island\'s identity through shifting regional power.'},
+  {id:'khalifa', icon:'flag', grad:'linear-gradient(135deg,#7a2a24,#b0453a)', yearAr:'١١٩٧ هـ / ١٧٨٣ م', yearEn:'1783 CE',
+   tAr:'حكم آل خليفة وفتح البحرين', tEn:'Al Khalifa Rule',
+   dAr:'عام ١٧٨٣م، فتحت قبائل العتوب بقيادة آل خليفة البحرين وأجلت الحكم الفارسي عنها إثر معركة الزبارة، لتبدأ عهدًا استمر حتى اليوم. طوّر آل خليفة أوال تدريجيًا من مركز إقليمي للؤلؤ إلى مملكة البحرين الدستورية المعاصرة.',
+   dEn:'In 1783 CE, the Utub tribes led by Al Khalifa took Bahrain following the Battle of Zubarah, ending Persian rule. Al Khalifa rule gradually developed Awal into the modern constitutional Kingdom of Bahrain.'},
+];
+
+const LANDMARKS = [
+  {id:'khamis', icon:'landmark', nameAr:'مسجد الخميس', nameEn:'Khamis Mosque', catAr:'عمارة إسلامية', catEn:'Islamic architecture',
+   dAr:'من أقدم المساجد في الخليج. تتكرر رواية شائعة تُرجع تأسيسه إلى عام 692م في عهد الخليفة عمر بن عبد العزيز، إلا أن هذا التاريخ يتضارب مع سنوات خلافته الفعلية (99-101هـ / 717-720م). استناداً إلى الدليل الأثري المادي (نقش المنارة المؤرخ 724هـ/1323م، ونقش الوقفية 776هـ/1374م، وطراز المحراب المقارَن بمحراب المسجد النبوي بعد ترميمه 707-709م)، يُرجَّح أن البناء الأول للمسجد يعود لمدى نظري بين 709-800م، تلته طبقات ترميم متعاقبة عبر العصور العباسية والعيونية وما بعدها.',
+   dEn:"Among the Gulf's oldest mosques. A widely repeated claim dates its founding to 692 CE under Caliph Umar ibn Abd al-Aziz, but this conflicts with his actual reign (99-101 AH / 717-720 CE). Based on physical archaeological evidence (a minaret inscription dated 724 AH/1323 CE, a waqf inscription dated 776 AH/1374 CE, and a mihrab style comparable to the Prophet's Mosque after its 707-709 CE renovation), the first structure likely dates to a theoretical range of 709-800 CE, followed by successive restoration layers through the Abbasid, Uyunid and later periods."},
+  {id:'fort', icon:'shield', nameAr:'قلعة البحرين', nameEn:'Bahrain Fort', catAr:'تراث عالمي (يونسكو)', catEn:'UNESCO World Heritage',
+   dAr:'مدرجة في قائمة اليونسكو للتراث العالمي، تقوم فوق تل أثري يضم طبقات استيطان متعاقبة من دلمون وتايلوس والعصرين الإسلامي والبرتغالي — سجل متكامل لتاريخ أوال.',
+   dEn:'A UNESCO World Heritage Site atop a tell holding layers from Dilmun, Tylos, the Islamic era and the Portuguese period — a compact record of Awal\'s whole history.'},
+  {id:'mounds', icon:'layers', nameAr:'تلال عالي الجنائزية', nameEn:"A'ali Burial Mounds", catAr:'أثري دلموني', catEn:'Dilmun archaeology',
+   dAr:'من أكبر حقول الدفن ما قبل الإسلام في العالم، تضم آلاف التلال الحجرية التي شُيّدت خلال الألفية الثانية قبل الميلاد، وتوفر أدلة مادية مباشرة على حضارة دلمون.',
+   dEn:'One of the largest pre-Islamic burial fields on earth, with thousands of stone mounds raised during the second millennium BCE — direct evidence of Dilmun civilization.'},
+  {id:'quran', icon:'book-open', nameAr:'بيت القرآن', nameEn:'Bait Al Quran', catAr:'تراث مخطوط', catEn:'Manuscript heritage',
+   dAr:'متحف ومكتبة متخصصة تضم مجموعة نادرة من المخطوطات القرآنية عبر العصور الإسلامية، ومرجع أساسي لدراسة تاريخ الخط والتدوين في المنطقة.',
+   dEn:"A museum and library holding a rare collection of Qur'anic manuscripts across the Islamic centuries — a key reference for the region's calligraphy history."},
+  {id:'pearl', icon:'gem', nameAr:'مركز زوار مسار اللؤلؤ', nameEn:'Pearling Path Visitor Center', catAr:'متاحف، آثار وتراث — المحرق', catEn:'Museum & heritage — Muharraq',
+   dAr:'يقع مركز الزوار الرئيسي لمسار اللؤلؤ (تراث عالمي مسجَّل لدى اليونسكو) في قلب المحرق بين شارع ١٠ وشارع التجار، صمّمه فاليريو أولجياتي ويضمّ أطلال عمارة يوسف علي فخرو التاريخية (ثلاثينات القرن العشرين) إلى جانب عمارة الدوي وتوسعتها. يخدم المركز كمساحة مجتمعية بمعارض وورش للأطفال وأرشيف لتراث اللؤلؤ ومكتبة ومرافق مؤتمرات، تحت سقف موحّد تلطّفه ١٥ برجًا هوائيًا محمولة على أعمدة نحيلة تتباين مع الأطلال الأثرية. أوقات الزيارة: ١٠ صباحًا–٦ مساءً (مغلق أيام الأحد). المصدر: هيئة البحرين للثقافة والآثار.',
+   dEn:"The Pearling Path's main visitor center sits in the heart of Muharraq between Road 10 and Al-Tujjar Street, designed by Valerio Olgiati. It incorporates the historic ruins of the 1930s Yousif Ali Fakhro house alongside the Dowai house and its extension. The center serves as a community space with exhibition areas, children's workshops, a pearling-heritage archive, a library and conference facilities, all under one roof cooled by 15 wind towers carried on slender columns that contrast with the ancient ruins. Hours: 10am–6pm (closed Sundays). Source: Bahrain Authority for Culture & Antiquities."},
+  {id:'isahouse', icon:'home', nameAr:'بيت الشيخ عيسى بن علي', nameEn:'Sheikh Isa bin Ali House', catAr:'عمارة تقليدية', catEn:'Traditional architecture',
+   dAr:'مقر الحكم في المحرق أواخر القرن التاسع عشر، يُظهر نموذجًا رفيعًا للعمارة الخليجية التقليدية بعناصره الزخرفية ونظام البراجيل، ويعكس حياة البلاط في عهد آل خليفة.',
+   dEn:'The seat of rule in Muharraq in the late 19th century, showcasing traditional Gulf architecture and wind-tower cooling — a window onto court life under Al Khalifa.'},
+  {id:'arad', icon:'compass', nameAr:'قلعة عراد', nameEn:'Arad Fort', catAr:'تحصين دفاعي', catEn:'Defensive fortification',
+   dAr:'قلعة إسلامية مربعة ذات أبراج دائرية، شُيّدت لحماية السواحل الشرقية للجزيرة، وشهدت ترميمات عبر عصور مختلفة تعكس استمرار الدور الدفاعي لأوال.',
+   dEn:"A square Islamic-era fort with round corner towers guarding the island's eastern shore, restored across successive periods."},
+  {id:'ainsujur', icon:'waves', nameAr:'عين أم السجور', nameEn:'Ain Umm Al-Sujur', catAr:'ينبوع دلموني', catEn:'Dilmun spring',
+   dAr:'حجرة مقدسة تحتضن ينبوعَ ماءٍ عذب في قلب مجمع باربار، إذ يُعتَقد أن ذلك التشكيل المعماري قد يعكس صلة مع بلاد ما بين النهرين وآلهة المياه العذبة إنكي. المصدر: هيئة البحرين للثقافة والآثار.',
+   dEn:"A sacred chamber housing a freshwater spring at the heart of the Barbar complex, thought to echo Mesopotamia's freshwater god Enki. Source: Bahrain Authority for Culture & Antiquities."},
+  {id:'barbar', icon:'landmark', nameAr:'مجمع باربار', nameEn:'Barbar Temple', catAr:'معبد دلموني', catEn:'Dilmun temple',
+   dAr:'مجمع يحتضن ثلاثة معابد متعاقبة، بُنيت على خمس مراحل مختلفة يعود تاريخها إلى آلاف السنين قبل الميلاد. معماريًا، شُيّدت على منصات تحيط بفناءٍ جميل. المصدر: هيئة البحرين للثقافة والآثار.',
+   dEn:'A complex holding three successive temples built in five construction phases dating back thousands of years BCE, rising on platforms around a courtyard. Source: Bahrain Authority for Culture & Antiquities.'},
+  {id:'rifaa', icon:'shield', nameAr:'قلعة الشيخ سلمان بن أحمد الفاتح', nameEn:'Sheikh Salman bin Ahmed Al-Fatih Fort', catAr:'آثار وتراث — الرفاع', catEn:'Heritage site — Riffa',
+   dAr:'المعروفة بقلعة الرفاع، تمثّل شاهدًا تاريخيًّا على واحدة من أهمّ المراحل الانتقالية في تاريخ البحرين، وتركيبًا عمرانيًّا جميلاً حمل ذاكرة العائلة الحاكمة. أعادت وزارة الثقافة إحياءها عبر عروض متحفية توثّق سيرة آل خليفة وحكاية المكان، ضمن فضاء صمّمته شركة "لا ميدوز" ومعماريّو PAD. تضم القلعة مقهى زعفران المطلّ على وادي الحنينية. مغلقة حاليًا لأعمال الترميم. المصدر: وزارة شؤون الإعلام - هيئة البحرين للثقافة والآثار.',
+   dEn:'Known as Riffa Fort, it stands as a historic witness to one of Bahrain\'s key transitional periods and a handsome structure carrying the memory of the ruling Al Khalifa family. The Ministry of Culture revived it with museum exhibits narrating the family\'s history, in a space designed by "La Méduse" and PAD architects. The fort hosts Saffron Café overlooking Wadi Al-Haniniya. Currently closed for restoration. Source: Bahrain Authority for Culture & Antiquities.'},
+  {id:'aalisettlement', icon:'layers', nameAr:'مستوطنة عالي الإسلامية المبكرة', nameEn:"A'ali Early Islamic Settlement", catAr:'آثار وتراث', catEn:'Archaeological heritage',
+   dAr:'تل أثري منخفض قرب قرية عالي، نقّبت فيه بعثة يابانية جزئيًا بين ١٩٨٨ و١٩٩٠ فكشفت مستوطنة إسلامية صغيرة مأهولة أساسًا بين أواخر القرن الثامن ومنتصف التاسع الميلادي (العصر العباسي المبكر)، وربما استمرت حتى القرنين الحادي عشر والثاني عشر. تُعدّ أقدم بقايا أثرية للوجود الإسلامي في البحرين المكتشفة حتى الآن، ويُرجَّح أنها كانت مستوطنة مزارعين محليين اعتمدت على التمور والحبوب والماشية. كشفت التنقيبات أسس جدران حجرية بملاط طيني، وبقايا جص، وأفران تنّور، وأرضية "مدبسة" لإنتاج الدبس، إلى جانب فخار وزجاج مستورد من بلاد الرافدين وشظايا خزف صيني. المصدر: هيئة البحرين للثقافة والآثار.',
+   dEn:"A low archaeological mound near A'ali village, partially excavated by a Japanese mission (1988–1990), revealing a small Islamic settlement mainly inhabited from the late 8th to mid-9th century CE (early Abbasid period), possibly continuing into the 11th–12th centuries. It is the oldest Islamic-era archaeological remains found in Bahrain to date, believed to be a local farming settlement based on dates, grain and livestock. Excavations uncovered stone wall foundations, plaster remains, tanoor ovens and a date-syrup production floor, alongside pottery and glass imported from Mesopotamia and Chinese ceramic fragments. Source: Bahrain Authority for Culture & Antiquities."},
+  {id:'janusan', icon:'shield', nameAr:'مدافن تايلوس في موقع جنوسان', nameEn:'Tylos Burial Mounds of Janusan', catAr:'آثار وتراث — جنوسان', catEn:'Archaeological heritage — Janusan',
+   dAr:'تلال ركامية رملية شمال شارع البديع، تضمّ ثلاث مجموعات دفن متميزة يبلغ ارتفاع بعضها أكثر من ١٠ أمتار. نقّبها الرائد سي دالي في عشرينيات القرن الماضي، ثم بعثة فرنسية (١٩٨٠–١٩٨١) اكتشفت محاربًا بدرع حديدي وأسلحته، تعود لمرحلة مبكرة من تايلوس (القرنان الثالث والثاني ق.م). كما نُقّبت مقبرة أطفال فريدة من فترة دلمون المتأخرة (٦٠٠–٥٠٠ ق.م) تشبه اكتشافات بابل وأور، وعُثر على تاج حجري بطراز بارثي يُرجَّح أنه من معبد تايلوسي قديم. يعود ارتفاع التلال غير المعتاد لتراكم رملي من فترة دلمون المبكرة (٢٠٠٠ ق.م) استُخدم لاحقًا لإقامة مدافن تايلوس المتعاقبة. المصدر: هيئة البحرين للثقافة والآثار.',
+   dEn:"Sandy tumulus mounds north of Budaiya Road, holding three distinct burial groups, some rising over 10 metres. First excavated by Major C. Dalyell in the 1920s, then a French mission (1980–81) found a warrior buried in iron armour with his weapons, dating to early Tylos (3rd–2nd century BCE). A unique children's cemetery from the late Dilmun period (600–500 BCE) resembling finds from Babylon and Ur was also uncovered, along with a Parthian-style stone crown believed to belong to an ancient Tylos temple. The mounds' unusual height stems from early Dilmun-period sand buildup (2000 BCE) later reused for successive Tylos burials. Source: Bahrain Authority for Culture & Antiquities."},
+];
+
+const RULERS_FORT_IDS = ['khalifa_ancestor','mohammed_1','khalifa_2','ahmed_fatih','salman_1','abdullah_1','mohammed_3','ali_1','mohammed_abdullah'];
+
+const RULERS = [
+  {id:'khalifa_ancestor', icon:'crown', nameAr:'الشيخ خليفة بن محمد (الجد الأكبر)', nameEn:'Sheikh Khalifa bin Mohammed (Great Ancestor)', periodAr:'ت. 1120هـ / 1708م', periodEn:'d. 1708 CE',
+   sAr:'الجد الأكبر لأسرة آل خليفة، أول من هاجر من نجد واستقرّ في الكويت، وبنى مسجد آل خليفة الشهير هناك.',
+   sEn:"The great ancestor of the Al Khalifa family; first to migrate from Najd and settle in Kuwait, where he built the well-known Al Khalifa Mosque."},
+  {id:'mohammed_1', icon:'crown', nameAr:'الشيخ محمد بن خليفة', nameEn:'Sheikh Mohammed bin Khalifa', periodAr:'1762 – 1772م', periodEn:'1762–1772 CE',
+   sAr:'انتقل من الكويت إلى الزبارة وبنى قلعة "صبحا" عام 1768م؛ عُرف بثرائه وباحترام قبيلته له.',
+   sEn:'Moved from Kuwait to Zubarah and built Subha Fort in 1768; known for his wealth and standing among his tribe.'},
+  {id:'khalifa_2', icon:'crown', nameAr:'الشيخ خليفة بن محمد بن خليفة', nameEn:'Sheikh Khalifa bin Mohammed bin Khalifa', periodAr:'1772 – 1782م', periodEn:'1772–1782 CE',
+   sAr:'عهد ازدهار اقتصادي وثقافي بفضل هجرة العلماء والتجار إلى الزبارة؛ توفي في مكة أثناء أداء فريضة الحج.',
+   sEn:'An era of economic and cultural flourishing as scholars and merchants migrated to Zubarah; died in Mecca while performing Hajj.'},
+  {id:'ahmed_fatih', icon:'crown', nameAr:'الشيخ أحمد بن محمد "الفاتح"', nameEn:'Sheikh Ahmed bin Mohammed "Al-Fatih"', periodAr:'1782 – 1795م', periodEn:'1782–1795 CE',
+   sAr:'قائد معركة الدفاع عن الزبارة، وفاتح جزر البحرين عام 1783م ومؤسس حكم آل خليفة فيها.',
+   sEn:'Led the defense of Zubarah and conquered Bahrain in 1783, founding Al Khalifa rule over the islands.'},
+  {id:'salman_1', icon:'crown', nameAr:'الشيخ سلمان بن أحمد', nameEn:'Sheikh Salman bin Ahmed', periodAr:'1795 – 1821م', periodEn:'1795–1821 CE',
+   sAr:'حاكم حازم وعادل، وقّع معاهدة السلام العامة عام 1820م مع شيوخ الخليج.',
+   sEn:'A firm, just ruler who signed the General Maritime Treaty of 1820 with Gulf sheikhs.'},
+  {id:'abdullah_1', icon:'crown', nameAr:'الشيخ عبدالله بن أحمد', nameEn:'Sheikh Abdullah bin Ahmed', periodAr:'1821 – 1843م', periodEn:'1821–1843 CE',
+   sAr:'واجه أطماعًا إقليمية متزايدة وأبرم اتفاقية خور حسان الشهيرة.',
+   sEn:'Faced growing regional ambitions and concluded the well-known Khor Hassan agreement.'},
+  {id:'mohammed_3', icon:'crown', nameAr:'الشيخ محمد بن خليفة', nameEn:'Sheikh Mohammed bin Khalifa', periodAr:'1843 – 1868م', periodEn:'1843–1868 CE',
+   sAr:'بنى علاقات إقليمية واسعة ووقّع اتفاقية 1861م مع بريطانيا؛ خاض معارك لإخماد تمردات في قطر.',
+   sEn:'Built wide regional ties and signed the 1861 agreement with Britain; fought to quell rebellions in Qatar.'},
+  {id:'ali_1', icon:'crown', nameAr:'الشيخ علي بن خليفة', nameEn:'Sheikh Ali bin Khalifa', periodAr:'1868 – 1869م', periodEn:'1868–1869 CE',
+   sAr:'خاض معارك عديدة للحفاظ على استقلال البلاد، واستُشهد في معركة الضلع عام 1869م.',
+   sEn:"Fought several battles to preserve the country's independence and was killed at the Battle of Al-Dhala' in 1869."},
+  {id:'mohammed_abdullah', icon:'crown', nameAr:'الشيخ محمد بن عبدالله', nameEn:'Sheikh Mohammed bin Abdullah', periodAr:'سبتمبر – ديسمبر 1869م', periodEn:'Sep–Dec 1869 CE',
+   sAr:'تولى الحكم لأربعة أشهر فقط بعد معركة الضلع، قبل تدخل السلطات البريطانية ونفيه.',
+   sEn:"Ruled for only four months following the Battle of Al-Dhala', before British intervention and his exile."},
+  {id:'isa_1', icon:'crown', nameAr:'الشيخ عيسى بن علي', nameEn:'Sheikh Isa bin Ali', periodAr:'1869 – 1932م', periodEn:'1869–1932 CE',
+   sAr:'صاحب أطول عهد حكم (63 عامًا)، أسس مدرسة الهداية الخليفية 1919م ونقل البلاد إلى العصر الحديث مع بدايات التعليم واكتشاف النفط.',
+   sEn:'Held the longest reign (63 years), founded Al-Hidaya Al-Khalifia School in 1919, and ushered the country into the modern era with early education and the discovery of oil.'},
+  {id:'hamad_1', icon:'crown', nameAr:'الشيخ حمد بن عيسى', nameEn:'Sheikh Hamad bin Isa', periodAr:'1932 – 1942م', periodEn:'1932–1942 CE',
+   sAr:'حاكم تحديثي أسس الإدارة الحكومية الحديثة، وشيّد قصر القضيبية وجسر المنامة–المحرق عام 1941م.',
+   sEn:'A modernizing ruler who founded modern government administration, built Qudaibiya Palace and the 1941 Manama–Muharraq bridge.'},
+  {id:'salman_2', icon:'crown', nameAr:'الشيخ سلمان بن حمد', nameEn:'Sheikh Salman bin Hamad', periodAr:'1942 – 1961م', periodEn:'1942–1961 CE',
+   sAr:'وسّع التعليم والبنية التحتية ووصل الماء والكهرباء لمعظم القرى خلال عهد استمر نحو عشرين عامًا.',
+   sEn:'Expanded education and infrastructure, bringing water and electricity to most villages over a nearly twenty-year reign.'},
+  {id:'isa_2', icon:'crown', nameAr:'صاحب السمو الشيخ عيسى بن سلمان', nameEn:'His Highness Sheikh Isa bin Salman', periodAr:'1961 – 1999م', periodEn:'1961–1999 CE',
+   sAr:'قاد استقلال البحرين عام 1971م وأول دستور عام 1973م، وشهد عهده الطفرة المصرفية والصناعية الكبرى.',
+   sEn:'Led Bahrain to independence in 1971 and its first constitution in 1973, overseeing a major banking and industrial boom.'},
+  {id:'hamad_king', icon:'crown', nameAr:'جلالة الملك حمد بن عيسى', nameEn:'His Majesty King Hamad bin Isa', periodAr:'1999م – حتى اليوم', periodEn:'1999 CE – present',
+   sAr:'أطلق مشروع ميثاق العمل الوطني (تأييد 98.4٪) وبرنامج إصلاح شامل شمل الفصل بين السلطات والانتخابات النيابية والبلدية.',
+   sEn:'Launched the National Action Charter (98.4% approval) and a sweeping reform program including the separation of powers and parliamentary and municipal elections.'},
+];
+
+const BATTLES = [
+  {id:'sumaysima', icon:'shield', nameAr:'معركة السميسمة', nameEn:'Battle of Sumaysima', yearAr:'1768م', yearEn:'1768 CE',
+   sAr:'انتصار آل خليفة على آل مسلم، وبروز الزبارة كحاضرة لقطر.', sEn:"Al Khalifa's victory over Al Muslim, establishing Zubarah as Qatar's capital."},
+  {id:'zubarah1', icon:'shield', nameAr:'معركة الزبارة الكبرى', nameEn:'Great Battle of Zubarah', yearAr:'1783م', yearEn:'1783 CE',
+   sAr:'انكسار الحصار والأسطول الفارسي، ما مهّد الطريق لفتح جزر البحرين.', sEn:'Breaking the Persian siege and fleet, paving the way for the conquest of Bahrain.'},
+  {id:'conquest', icon:'shield', nameAr:'فتح جزر البحرين', nameEn:'Conquest of Bahrain', yearAr:'28 يوليو 1783م', yearEn:'28 July 1783 CE',
+   sAr:'بقيادة الشيخ أحمد الفاتح؛ أنهت الوجود الأجنبي وأسست حكم آل خليفة المستقل في أوال.', sEn:'Led by Sheikh Ahmed Al-Fatih; ended foreign presence and founded independent Al Khalifa rule over Awal.'},
+  {id:'huwaila', icon:'shield', nameAr:'معركة الحويلة', nameEn:'Battle of Huwaila', yearAr:'1835م', yearEn:'1835 CE',
+   sAr:'دحر تمرد أبناء الشيخ عبدالله بن أحمد وإعادتهم للطاعة.', sEn:"Quelling a revolt by Sheikh Abdullah bin Ahmed's sons."},
+  {id:'umsuwayya', icon:'shield', nameAr:'معركة أم سويّة (خراب الدوحة الأول)', nameEn:'Battle of Umm Suwayya', yearAr:'1848م', yearEn:'1848 CE',
+   sAr:'هزيمة الشيخ محمد بن خليفة للقبائل المتآمرة عليه.', sEn:"Sheikh Mohammed bin Khalifa's defeat of conspiring tribes."},
+  {id:'wakra', icon:'shield', nameAr:'معركة الوكرة', nameEn:'Battle of Al-Wakra', yearAr:'1865م', yearEn:'1865 CE',
+   sAr:'مواجهة عصيان قبائل قطر بقيادة قاسم آل ثاني وحصارهم لقلعة والي آل خليفة.', sEn:"Confronting a Qatari tribal uprising led by Qasim Al Thani, besieging the Al Khalifa governor's fort."},
+  {id:'doha2', icon:'shield', nameAr:'معركة خراب الدوحة الثاني', nameEn:'Second Battle of Kharab Al-Doha', yearAr:'1866م', yearEn:'1866 CE',
+   sAr:'حملة الشيخ علي بن خليفة لردع القبائل الخارجة عن القانون وتدمير معاقلها بالدوحة.', sEn:"Sheikh Ali bin Khalifa's campaign against outlaw tribes, destroying their strongholds in Doha."},
+  {id:'damasa', icon:'shield', nameAr:'معركة دامسة', nameEn:'Battle of Damasa', yearAr:'1867م', yearEn:'1867 CE',
+   sAr:'هزيمة شنيعة للقبائل المتمردة بزعامة ناصر بن جبر لترسيخ سيادة الدولة الخليفية.', sEn:'A decisive defeat of rebel tribes led by Nasir bin Jabr, cementing Al Khalifa state authority.'},
+  {id:'dhala', icon:'shield', nameAr:'معركة الضلع الشرسة', nameEn:"Battle of Al-Dhala'", yearAr:'30 أغسطس 1869م', yearEn:'30 August 1869 CE',
+   sAr:'مواجهة كبرى انتهت باستشهاد الشيخ علي بن خليفة واضطراب الحكم مؤقتًا.', sEn:"A major clash ending in Sheikh Ali bin Khalifa's death and temporary instability in rule."},
+  {id:'rubaigha', icon:'shield', nameAr:'معركة ربيجة', nameEn:'Battle of Rubaigha', yearAr:'1870م', yearEn:'1870 CE',
+   sAr:'نقل الشيخ عيسى بن علي رعايا قبيلة النعيم لحمايتهم في البحرين بعد إغارة قاسم آل ثاني.', sEn:"Sheikh Isa bin Ali relocated the Na'im tribe to Bahrain for protection after a raid by Qasim Al Thani."},
+  {id:'quliya', icon:'shield', nameAr:'معركة شدّ القليعة', nameEn:'Battle of Shadd Al-Quliya', yearAr:'1878م', yearEn:'1878 CE',
+   sAr:'حصار قاسم آل ثاني لقلعة مرير بالزبارة، وتدخل بريطاني بحري أوقف وصول الإمدادات.', sEn:"Qasim Al Thani's siege of Murair Fort in Zubarah, ended by British naval intervention cutting off supplies."},
+  {id:'zubarah_blockade', icon:'shield', nameAr:'كسارة الزبارة', nameEn:'Zubarah Blockade', yearAr:'1849 – 1895م', yearEn:'1849–1895 CE',
+   sAr:'تصدٍّ بريطاني بحري متكرر للحشود العثمانية وحشود آل ثاني المهددة للبحرين.', sEn:'Repeated British naval resistance to Ottoman and Al Thani forces threatening Bahrain.'},
+  {id:'zubarah2', icon:'shield', nameAr:'أحداث معركة الزبارة الثانية', nameEn:'Second Zubarah Events', yearAr:'1 يوليو 1937م', yearEn:'1 July 1937 CE',
+   sAr:'حصار واحتلال إقليم الزبارة التابع لسيادة آل خليفة من قِبل حاكم قطر عبدالله بن قاسم.', sEn:"Siege and occupation of the Al Khalifa-held Zubarah region by Qatar's ruler Abdullah bin Qasim."},
+];
+
+const MANUSCRIPT_IMGS = {
+  ms1: 'uploads/PHOTO-2024-06-23-01-48-05.jpg',
+  ms2: 'uploads/PHOTO-2024-06-23-01-48-15.jpg',
+  ms3: 'uploads/الزبدة 3.png',
+  ms4: 'uploads/EaRKXBuXsAEaEmb.jpg',
+  ms5: 'uploads/وثيقة مهة.jfif',
+};
+
+const MANUSCRIPTS = Array.from({length:10}, (_,i)=>({
+  id:'ms'+(i+1), icon:'book-open',
+  titleAr: MANUSCRIPT_IMGS['ms'+(i+1)] ? ('مخطوطة الزبدة — صفحة '+(i+1)) : 'مخطوطة رقم '+(i+1),
+  titleEn: MANUSCRIPT_IMGS['ms'+(i+1)] ? ('Al-Zubda Manuscript — Page '+(i+1)) : 'Manuscript No. '+(i+1),
+  metaAr: MANUSCRIPT_IMGS['ms'+(i+1)] ? 'من مخطوطة "الزبدة" في أنساب آل الرفاعي.' : 'أضف عنوان المخطوطة ومصدرها',
+  metaEn: MANUSCRIPT_IMGS['ms'+(i+1)] ? 'From the "Al-Zubda" manuscript on the Al-Rifai lineage.' : 'Add the manuscript title and source',
+}));
+
+const THESES_SOURCE = { nameAr:'قاعدة الرسائل الجامعية — د. عبدالله بن ناصر الوليعي', nameEn:"University Theses Database — Dr. Abdullah bin Nasser Alwelaie", url:'https://www.alwelaie.com/website/university-theses.php' };
+
+const THESES = [
+  {id:'th1', titleAr:'الإمارة الجروانية في البحرين: دراسة تاريخية 705-820هـ / 1305-1417م', titleEn:'Jerwani Period of Authority in Bahrain (Historical Study) 705-820 AH / 1305-1417 CE', researcher:'رضا حرب محمد عبد الحليم', degreeAr:'ماجستير', degreeEn:"Master's", year:'2019', uniAr:'جامعة المنيا', uniEn:'Minia University', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=32376'},
+  {id:'th2', titleAr:'أهمية المساحات البحرية المتجاورة للدول المتضررة جغرافياً (العراق – الأردن – البحرين): دراسة في الجغرافية السياسية', titleEn:'', researcher:'محمد عبد الرضا عبد جاسم', degreeAr:'دكتوراه', degreeEn:'PhD', year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=30022'},
+  {id:'th3', titleAr:'الحدود القطرية – البحرينية: دراسة في الجغرافية السياسية', titleEn:'', researcher:'محمد عبد الرضا عبد جاسم', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=29976'},
+  {id:'th4', titleAr:'التحليل المكاني للأمراض في دولة البحرين: دراسة في الجغرافيا الطبية', titleEn:'', researcher:'غنيمة شهاب أحمد العمران', degreeAr:'ماجستير', degreeEn:"Master's", year:'1994', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=9084'},
+  {id:'th5', titleAr:'نمذجة النمط المتفرّق للخيارات للمسافرين لغرض غير تجاري على جسر الملك فهد بين البحرين والسعودية', titleEn:'Disaggregate Mode Choice Modeling for Intercity Non-Business Travelers in the Saudi Arabia–Bahrain Corridor', researcher:'سعد بن ناصر الجراد (Aljarad, Saad N.)', degreeAr:'دكتوراه', degreeEn:'PhD', year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=7313'},
+  {id:'th6', titleAr:'نشوء ومستقبل الاقتصاد القائم على الاستثمار والتملك في مجتمع صغير ومنفتح معتمد على النفط: حالة البحرين', titleEn:'The Evolution of and Prospects for the Rentier Economy in a Small, Open and Oil-Based Society: The Case of Bahrain', researcher:'خالد عبدالله (Abdulla, Khalid M.)', degreeAr:'دكتوراه', degreeEn:'PhD', year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=7307'},
+  {id:'th7', titleAr:'أداة قرار إحصائية لأمة لتقييم إمكانية تأسيس نظم معلومات طبية بالبحرين', titleEn:'A Statistical Decision Tool for a Nation to Assess the Feasibility of Implementing Medical Information Systems', researcher:'مختار الهاشمي (Al-Hashimi, Mukhtar S. Ali)', degreeAr:'دكتوراه', degreeEn:'PhD', year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=7210'},
+  {id:'th8', titleAr:'مشكلات الكحول والمسكرات في البحرين', titleEn:'Alcohol Problems in Bahrain', researcher:'كاثرن مارلن مجرودر (Magruder, Kathryn Marley)', degreeAr:'دكتوراه', degreeEn:'PhD', year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4977'},
+  {id:'th9', titleAr:'تجربة التخطيط الإنمائي المتكامل في المملكة العربية السعودية والتخطيط الاقتصادي في دولة البحرين', titleEn:'', researcher:'مها خليفة أحمد الغتم', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4909'},
+  {id:'th10', titleAr:'دور التصنيع في تحقيق التنمية الاقتصادية: دراسة تطبيقية على دولة البحرين', titleEn:'', researcher:'سهى حسين السعد', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4908'},
+  {id:'th11', titleAr:'الوضع المائي في البحرين من عام 1979 إلى 1989م', titleEn:'', researcher:'صباح صالح الجنيد', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4907'},
+  {id:'th12', titleAr:'تقييم إستراتيجيات ترشيد الطاقة في المباني السكنية: دراسة تطبيقية في منطقة البحرين', titleEn:'', researcher:'حبيب محمد العصفور', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4903'},
+  {id:'th13', titleAr:'مصادر الطاقة وأساليب ترشيد استخدامها: دراسة تطبيقية خاصة بدولة البحرين', titleEn:'', researcher:'خالد محمد آل خليفة', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4898'},
+  {id:'th14', titleAr:'العلاقة بين المهارات الإدراكية وبعض صعوبات القراءة لدى تلاميذ الصفوف الأولى من المرحلة الابتدائية بدولة البحرين', titleEn:'', researcher:'أمينة عبدالله كمال', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4895'},
+  {id:'th15', titleAr:'العوامل الاجتماعية والثقافية والاقتصادية المؤثرة في آراء المواطنين في استخدام مياه المجاري بدولة البحرين', titleEn:'', researcher:'هيام عبدالله محمد الخليفة', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4893'},
+  {id:'th16', titleAr:'أثر تطبيق الأتمتة في الأداء الوظيفي للمؤسسات الحكومية المستقلة بدولة البحرين', titleEn:'', researcher:'عثمان يوسف الحجي', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4887'},
+  {id:'th17', titleAr:'واقع اتخاذ القرارات الاستثمارية في كبرى شركات القطاع الصناعي بدولة البحرين', titleEn:'', researcher:'ضحى عبدالله الخليفة', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4884'},
+  {id:'th18', titleAr:'أثر نقل التكنولوجيا في تحقيق التنمية: دراسة تحليلية لقطاع الثروة السمكية بدولة البحرين', titleEn:'', researcher:'جهاد محسن سلوم', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4873'},
+  {id:'th19', titleAr:'أساليب نقل التكنولوجيا في المؤسسات الصناعية الصغيرة والمتوسطة في دولة البحرين وآثارها في رفع المقدرة التكنولوجية المحلية', titleEn:'', researcher:'عبدالله تركي المحمود', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4843'},
+  {id:'th20', titleAr:'تحليل حوادث السرعة المؤدية للوفاة في دولة البحرين ودراسة جدوى للحد منها', titleEn:'', researcher:'حسن عيسى الصميم', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4842'},
+  {id:'th21', titleAr:'تنمية القدرة التكنولوجية للعمالة الوطنية: دراسة تطبيقية عن دور الشركات الصناعية الكبرى في تنمية قدرات عمالتها التكنولوجية بدولة البحرين', titleEn:'', researcher:'سلمان بن عيسى آل خليفة', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4808'},
+  {id:'th22', titleAr:'ظاهرة الانقلاب الحراري في دولة البحرين', titleEn:'', researcher:'سهى أحمد عبدالهادي', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4803'},
+  {id:'th23', titleAr:'تاريخ وواقع العيون الطبيعية في دولة البحرين', titleEn:'', researcher:'هند عبدالعزيز القصيبي', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4802'},
+  {id:'th24', titleAr:'منهجيات تطور أنظمة المعلومات في البحرين', titleEn:'', researcher:'رسالة عبدالله الأدرج', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4792'},
+  {id:'th25', titleAr:'أثر إدخال واستخدام التكنولوجيا الحديثة في تحسين ورفع الإنتاجية في القطاع الحكومي بدولة البحرين', titleEn:'', researcher:'عيسى جاسم العبيدلي', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4790'},
+  {id:'th26', titleAr:'تقييم الخصائص الهيدرولوجية ونمذجة حركة الفيروسات في خزان أم الرؤوس – أم رضمة في البحرين', titleEn:'', researcher:'عبدالرحمن سالم الغامدي', degreeAr:'ماجستير', degreeEn:"Master's", year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4789'},
+  {id:'th27', titleAr:'صعوبات اكتساب طلبة المرحلة الإعدادية بدولة البحرين لمهارات قراءة الخريطة والكرة الأرضية', titleEn:'', researcher:'خالد عبدالله أحمد الخاجة', degreeAr:'ماجستير', degreeEn:"Master's", year:'1989', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4412'},
+  {id:'th28', titleAr:'فاعلية برنامج للنشاط المدرسي في تدريس مقرر الجغرافيا الاقتصادية لدى طلاب المرحلة الثانوية بدولة البحرين', titleEn:'', researcher:'نورة أحمد عبدالله', degreeAr:'', degreeEn:'', year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=4000'},
+  {id:'th29', titleAr:'أثر جسر الملك فهد في التفاعل المكاني بين المملكة العربية السعودية ومملكة البحرين: دراسة في جغرافية النقل', titleEn:'', researcher:'علي بن فوزان الشايع', degreeAr:'ماجستير', degreeEn:"Master's", year:'1423هـ', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=3979'},
+  {id:'th30', titleAr:'أثر أسلوبي الاستقصاء والإلقاء في تحصيل طلاب الصف الثاني الثانوي الأدبي (بنين) في الجغرافيا بدولة البحرين', titleEn:'', researcher:'إبراهيم بن محمد عبدالله الحسن', degreeAr:'ماجستير', degreeEn:"Master's", year:'1409هـ', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=3855'},
+  {id:'th31', titleAr:'تقويم تدريس مادة الجغرافيا في المدارس الثانوية للبنين والبنات في دولة البحرين', titleEn:'', researcher:'جاسم سالم بن عتيق بنوفل', degreeAr:'ماجستير', degreeEn:"Master's", year:'1404هـ', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=3803'},
+  {id:'th32', titleAr:'تطوير برامج تدريب معلمي الجغرافيا أثناء الخدمة بالبحرين في ضوء فكرة المواطنة العالمية', titleEn:'', researcher:'نورة أحمد عبدالله الغتم', degreeAr:'دكتوراه', degreeEn:'PhD', year:'1996', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=3644'},
+  {id:'th33', titleAr:'الجغرافيا الاقتصادية لجزر البحرين', titleEn:'', researcher:'أحمد رمضان محمد شقلية', degreeAr:'دكتوراه', degreeEn:'PhD', year:'1972', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=3392'},
+  {id:'th34', titleAr:'تقويم بعض الوظائف الإدارية لإدارة التربية الرياضية المدرسية بدولة البحرين', titleEn:'Evaluation of Some Administrative Functions for School Physical Education Department in the State of Bahrain', researcher:'عبدالهادي عيسى عبدالله العالي', degreeAr:'دكتوراه', degreeEn:'PhD', year:'', uniAr:'', uniEn:'', url:'https://www.alwelaie.com/website/universitytheses_details.php?theses_id=2782'},
+];
+
+const STR = {
+  ar: { dir:'rtl', close:'إغلاق',
+    brand:'سُطور من أوال',
+    nav:[{href:'#home',label:'الرئيسية'},{href:'#landmarks',label:'المعالم'},{href:'#timeline',label:'الخط الزمني'},{href:'#library',label:'المكتبة'},{href:'#theses',label:'الرسائل الجامعية'},{href:'#about',label:'من نحن'},{href:'#contact',label:'تواصل'}],
+    heroKicker:'منصّة توثيق تراث مملكة البحرين',
+    heroTitle:'نقرأ الطبقات، نوثّق الحقيقة',
+    heroSubtitle:'منصّة رقمية أهلية توثّق التراث المخطوط والأثري في مملكة البحرين، من دلمون إلى اليوم، بمرجعية معلَنة وقابلة للتحقق.',
+    stats:[{n:'١٢',l:'معالم موثّقة'},{n:'٩',l:'محطات زمنية'},{n:'٦',l:'حقب تاريخية'},{n:'٣',l:'مستويات تحقق'}],
+    landmarksKicker:'المعالم والمخطوطات', landmarksTitle:'اضغط على أي أيقونة لتفتح ملف المعلم',
+    landmarksSub:'اثنا عشر معلمًا موثَّقًا وفق بروتوكول التحقق الثلاثي.',
+    timelineKicker:'الخط الزمني التفاعلي', timelineTitle:'رحلة الإنسان البحريني عبر العصور',
+    timelineSub:'اختر محطة زمنية لمشاهدة مَشهدها الحيّ وقراءة ملخصها الموثّق.',
+    watchVideo:'مشاهدة المشهد المتحرك', comingSoon:'قيد الإعداد', eraLabel:'المحطة',
+    libraryKicker:'المكتبة العلمية', libraryTitle:'مصادر ومراجع معتمدة',
+    libraryItems:['السجلات الأثرية لمواقع دلمون وعالي','تقارير بعثة التنقيب الدنماركية (١٩٥٣–١٩٦٥)','كتابات الجغرافيين العرب: البلاذري والطبري','ملفات ترشيح اليونسكو لقلعة البحرين وطريق اللؤلؤ'],
+    eventsKicker:'الفعاليات والمؤتمرات', eventsTitle:'المؤتمر الدولي لاستدامة التراث',
+    eventDate:'٢٥–٢٦ نوفمبر ٢٠٢٦', eventName:'ICSH 2026 — جامعة البحرين',
+    eventDesc:'تقديم البحث المرجعي لمنصّة سُطور من أوال ضمن أعمال المؤتمر الدولي الرابع لاستدامة التراث.',
+    thesesKicker:'قاعدة الرسائل الجامعية', thesesTitle:'رسائل الماجستير والدكتوراه عن البحرين',
+    thesesSub:'فهرس مجمَّع للرسائل الجامعية العربية والأجنبية التي تناولت البحرين موضوعًا رئيسًا — تاريخًا وجغرافيا واقتصادًا ومجتمعًا — قابل للبحث بالعنوان أو اسم الباحث.',
+    thesesSearchPh:'ابحث بعنوان الرسالة أو اسم الباحث…',
+    thesesResultsOf:'نتيجة من', thesesNoResults:'لا توجد نتائج مطابقة. جرّب كلمة أخرى.',
+    thesesResearcher:'الباحث', thesesDegree:'الدرجة', thesesYear:'السنة', thesesViewSource:'عرض المصدر ←',
+    thesesSourceNote:'هذا الفهرس مُجمَّع يدويًا من', thesesSourceLinkLabel:'قاعدة الرسائل الجامعية لدى د. عبدالله بن ناصر الوليعي',
+    thesesHowKicker:'كيفية الحصول على نسخة كاملة',
+    thesesHowAr:'الرسائل العربية: تُطلب مصوَّرة من القسم العلمي المانح أو الكلية أو مكتبة الجامعة (نادرًا ما تتوفر بصيغة PDF مباشرة).',
+    thesesHowIntlTitle:'منصّات الرسائل الأجنبية (أوروبية وأمريكية)',
+    thesesHowUK:'المملكة المتحدة — EThOS (British Library): نسخ PDF لرسائل الجامعات البريطانية.',
+    thesesHowUS:'الولايات المتحدة وكندا — ProQuest Dissertations & Theses: شراء نسخ PDF لرسائل الجامعات الأمريكية والكندية.',
+    aboutKicker:'من نحن', aboutTitle:'الرؤية والهدف',
+    aboutText:'نقدّم منصّة رقمية واحدة تجمع معالم أوال الأثرية والمعمارية والمخطوطة ضمن سردية تاريخية متصلة، مستندة إلى بروتوكول تحقق ثلاثي المستوى يعلن مصدر كل معلومة بوضوح.',
+    goals:['التوثيق المُسنَد','التصحيح التاريخي العلني','الشراكات المؤسسية','إحياء الذاكرة الشفهية'],
+    contactKicker:'تواصل معنا', contactTitle:'لديك مصدر تودّ اقتراحه؟',
+    namePh:'الاسم', emailPh:'البريد الإلكتروني', msgPh:'الرسالة', send:'إرسال الرسالة',
+    footerText:'منصّة رقمية توثّق التراث المخطوط والأثري في مملكة البحرين بمرجعية معلَنة وقابلة للتحقق.',
+    footerRights:'© ٢٠٢٦ سُطور من أوال' },
+  en: { dir:'ltr', close:'Close',
+    brand:'Sutoor Awal',
+    nav:[{href:'#home',label:'Home'},{href:'#landmarks',label:'Landmarks'},{href:'#timeline',label:'Timeline'},{href:'#library',label:'Library'},{href:'#theses',label:'Theses Database'},{href:'#about',label:'About'},{href:'#contact',label:'Contact'}],
+    heroKicker:'Heritage documentation platform of the Kingdom of Bahrain',
+    heroTitle:'We Read the Layers, We Document the Truth',
+    heroSubtitle:'A civic digital platform documenting the manuscript and archaeological heritage of Bahrain, from Dilmun to today, with declared and verifiable sourcing.',
+    stats:[{n:'12',l:'Verified landmarks'},{n:'9',l:'Timeline stations'},{n:'6',l:'Historical eras'},{n:'3',l:'Verification levels'}],
+    landmarksKicker:'Landmarks & Manuscripts', landmarksTitle:'Tap any icon to open its file',
+    landmarksSub:'Twelve landmarks verified under the triple-verification protocol.',
+    timelineKicker:'Interactive Timeline', timelineTitle:"The Bahraini Human Journey Through the Ages",
+    timelineSub:'Pick a station to view its living scene and read its verified summary.',
+    watchVideo:'Watch animated scene', comingSoon:'In production', eraLabel:'Station',
+    libraryKicker:'Scientific Library', libraryTitle:'Approved sources & references',
+    libraryItems:['Archaeological records of Dilmun and A\'ali sites','Danish expedition reports (1953–1965)','Writings of Arab geographers: Al-Baladhuri and Al-Tabari','UNESCO nomination files for Bahrain Fort and the Pearling Path'],
+    eventsKicker:'Events & Conferences', eventsTitle:'International Conference on Heritage Sustainability',
+    eventDate:'25–26 Nov 2026', eventName:'ICSH 2026 — University of Bahrain',
+    eventDesc:"Presenting Sutoor Awal's reference research within the 4th International Conference on Heritage Sustainability.",
+    thesesKicker:'University Theses Database', thesesTitle:"Master's & PhD Theses on Bahrain",
+    thesesSub:"A compiled index of Arabic and international university theses treating Bahrain as a primary subject — history, geography, economics and society — searchable by title or researcher.",
+    thesesSearchPh:'Search by thesis title or researcher name…',
+    thesesResultsOf:'of', thesesNoResults:'No matching results. Try another term.',
+    thesesResearcher:'Researcher', thesesDegree:'Degree', thesesYear:'Year', thesesViewSource:'View source ←',
+    thesesSourceNote:'This index was manually compiled from', thesesSourceLinkLabel:"Dr. Abdullah bin Nasser Alwelaie's University Theses Database",
+    thesesHowKicker:'Obtaining a full copy',
+    thesesHowAr:'Arabic theses: request a scanned copy from the granting department, college or university library (rarely available directly as PDF).',
+    thesesHowIntlTitle:'International thesis portals (European & American)',
+    thesesHowUK:'United Kingdom — EThOS (British Library): PDF copies of UK university theses.',
+    thesesHowUS:'United States & Canada — ProQuest Dissertations & Theses: purchase PDF copies of US/Canadian university theses.',
+    aboutKicker:'About Us', aboutTitle:'Vision & Purpose',
+    aboutText:"One digital platform gathering Awal's archaeological, architectural and manuscript landmarks into a connected historical narrative, built on a triple-level verification protocol that discloses every source.",
+    goals:['Sourced documentation','Public historical correction','Institutional partnerships','Reviving oral memory'],
+    contactKicker:'Contact Us', contactTitle:'Have a source to suggest?',
+    namePh:'Name', emailPh:'Email', msgPh:'Message', send:'Send Message',
+    footerText:'A digital platform documenting the manuscript and archaeological heritage of the Kingdom of Bahrain with declared, verifiable sourcing.',
+    footerRights:'© 2026 Sutoor Awal' },
+};
+
+class Component extends DCLogic {
+  state = { lang:'ar', era:0, landmark:null, ruler:null, battle:null, manuscript:null, thesesQuery:'' };
+  renderVals(){
+    const st = this.state;
+    const t = STR[st.lang];
+    const isAr = st.lang === 'ar';
+    const eras = ERAS.map((e,i)=>({ id:e.id, icon:e.icon, grad:e.grad, hasImg: !!ERA_HAS_IMG[e.id], year:isAr?e.yearAr:e.yearEn, title:isAr?e.tAr:e.tEn, $index:i, active:i===st.era }));
+    const ae = ERAS[st.era];
+    const activeEra = { icon:ae.icon, grad:ae.grad, hasImg: !!ERA_HAS_IMG[ae.id], noImg: !ERA_HAS_IMG[ae.id], slotId:'era-'+ae.id, year:isAr?ae.yearAr:ae.yearEn, title:isAr?ae.tAr:ae.tEn, desc:isAr?ae.dAr:ae.dEn, index:st.era+1, total:ERAS.length };
+    const landmarks = LANDMARKS.map(l=>({ id:l.id, icon:l.icon, slotId:'lm-'+l.id, name:isAr?l.nameAr:l.nameEn, cat:isAr?l.catAr:l.catEn }));
+    let openLandmark = null;
+    if (st.landmark) {
+      const l = LANDMARKS.find(x=>x.id===st.landmark);
+      if (l) openLandmark = { icon:l.icon, dialogSlotId:'lm-'+l.id+'-dialog', name:isAr?l.nameAr:l.nameEn, cat:isAr?l.catAr:l.catEn, desc:isAr?l.dAr:l.dEn };
+    }
+    const isKhalifaEra = ae.id === 'khalifa';
+    const rulers = RULERS.map(r=>({ id:r.id, icon:r.icon, hasImg: RULERS_FORT_IDS.includes(r.id), hasKingImg: r.id==='hamad_king', hasIsa2Img: r.id==='isa_2', hasSalman2Img: r.id==='salman_2', hasHamad1Img: r.id==='hamad_1', hasIsa1Img: r.id==='isa_1', name:isAr?r.nameAr:r.nameEn, period:isAr?r.periodAr:r.periodEn }));
+    const battles = BATTLES.map(b=>({ id:b.id, icon:b.icon, name:isAr?b.nameAr:b.nameEn, year:isAr?b.yearAr:b.yearEn }));
+    let openRuler = null;
+    if (st.ruler) {
+      const r = RULERS.find(x=>x.id===st.ruler);
+      if (r) openRuler = { icon:r.icon, hasImg: RULERS_FORT_IDS.includes(r.id), hasKingImg: r.id==='hamad_king', hasIsa2Img: r.id==='isa_2', hasSalman2Img: r.id==='salman_2', hasHamad1Img: r.id==='hamad_1', hasIsa1Img: r.id==='isa_1', name:isAr?r.nameAr:r.nameEn, period:isAr?r.periodAr:r.periodEn, desc:isAr?r.sAr:r.sEn };
+    }
+    let openBattle = null;
+    if (st.battle) {
+      const b = BATTLES.find(x=>x.id===st.battle);
+      if (b) openBattle = { icon:b.icon, name:isAr?b.nameAr:b.nameEn, year:isAr?b.yearAr:b.yearEn, desc:isAr?b.sAr:b.sEn };
+    }
+    const manuscripts = MANUSCRIPTS.map(m=>({ id:m.id, icon:m.icon, slotId:'ms-'+m.id, noImg: !MANUSCRIPT_IMGS[m.id],
+      isMs1:m.id==='ms1', isMs2:m.id==='ms2', isMs3:m.id==='ms3', isMs4:m.id==='ms4', isMs5:m.id==='ms5',
+      title:isAr?m.titleAr:m.titleEn, meta:isAr?m.metaAr:m.metaEn }));
+    let openManuscript = null;
+    if (st.manuscript) {
+      const m = MANUSCRIPTS.find(x=>x.id===st.manuscript);
+      if (m) openManuscript = { id:m.id, icon:m.icon, docSlotId:'ms-'+m.id+'-doc', noImg: !MANUSCRIPT_IMGS[m.id],
+        isMs1:m.id==='ms1', isMs2:m.id==='ms2', isMs3:m.id==='ms3', isMs4:m.id==='ms4', isMs5:m.id==='ms5',
+        title:isAr?m.titleAr:m.titleEn, meta:isAr?m.metaAr:m.metaEn };
+    }
+    return {
+      dir:t.dir, lang:st.lang, t, nav:t.nav, stats:t.stats, eras, activeEra, landmarks, openLandmark,
+      isKhalifaEra, rulers, battles, openRuler, openBattle,
+      rulersLabel: isAr ? 'حكّام آل خليفة' : "Al Khalifa Rulers",
+      battlesLabel: isAr ? 'أبرز المعارك' : 'Key Battles',
+      manuscripts, openManuscript,
+      manuscriptsLabel: isAr ? 'اضغط على أي مخطوطة لعرض وثيقتها' : 'Tap any manuscript to view its document',
+      filteredTheses: (()=>{
+        const q = (st.thesesQuery||'').trim().toLowerCase();
+        const list = !q ? THESES : THESES.filter(th =>
+          (th.titleAr||'').toLowerCase().includes(q) ||
+          (th.titleEn||'').toLowerCase().includes(q) ||
+          (th.researcher||'').toLowerCase().includes(q));
+        return list.map(th => ({
+          id: th.id,
+          title: isAr ? th.titleAr : (th.titleEn || th.titleAr),
+          titleEn: isAr ? th.titleEn : '',
+          researcher: th.researcher,
+          degreeYear: [(isAr?th.degreeAr:th.degreeEn), th.year].filter(Boolean).join(isAr ? ' — ' : ' — '),
+          url: th.url,
+        }));
+      })(),
+      thesesEmpty: (()=>{
+        const q = (st.thesesQuery||'').trim().toLowerCase();
+        if (!q) return false;
+        return !THESES.some(th =>
+          (th.titleAr||'').toLowerCase().includes(q) ||
+          (th.titleEn||'').toLowerCase().includes(q) ||
+          (th.researcher||'').toLowerCase().includes(q));
+      })(),
+      thesesResultsLabel: (()=>{
+        const q = (st.thesesQuery||'').trim().toLowerCase();
+        const n = !q ? THESES.length : THESES.filter(th =>
+          (th.titleAr||'').toLowerCase().includes(q) ||
+          (th.titleEn||'').toLowerCase().includes(q) ||
+          (th.researcher||'').toLowerCase().includes(q)).length;
+        return n + ' ' + t.thesesResultsOf + ' ' + THESES.length;
+      })(),
+      thesesSourceUrl: THESES_SOURCE.url,
+      langBtn: isAr ? 'EN' : 'AR',
+      aboutCredit: isAr
+        ? (this.props.aboutCredit ?? 'إعداد الدكتور أحمد بن عبدالرحمن العسيري — الأستاذ المشارك بجامعة البحرين، كلية محمد بن جابر الأنصاري')
+        : (this.props.aboutCreditEn ?? 'Prepared by Dr. Ahmed bin Abdulrahman Alaseeri — Associate Professor, University of Bahrain, Mohammed bin Jaber Al-Ansari College'),
+      toggleLang: ()=>this.setState({ lang: isAr ? 'en' : 'ar' }),
+      setEra: (ev)=>{ const i = Number(ev.currentTarget.dataset.idx); this.setState({ era:i }); },
+      prevEra: ()=>this.setState({ era:(st.era-1+ERAS.length)%ERAS.length }),
+      nextEra: ()=>this.setState({ era:(st.era+1)%ERAS.length }),
+      openL: (ev)=>this.setState({ landmark: ev.currentTarget.dataset.id }),
+      closeL: ()=>this.setState({ landmark:null }),
+      openR: (ev)=>this.setState({ ruler: ev.currentTarget.dataset.id }),
+      closeR: ()=>this.setState({ ruler:null }),
+      openB: (ev)=>this.setState({ battle: ev.currentTarget.dataset.id }),
+      closeB: ()=>this.setState({ battle:null }),
+      setThesesQuery: (ev)=>this.setState({ thesesQuery: ev.currentTarget.value }),
+      openM: (ev)=>this.setState({ manuscript: ev.currentTarget.dataset.id }),
+      closeM: ()=>this.setState({ manuscript:null }),
+      stop: (ev)=>ev.stopPropagation(),
+      sendMessage: ()=>{
+        const to = 'aalaseeri' + '@' + 'uob.edu.bh';
+        const name = document.getElementById('contactName')?.value || '';
+        const email = document.getElementById('contactEmail')?.value || '';
+        const msg = document.getElementById('contactMsg')?.value || '';
+        const subject = encodeURIComponent(isAr ? ('رسالة من زائر الموقع' + (name ? (' — ' + name) : '')) : ('Website visitor message' + (name ? (' — ' + name) : '')));
+        const body = encodeURIComponent(msg + (email ? ('\n\n' + (isAr ? 'البريد للرد: ' : 'Reply email: ') + email) : ''));
+        window.location.href = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>
