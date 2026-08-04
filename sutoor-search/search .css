@@ -1,0 +1,576 @@
+/* ============================================================================
+ * سُطور من أوال — محرّك «اسأل الأرشيف الموثّق»
+ * الملف (4/5): search.css
+ *
+ * الهوية البصرية مأخوذة قياساً من واجهة المنصّة الحالية:
+ *   رقّ  #f3eddf | سطح #fffdf7 | زيتوني #304029 | أخضر الفعل #256242 | نحاسي #8b671d
+ *
+ * ما صُحِّح في نسختك الأولى من الملف:
+ *  1) 100vw/100vh → inset:0 و100dvh (الأول يُحدث تمريراً أفقياً، والثاني يقفز على الجوال).
+ *  2) display:none ⟷ flex يُلغي أيّ انتقال بصري؛ فُصل الظهور عن الحركة.
+ *  3) backdrop-filter بلا بادئة -webkit- معطَّل في سفاري.
+ *  4) عناصر flex بلا min-width:0 تكسر التفاف النصّ الطويل.
+ *  5) لا مؤشّر تركيز (:focus-visible) ولا حالة تحديد بالأسهم (.is-active).
+ *  6) لا وضع داكن، ولا احترام لتقليل الحركة، ولا قفل لتمرير الصفحة.
+ *  7) لا تنسيقات لواجهة النتائج الشاملة ولا لسطح «اسأل الأرشيف» في الصفحة.
+ * ==========================================================================*/
+
+/* ==========================================================================
+   0) الرموز التصميمية
+   ========================================================================== */
+:root {
+  /* الأسطح */
+  --sutoor-parchment:   #f3eddf;   /* الرقّ — خلفية القسم */
+  --sutoor-surface:     #fffdf7;   /* سطح البطاقات والشريط */
+  --sutoor-surface-2:   #f9f6eb;   /* سطح ثانوي — الشرائح والتذييل */
+  --sutoor-surface-3:   #eee5ce;   /* سطح نحاسي فاتح — الشارات */
+  --sutoor-border:      #e6dcc6;
+  --sutoor-border-soft: #efe8d7;
+
+  /* الهوية */
+  --sutoor-olive:       #304029;   /* الزيتوني الداكن — العناوين */
+  --sutoor-green:       #256242;   /* أخضر الفعل — الأزرار */
+  --sutoor-green-deep:  #1c4c33;
+  --sutoor-green-soft:  rgba(37, 98, 66, 0.10);
+  --sutoor-brass:       #8b671d;   /* النحاسي — الشارات والتظليل */
+  --sutoor-brass-soft:  rgba(139, 103, 29, 0.20);
+
+  /* النصّ */
+  --sutoor-text:        #304029;
+  --sutoor-text-2:      #6d7863;
+  --sutoor-text-muted:  #8a8274;
+
+  /* المقاييس */
+  --sutoor-radius:      22px;
+  --sutoor-radius-sm:   12px;
+  --sutoor-pill:        999px;
+  --sutoor-shadow:      0 30px 60px -20px rgba(48, 64, 41, 0.35);
+  --sutoor-shadow-soft: 0 2px 10px rgba(48, 64, 41, 0.06);
+  --sutoor-ring:        0 0 0 3px var(--sutoor-green-soft), 0 0 0 1px var(--sutoor-green);
+  --sutoor-speed:       170ms;
+  --sutoor-ease:        cubic-bezier(0.2, 0.8, 0.3, 1);
+
+  --sutoor-font:        'Tajawal', 'Cairo', 'Segoe UI', system-ui, sans-serif;
+  --sutoor-font-title:  'Amiri', 'Aref Ruqaa', 'Scheherazade New', Georgia, serif;
+}
+
+:root[data-theme="dark"],
+:root:not([data-theme="light"]) .sutoor-dark-scope { color-scheme: dark; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sutoor-parchment: #161c14;
+    --sutoor-surface:   #1c241a;
+    --sutoor-surface-2: #232d20;
+    --sutoor-surface-3: #2e3a29;
+    --sutoor-border:    #33402e;
+    --sutoor-border-soft:#2a3526;
+    --sutoor-olive:     #e6ecd9;
+    --sutoor-green:     #5fa87c;
+    --sutoor-green-deep:#4b8f68;
+    --sutoor-green-soft: rgba(95, 168, 124, 0.16);
+    --sutoor-brass:     #d8b268;
+    --sutoor-brass-soft: rgba(216, 178, 104, 0.24);
+    --sutoor-text:      #e9eddf;
+    --sutoor-text-2:    #b3bfa6;
+    --sutoor-text-muted:#9aa48e;
+  }
+}
+
+/* قفل تمرير الصفحة خلف النافذة دون قفزة تخطيط */
+html.sutoor-locked { overflow: hidden; scrollbar-gutter: stable; }
+
+/* ==========================================================================
+   1) سطح «اسأل الأرشيف الموثّق» داخل الصفحة
+   ========================================================================== */
+.sutoor-ask {
+  direction: rtl;
+  font-family: var(--sutoor-font);
+  background: var(--sutoor-parchment);
+  color: var(--sutoor-text);
+  text-align: center;
+  padding: clamp(40px, 7vw, 76px) 20px clamp(34px, 5vw, 56px);
+}
+.sutoor-ask-inner { max-width: 860px; margin: 0 auto; }
+
+.sutoor-eyebrow {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--sutoor-brass);
+  background: var(--sutoor-surface-3);
+  border-radius: var(--sutoor-pill);
+  padding: 6px 18px;
+  margin-bottom: 18px;
+}
+.sutoor-ask-title {
+  font-family: var(--sutoor-font-title);
+  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--sutoor-olive);
+  margin: 0 0 14px;
+}
+.sutoor-ask-sub {
+  font-size: clamp(0.9rem, 2.2vw, 1.02rem);
+  line-height: 1.9;
+  color: var(--sutoor-text-muted);
+  margin: 0 auto 26px;
+  max-width: 640px;
+}
+
+/* شريط البحث الكبسولي */
+.sutoor-ask-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--sutoor-surface);
+  border: 1px solid var(--sutoor-border);
+  border-radius: var(--sutoor-pill);
+  box-shadow: var(--sutoor-shadow-soft);
+  padding: 8px 10px 8px 8px;
+  transition: box-shadow var(--sutoor-speed) var(--sutoor-ease),
+              border-color var(--sutoor-speed) var(--sutoor-ease);
+}
+.sutoor-ask-bar:focus-within {
+  border-color: var(--sutoor-green);
+  box-shadow: var(--sutoor-ring);
+}
+.sutoor-ask-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: clamp(0.95rem, 2.4vw, 1.08rem);
+  color: var(--sutoor-text);
+  padding: 12px 16px;
+}
+.sutoor-ask-input::placeholder { color: var(--sutoor-text-muted); }
+.sutoor-ask-input::-webkit-search-cancel-button { display: none; }
+
+.sutoor-ask-submit {
+  flex: 0 0 auto;
+  font: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fffdf7;
+  background: var(--sutoor-green);
+  border: 0;
+  border-radius: var(--sutoor-pill);
+  padding: 12px 34px;
+  cursor: pointer;
+  transition: background var(--sutoor-speed) var(--sutoor-ease),
+              transform var(--sutoor-speed) var(--sutoor-ease);
+}
+.sutoor-ask-submit:hover { background: var(--sutoor-green-deep); }
+.sutoor-ask-submit:active { transform: scale(0.97); }
+.sutoor-ask-submit:focus-visible { outline: 3px solid var(--sutoor-brass); outline-offset: 2px; }
+
+/* شرائح الأمثلة */
+.sutoor-ask-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 22px 0 24px;
+}
+.sutoor-ask-note {
+  font-size: 0.8rem;
+  line-height: 1.9;
+  color: var(--sutoor-text-muted);
+  margin: 0;
+}
+
+/* ==========================================================================
+   2) النافذة
+   ========================================================================== */
+.sutoor-modal {
+  position: fixed;
+  inset: 0;                                   /* بديل 100vw/100vh */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 6vh 16px 16px;
+  background: rgba(30, 40, 26, 0.62);
+  -webkit-backdrop-filter: blur(9px) saturate(120%);
+  backdrop-filter: blur(9px) saturate(120%);
+  z-index: 99999;
+  direction: rtl;
+  font-family: var(--sutoor-font);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--sutoor-speed) ease, visibility 0s linear var(--sutoor-speed);
+}
+.sutoor-modal[hidden] { display: none; }
+.sutoor-modal.active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--sutoor-speed) ease;
+}
+
+.sutoor-search-box {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 860px);
+  max-height: min(84dvh, 84vh);
+  background: var(--sutoor-surface);
+  border: 1px solid var(--sutoor-border);
+  border-radius: var(--sutoor-radius);
+  box-shadow: var(--sutoor-shadow);
+  overflow: hidden;
+  transform: translateY(-14px) scale(0.985);
+  transition: transform var(--sutoor-speed) var(--sutoor-ease);
+}
+.sutoor-modal.active .sutoor-search-box { transform: none; }
+
+/* خيط نحاسي رفيع أعلى النافذة — توقيع الهوية */
+.sutoor-search-box::before {
+  content: '';
+  display: block;
+  height: 3px;
+  flex: 0 0 auto;
+  background: linear-gradient(90deg, var(--sutoor-brass), var(--sutoor-green), var(--sutoor-brass));
+}
+
+/* ==========================================================================
+   3) الرأس وحقل الإدخال
+   ========================================================================== */
+.sutoor-search-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--sutoor-border-soft);
+}
+.sutoor-search-icon {
+  width: 22px; height: 22px; flex: 0 0 auto;
+  margin-inline-start: 6px;
+  fill: none; stroke: var(--sutoor-green); stroke-width: 2; stroke-linecap: round;
+}
+.sutoor-search-input {
+  flex: 1 1 auto;
+  min-width: 0;                               /* يمنع طرد بقيّة العناصر */
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 1.18rem;
+  color: var(--sutoor-text);
+  padding: 8px 4px;
+}
+.sutoor-search-input::placeholder { color: var(--sutoor-text-muted); }
+.sutoor-search-input::-webkit-search-cancel-button { display: none; }
+
+.sutoor-shortcut-hint,
+.sutoor-search-footer kbd {
+  font-family: inherit;
+  font-size: 0.7rem;
+  line-height: 1.7;
+  background: var(--sutoor-surface-2);
+  color: var(--sutoor-text-2);
+  border: 1px solid var(--sutoor-border);
+  border-radius: 7px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+.sutoor-close {
+  flex: 0 0 auto;
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  font-size: 1.5rem; line-height: 1;
+  color: var(--sutoor-text-2);
+  background: transparent;
+  border: 0; border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--sutoor-speed) ease, color var(--sutoor-speed) ease;
+}
+.sutoor-close:hover { background: var(--sutoor-surface-2); color: var(--sutoor-green); }
+.sutoor-close:focus-visible { outline: none; box-shadow: var(--sutoor-ring); }
+
+/* ==========================================================================
+   4) شريط التصفية بالأقسام
+   ========================================================================== */
+.sutoor-filters {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 11px 18px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--sutoor-border-soft);
+  background: var(--sutoor-surface-2);
+}
+.sutoor-filters[hidden] { display: none; }   /* الصنف يتجاوز خاصية hidden لولا هذا السطر */
+.sutoor-filters::-webkit-scrollbar { display: none; }
+.sutoor-filter {
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+  font: inherit; font-size: 0.82rem;
+  color: var(--sutoor-text-2);
+  background: var(--sutoor-surface);
+  border: 1px solid var(--sutoor-border);
+  border-radius: var(--sutoor-pill);
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: all var(--sutoor-speed) var(--sutoor-ease);
+}
+.sutoor-filter span {
+  font-size: 0.7rem;
+  color: var(--sutoor-text-muted);
+  background: var(--sutoor-surface-2);
+  border-radius: var(--sutoor-pill);
+  padding: 0 6px;
+}
+.sutoor-filter:hover { border-color: var(--sutoor-green); color: var(--sutoor-green); }
+.sutoor-filter:focus-visible { outline: none; box-shadow: var(--sutoor-ring); }
+.sutoor-filter.is-on {
+  background: var(--sutoor-green);
+  border-color: var(--sutoor-green);
+  color: #fffdf7;
+  font-weight: 700;
+}
+.sutoor-filter.is-on span { background: rgba(255, 253, 247, 0.22); color: #fffdf7; }
+
+/* ==========================================================================
+   5) لوحة النتائج
+   ========================================================================== */
+.sutoor-results-container {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sutoor-border) transparent;
+}
+.sutoor-results-container::-webkit-scrollbar { width: 11px; }
+.sutoor-results-container::-webkit-scrollbar-thumb {
+  background: var(--sutoor-border);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: var(--sutoor-pill);
+}
+.sutoor-results-container::-webkit-scrollbar-thumb:hover { background: var(--sutoor-text-2); background-clip: content-box; }
+
+.sutoor-result-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px;
+  border-radius: var(--sutoor-radius-sm);
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--sutoor-border-soft);
+  transition: background var(--sutoor-speed) ease, box-shadow var(--sutoor-speed) ease;
+}
+.sutoor-result-card:last-of-type { border-bottom: 0; }
+.sutoor-result-card:hover,
+.sutoor-result-card.is-active { background: var(--sutoor-parchment); }
+.sutoor-result-card.is-active {
+  box-shadow: inset 3px 0 0 var(--sutoor-green);   /* الحافة اليمنى في الـRTL */
+}
+.sutoor-result-card:focus-visible { outline: none; box-shadow: var(--sutoor-ring); }
+
+.sutoor-result-thumb,
+.sutoor-thumb-placeholder {
+  flex: 0 0 auto;
+  width: 62px; height: 62px;
+  border-radius: var(--sutoor-radius-sm);
+}
+.sutoor-result-thumb { object-fit: cover; background: var(--sutoor-surface-2); }
+.sutoor-thumb-placeholder {
+  display: grid; place-items: center;
+  background: linear-gradient(150deg, var(--sutoor-olive), var(--sutoor-green));
+  color: #fffdf7;
+  font-family: var(--sutoor-font-title);
+  font-size: 0.72rem;
+  text-align: center;
+  padding: 4px;
+  line-height: 1.35;
+}
+
+.sutoor-result-body {
+  flex: 1 1 auto;
+  min-width: 0;                                /* يسمح بالالتفاف والقصّ */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sutoor-result-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sutoor-badge {
+  font-size: 0.7rem; font-weight: 700;
+  background: var(--sutoor-surface-3);
+  color: var(--sutoor-brass);
+  padding: 2px 10px;
+  border-radius: var(--sutoor-pill);
+}
+.sutoor-type { font-size: 0.7rem; color: var(--sutoor-text-muted); }
+.sutoor-result-title {
+  font-family: var(--sutoor-font-title);
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--sutoor-olive);
+}
+.sutoor-result-snippet {
+  font-size: 0.87rem;
+  line-height: 1.8;
+  color: var(--sutoor-text-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sutoor-go {
+  flex: 0 0 auto;
+  align-self: center;
+  width: 18px; height: 18px;
+  fill: none; stroke: var(--sutoor-text-muted); stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity var(--sutoor-speed) ease;
+}
+.sutoor-result-card:hover .sutoor-go,
+.sutoor-result-card.is-active .sutoor-go { opacity: 1; stroke: var(--sutoor-green); }
+
+/* التظليل النحاسي */
+mark.sutoor-highlight {
+  background: var(--sutoor-brass-soft);
+  color: inherit;
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+.sutoor-result-title mark.sutoor-highlight { color: var(--sutoor-brass); }
+
+/* ==========================================================================
+   6) الحالات: خالٍ، بلا نتائج، تحميل تدريجي
+   ========================================================================== */
+.sutoor-group {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 8px 6px;
+}
+.sutoor-group-title {
+  font-size: 0.74rem; font-weight: 700; letter-spacing: 0.04em;
+  color: var(--sutoor-text-muted);
+}
+.sutoor-clear {
+  font: inherit; font-size: 0.74rem;
+  background: none; border: 0; cursor: pointer;
+  color: var(--sutoor-green);
+}
+.sutoor-clear:hover { text-decoration: underline; }
+
+.sutoor-chip {
+  display: inline-block;
+  font: inherit; font-size: 0.86rem; font-weight: 500;
+  margin: 3px;
+  padding: 9px 20px;
+  color: var(--sutoor-text-2);
+  background: var(--sutoor-surface-2);
+  border: 1px solid var(--sutoor-border);
+  border-radius: var(--sutoor-pill);
+  cursor: pointer;
+  transition: all var(--sutoor-speed) var(--sutoor-ease);
+}
+.sutoor-chip:hover {
+  color: var(--sutoor-green);
+  border-color: var(--sutoor-green);
+  background: var(--sutoor-surface);
+  transform: translateY(-1px);
+}
+.sutoor-chip:focus-visible { outline: none; box-shadow: var(--sutoor-ring); }
+.sutoor-ask-chips .sutoor-chip { background: var(--sutoor-surface); font-weight: 700; }
+
+.sutoor-no-results { text-align: center; padding: 48px 20px; color: var(--sutoor-text-muted); }
+.sutoor-no-results-title {
+  font-family: var(--sutoor-font-title);
+  font-size: 1.2rem;
+  color: var(--sutoor-olive);
+  margin: 0 0 10px;
+}
+.sutoor-sentinel, .sutoor-more {
+  display: block; width: 100%;
+  text-align: center;
+  padding: 15px;
+  font: inherit; font-size: 0.85rem;
+  color: var(--sutoor-text-muted);
+  background: none; border: 0; cursor: default;
+}
+.sutoor-more { cursor: pointer; color: var(--sutoor-green); font-weight: 700; border-radius: var(--sutoor-radius-sm); }
+.sutoor-more:hover { background: var(--sutoor-parchment); }
+.sutoor-more:focus-visible { outline: none; box-shadow: var(--sutoor-ring); }
+
+/* ==========================================================================
+   7) التذييل
+   ========================================================================== */
+.sutoor-search-footer {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 10px 18px;
+  border-top: 1px solid var(--sutoor-border-soft);
+  background: var(--sutoor-surface-2);
+  font-size: 0.74rem;
+  color: var(--sutoor-text-muted);
+}
+.sutoor-legend { display: inline-flex; align-items: center; gap: 4px; }
+.sutoor-stat { margin-inline-start: auto; }
+
+/* وميض العنصر المقصود بعد الانتقال إليه */
+.sutoor-flash { animation: sutoor-flash 1.6s ease; border-radius: var(--sutoor-radius-sm); }
+@keyframes sutoor-flash {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  25%      { box-shadow: 0 0 0 5px var(--sutoor-brass-soft); }
+}
+
+/* مخفيّ بصرياً ومقروء للقارئ الصوتي */
+.sutoor-sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ==========================================================================
+   8) التجاوب والتفضيلات
+   ========================================================================== */
+@media (max-width: 640px) {
+  .sutoor-ask-bar { flex-direction: column; border-radius: var(--sutoor-radius); padding: 10px; }
+  .sutoor-ask-input { width: 100%; text-align: center; }
+  .sutoor-ask-submit { width: 100%; }
+  .sutoor-ask-chips { gap: 8px; }
+  .sutoor-ask-chips .sutoor-chip { font-size: 0.8rem; padding: 8px 15px; }
+
+  .sutoor-modal { padding: 0; }
+  .sutoor-search-box {
+    width: 100%;
+    height: 100dvh; max-height: 100dvh;
+    border-radius: 0;
+    border: 0;
+  }
+  .sutoor-search-input { font-size: 1.05rem; }
+  .sutoor-result-thumb, .sutoor-thumb-placeholder { width: 52px; height: 52px; }
+  .sutoor-result-title { font-size: 1.02rem; }
+  .sutoor-search-footer .sutoor-legend { display: none; }
+  .sutoor-search-footer .sutoor-stat { margin-inline-start: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sutoor-modal, .sutoor-search-box, .sutoor-result-card,
+  .sutoor-chip, .sutoor-filter, .sutoor-go, .sutoor-flash,
+  .sutoor-ask-bar, .sutoor-ask-submit {
+    transition: none !important;
+    animation: none !important;
+  }
+  .sutoor-search-box { transform: none; }
+  .sutoor-chip:hover { transform: none; }
+}
+
+@media (forced-colors: active) {
+  .sutoor-search-box { border: 1px solid CanvasText; }
+  .sutoor-result-card.is-active { outline: 2px solid Highlight; }
+  mark.sutoor-highlight { background: Highlight; color: HighlightText; }
+}
