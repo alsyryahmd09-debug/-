@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="خريطة تفاعلية لمعالم مملكة البحرين التاريخية والأثرية والطبيعية ضمن منصة سُطور من أوال.">
+<title>معالم البحرين التفاعلية | سُطور من أوال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root{
+    --parchment:#efe6d2;
+    --parchment-deep:#e3d5b8;
+    --paper:#fbf7ec;
+    --ink:#2b2a1f;
+    --ink-soft:#6b6450;
+    --olive:#55603f;
+    --olive-deep:#313a24;
+    --brass:#b08a3e;
+    --brass-bright:#d9b56f;
+    --sea:#2e5c58;
+    --sea-deep:#1f3f3c;
+    --line:rgba(43,42,31,.14);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0; padding:0; width:100%; height:100%;}
+  body{
+    height:100vh;
+    height:100dvh;
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    color:var(--ink);
+    background:
+      linear-gradient(135deg,rgba(176,138,62,.045) 25%,transparent 25%) 0 0/28px 28px,
+      var(--parchment);
+    font-family:'Noto Kufi Arabic',sans-serif;
+  }
+
+  h1,h2{font-family:'Aref Ruqaa',serif; font-weight:700; margin:0;}
+  button,input{font:inherit;}
+  button,a,input{touch-action:manipulation;}
+  :focus-visible{outline:2px solid var(--brass-bright); outline-offset:3px;}
+
+  .topbar{
+    position:relative;
+    flex:0 0 auto;
+    display:grid;
+    grid-template-columns:minmax(310px,.9fr) minmax(440px,1.1fr);
+    gap:24px;
+    align-items:center;
+    padding:14px clamp(18px,3vw,38px) 13px;
+    color:var(--parchment);
+    background:
+      radial-gradient(circle at 84% -30%,rgba(217,181,111,.18),transparent 42%),
+      linear-gradient(180deg,var(--olive),var(--olive-deep));
+    border-bottom:3px solid var(--brass);
+    box-shadow:0 8px 30px rgba(31,30,20,.18);
+    z-index:500;
+  }
+
+  .brand{display:flex; gap:13px; align-items:center; min-width:0;}
+  .brand-mark{
+    width:47px;
+    height:47px;
+    display:grid;
+    place-items:center;
+    flex:none;
+    border:1px solid rgba(217,181,111,.72);
+    border-radius:15px 15px 15px 5px;
+    color:var(--olive-deep);
+    background:var(--brass-bright);
+    box-shadow:inset 0 0 0 4px rgba(255,255,255,.16);
+  }
+  .brand-mark svg{width:27px; height:27px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round;}
+  .brand-copy{min-width:0;}
+  .brand h1{font-size:clamp(20px,2.1vw,28px); letter-spacing:.2px;}
+  .brand p{margin:2px 0 0; color:#d9d2bd; font-family:'Tajawal',sans-serif; font-size:12px; line-height:1.45;}
+  .back-link{
+    min-height:36px;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-top:6px;
+    color:var(--brass-bright);
+    text-decoration:none;
+    font-family:'Tajawal',sans-serif;
+    font-size:12px;
+  }
+  .back-link svg{width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2;}
+  .back-link:hover{color:#fff;}
+
+  .controls{display:grid; gap:9px; justify-items:end; min-width:0;}
+  .search-wrap{position:relative; width:min(100%,390px);}
+  .search-wrap svg{
+    position:absolute;
+    top:50%;
+    right:14px;
+    width:17px;
+    height:17px;
+    transform:translateY(-50%);
+    fill:none;
+    stroke:#d9d2bd;
+    stroke-width:2;
+    pointer-events:none;
+  }
+  #searchInput{
+    width:100%;
+    min-height:44px;
+    padding:8px 43px 8px 16px;
+    color:var(--parchment);
+    background:rgba(239,230,210,.11);
+    border:1px solid rgba(217,181,111,.58);
+    border-radius:999px;
+    font-family:'Tajawal',sans-serif;
+    font-size:14px;
+  }
+  #searchInput::placeholder{color:#c9c2ab;}
+  #searchInput:focus{background:rgba(239,230,210,.18);}
+
+  .chips{display:flex; flex-wrap:wrap; gap:7px; justify-content:flex-end;}
+  .chip{
+    min-height:40px;
+    padding:5px 12px;
+    color:#e7e1cc;
+    background:transparent;
+    border:1px solid rgba(217,181,111,.48);
+    border-radius:999px;
+    font-family:'Tajawal',sans-serif;
+    font-size:12px;
+    cursor:pointer;
+    transition:transform .16s ease,background .16s ease,color .16s ease;
+  }
+  .chip:hover{transform:translateY(-1px); background:rgba(217,181,111,.14);}
+  .chip.active{color:#221d10; background:var(--brass-bright); border-color:var(--brass-bright); font-weight:700;}
+
+  .map-shell{position:relative; flex:1; display:flex; flex-direction:column; min-height:0;}
+  .map-info{
+    position:absolute;
+    top:13px;
+    right:50%;
+    width:min(calc(100% - 150px),720px);
+    transform:translateX(50%);
+    z-index:450;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    padding:8px 15px;
+    color:var(--ink-soft);
+    background:rgba(251,247,236,.92);
+    border:1px solid rgba(176,138,62,.34);
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(31,30,20,.13);
+    backdrop-filter:blur(12px);
+    font-family:'Tajawal',sans-serif;
+    font-size:12px;
+  }
+  .map-info p{margin:0;}
+  .counter{color:var(--olive-deep); font-weight:700; white-space:nowrap;}
+  .legend{display:flex; gap:12px; align-items:center; white-space:nowrap;}
+  .legend-item{display:flex; align-items:center; gap:5px;}
+  .dot{width:11px; height:11px; display:inline-block; border:2px solid #fff; border-radius:50%; box-shadow:0 0 0 1px rgba(43,42,31,.22);}
+  .dot.gold{background:var(--brass);}
+  .dot.silver{background:var(--sea-deep);}
+
+  #map{flex:1; min-height:280px; position:relative; background:#dfe7e5;}
+  .custom-pin{background:transparent!important; border:none!important;}
+  .pin-wrap{position:relative; width:34px; height:34px; display:flex; align-items:center; justify-content:center;}
+  .core{
+    position:relative;
+    width:21px;
+    height:21px;
+    display:grid;
+    place-items:center;
+    border:2px solid #fff;
+    border-radius:50% 50% 50% 15%;
+    transform:rotate(-45deg);
+    color:#fff;
+    background:var(--sea-deep);
+    box-shadow:0 2px 7px rgba(31,30,20,.45);
+  }
+  .core svg{width:11px; height:11px; transform:rotate(45deg); fill:none; stroke:currentColor; stroke-width:2;}
+  .core.gold{width:27px; height:27px; background:var(--brass);}
+  .core.gold svg{width:14px; height:14px;}
+  .core.offmap{background:var(--olive-deep); border-style:dashed;}
+  .halo{
+    position:absolute;
+    width:27px;
+    height:27px;
+    border:3px solid var(--brass-bright);
+    border-radius:50%;
+    opacity:.6;
+    animation:pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{transform:scale(.75);opacity:.6}50%{transform:scale(1.8);opacity:.04}}
+  @media (prefers-reduced-motion:reduce){.halo{animation:none}.panel,.scrim,.chip,.interactive-landmarks-link{transition:none!important;}}
+
+  .ibnmajid-control{
+    min-width:82px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 9px;
+    color:var(--olive-deep);
+    background:var(--parchment-deep);
+    border:2px solid var(--brass);
+    border-radius:10px;
+    box-shadow:0 2px 7px rgba(31,30,20,.24);
+    font-family:'Tajawal',sans-serif;
+    font-size:11px;
+    line-height:1.3;
+    cursor:pointer;
+    user-select:none;
+  }
+  .ibnmajid-control:hover{background:var(--brass-bright);}
+  .ibnmajid-control svg{width:19px; height:19px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8;}
+  .leaflet-tooltip.route-tooltip{color:var(--ink); background:rgba(239,230,210,.94); border:1px solid var(--brass); border-radius:6px; font-family:'Tajawal',sans-serif; font-size:11px;}
+  .leaflet-tooltip{font-family:'Tajawal',sans-serif; font-size:12px;}
+  .leaflet-control-attribution{font-size:10px!important; background:rgba(239,230,210,.87)!important;}
+  .leaflet-control-zoom a{color:var(--ink)!important;}
+  .leaflet-touch .leaflet-bar a{width:44px; height:44px; line-height:44px; font-size:22px;}
+  .leaflet-control-container .leaflet-top{top:max(0px,env(safe-area-inset-top));}
+  .leaflet-control-container .leaflet-bottom{bottom:max(0px,env(safe-area-inset-bottom));}
+
+  .scrim{position:fixed; inset:0; z-index:1100; opacity:0; pointer-events:none; background:rgba(31,30,20,.4); transition:opacity .2s ease;}
+  .scrim.open{opacity:1; pointer-events:auto;}
+  .panel{
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    z-index:1200;
+    width:min(400px,92vw);
+    padding:21px;
+    overflow-y:auto;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 80% 5%,rgba(217,181,111,.25),transparent 34%),
+      var(--parchment-deep);
+    border-inline-start:3px solid var(--brass);
+    box-shadow:-8px 0 28px rgba(31,30,20,.28);
+    transform:translateX(105%);
+    transition:transform .28s ease;
+  }
+  .panel.open{transform:translateX(0);}
+  .panel-close{
+    width:34px;
+    height:34px;
+    display:grid;
+    place-items:center;
+    margin-bottom:18px;
+    color:var(--parchment);
+    background:var(--olive);
+    border:0;
+    border-radius:50%;
+    cursor:pointer;
+  }
+  .panel-close svg{width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:2.2;}
+  .panel-eyebrow{color:var(--sea-deep); font-family:'Tajawal',sans-serif; font-size:12px; font-weight:700;}
+  .panel h2{margin:6px 0 11px; color:var(--olive-deep); font-size:27px; line-height:1.3;}
+  .badge{display:inline-block; margin-bottom:12px; padding:4px 10px; border-radius:999px; font-family:'Tajawal',sans-serif; font-size:11.5px; font-weight:700;}
+  .badge.gold{color:#241d0e; background:var(--brass-bright);}
+  .badge.silver{color:#eef4f3; background:var(--sea-deep);}
+  .panel p{margin:0 0 11px; font-size:14px; line-height:1.95;}
+  .panel-note{padding:10px 11px; color:var(--ink-soft); background:rgba(176,138,62,.14); border-inline-start:3px solid var(--brass); border-radius:6px; font-size:12.5px!important;}
+
+  footer{flex:0 0 auto; padding:7px 12px; color:var(--ink-soft); background:var(--parchment); border-top:1px solid var(--line); text-align:center; font-family:'Tajawal',sans-serif; font-size:10.5px;}
+
+  @media (max-width:900px){
+    .topbar{grid-template-columns:1fr; gap:12px; align-items:start;}
+    .controls{justify-items:stretch;}
+    .search-wrap{width:100%;}
+    .chips{justify-content:flex-start;}
+  }
+
+  @media (max-width:720px){
+    .topbar{
+      gap:9px;
+      padding:max(9px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));
+    }
+    .brand-mark{width:42px; height:42px; border-radius:13px 13px 13px 4px;}
+    .brand h1{font-size:20px;}
+    .brand p{display:none;}
+    .back-link{min-height:32px; margin-top:0;}
+    .chips{flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-inline:contain; scroll-snap-type:inline proximity; padding:0 0 3px; scrollbar-width:none;}
+    .chips::-webkit-scrollbar{display:none;}
+    .chip{min-height:42px; flex:none; scroll-snap-align:start;}
+    .map-info{top:8px; width:calc(100% - 118px); min-height:42px; justify-content:space-between; padding:7px 10px;}
+    .map-info p{display:none;}
+    .legend{gap:8px;}
+    .legend-item span:last-child{display:none;}
+    .panel{inset-inline:0; top:auto; right:0; left:0; width:auto; max-height:min(72vh,620px); padding:29px 18px max(20px,env(safe-area-inset-bottom)); border-inline-start:0; border-top:3px solid var(--brass); border-radius:22px 22px 0 0; transform:translateY(105%);}
+    .panel::before{content:""; position:absolute; top:10px; left:50%; width:46px; height:5px; border-radius:99px; background:rgba(49,58,36,.28); transform:translateX(-50%);}
+    .panel.open{transform:translateY(0);}
+    .panel-close{width:44px; height:44px; margin-bottom:12px;}
+    .panel h2{font-size:24px;}
+    footer{display:none;}
+  }
+
+  @media (max-width:480px){
+    .brand{gap:10px;}
+    .brand-mark{width:38px; height:38px; border-radius:12px 12px 12px 4px;}
+    .brand-mark svg{width:23px; height:23px;}
+    .brand h1{font-size:18px;}
+    .back-link{font-size:11.5px;}
+    #searchInput{font-size:16px;}
+    .map-info{right:12px; width:auto; transform:none;}
+    .legend{display:none;}
+    .counter{min-width:42px; text-align:center;}
+    .leaflet-control-attribution{max-width:72vw; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;}
+  }
+
+  @media (max-height:560px) and (orientation:landscape){
+    .topbar{grid-template-columns:minmax(250px,.72fr) minmax(420px,1.28fr); gap:12px; padding-top:max(7px,env(safe-area-inset-top)); padding-bottom:7px;}
+    .brand-mark{width:38px; height:38px;}
+    .brand h1{font-size:18px;}
+    .brand p,.back-link span{display:none;}
+    .back-link{position:absolute; top:max(8px,env(safe-area-inset-top)); left:max(12px,env(safe-area-inset-left)); width:40px; min-height:40px; justify-content:center; margin:0; border:1px solid rgba(217,181,111,.48); border-radius:50%;}
+    .controls{grid-template-columns:minmax(180px,280px) 1fr; align-items:center; gap:8px;}
+    .chips{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none;}
+    .chip{min-height:40px; flex:none;}
+    .panel{inset:0 0 0 auto; width:min(380px,58vw); max-height:none; padding:18px max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) 18px; border-top:0; border-inline-start:3px solid var(--brass); border-radius:18px 0 0 18px; transform:translateX(105%);}
+    .panel::before{display:none;}
+    .panel.open{transform:translateX(0);}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32">
+        <path d="M4 10.5 11 7l10 3.5L28 7v17.5L21 28l-10-3.5L4 28Z"></path>
+        <path d="M11 7v17.5M21 10.5V28"></path>
+        <path d="M16 13a3.4 3.4 0 0 1 3.4 3.4c0 2.6-3.4 6.2-3.4 6.2s-3.4-3.6-3.4-6.2A3.4 3.4 0 0 1 16 13Z"></path>
+        <circle cx="16" cy="16.4" r="1" fill="currentColor" stroke="none"></circle>
+      </svg>
+    </span>
+    <div class="brand-copy">
+      <h1>معالم البحرين التفاعلية</h1>
+      <p>خريطة جغرافية حقيقية بإحداثيات فعلية للمعالم التاريخية والتراثية</p>
+      <a class="back-link" href="./index.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg>
+        <span>العودة إلى سُطور من أوال</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label class="search-wrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg>
+      <input type="search" id="searchInput" placeholder="ابحث عن معلم… مثل: الخميس، الرفاع، دلمون" aria-label="بحث عن معلم">
+    </label>
+    <div class="chips" id="chipsRow" role="group" aria-label="تصنيف المعالم">
+      <button class="chip active" type="button" data-mode="all" aria-pressed="true">الكل</button>
+      <button class="chip" type="button" data-mode="pre-islamic" aria-pressed="false">ما قبل الإسلام</button>
+      <button class="chip" type="button" data-mode="islamic" aria-pressed="false">صدر الإسلام</button>
+      <button class="chip" type="button" data-mode="khalifa" aria-pressed="false">عصر آل خليفة</button>
+      <button class="chip" type="button" data-mode="modernnature" aria-pressed="false">حديثة وطبيعية</button>
+      <button class="chip" type="button" data-mode="unesco" aria-pressed="false">مواقع يونسكو</button>
+    </div>
+  </div>
+</header>
+
+<main class="map-shell">
+  <div class="map-info" aria-live="polite">
+    <p>اختر دبّوساً لعرض قصته وموقعه</p>
+    <div class="legend" aria-label="مفتاح الخريطة">
+      <span class="legend-item"><i class="dot gold"></i><span>ملف موثّق</span></span>
+      <span class="legend-item"><i class="dot silver"></i><span>معلم عام</span></span>
+    </div>
+    <span class="counter" id="counterText"></span>
+  </div>
+  <div id="map" aria-label="خريطة معالم مملكة البحرين"></div>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="panel" id="infoPanel" aria-hidden="true" aria-labelledby="panelTitle">
+  <button class="panel-close" id="panelClose" type="button" aria-label="إغلاق التفاصيل">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+  </button>
+  <div id="panelContent"></div>
+</aside>
+
+<footer>الخريطة: © مساهمو OpenStreetMap · © CARTO — بعض الإحداثيات تشير إلى مركز الموقع الأثري أو الطبيعي الممتد</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  const ERA_LABELS = {
+    'pre-islamic':'ما قبل الإسلام',
+    'islamic':'صدر الإسلام',
+    'khalifa':'عصر آل خليفة',
+    'modernnature':'معلم حديث أو طبيعي'
+  };
+
+  const LANDMARKS = [
+    {id:'khamis',name:'مسجد الخميس',tier:'gold',era:'islamic',lat:26.1907,lng:50.5233,desc:'من أقدم مساجد البحرين، يُنسب تأسيسه إلى عهد الخليفة عمر بن عبدالعزيز، وأكدت مكانته التاريخية نتائج أعمال التنقيب الأثري في الموقع.'},
+    {id:'rifa',name:'قلعة الرفاع',tier:'gold',era:'khalifa',lat:26.1173,lng:50.5577,desc:'شُيّدت في عهد الحاكم أحمد الفاتح، وأصبحت مركزاً مهماً للحكم بعد انتقال العاصمة إلى الرفاع في أواخر القرن الثامن عشر.'},
+    {id:'samahij',name:'سماهيج',tier:'gold',era:'pre-islamic',lat:26.2830,lng:50.6335,desc:'قرية على ساحل جزيرة المحرق الشمالي، ارتبط تاريخها بوجود مسيحي مبكر في البحرين وبشخصيات علمية بحرينية في عصور لاحقة.'},
+    {id:'dilmun',name:'تلال مدافن دلمون — عالي',tier:'gold',era:'pre-islamic',unesco:true,lat:26.1547,lng:50.5136,desc:'موقع تراث عالمي يضم آلاف تلال الدفن من الألفية الثانية قبل الميلاد؛ تشير الإحداثيات إلى مركز أحد حقول التلال في عالي.'},
+    {id:'bahrainfort',name:'قلعة البحرين',tier:'silver',era:'pre-islamic',unesco:true,lat:26.2333,lng:50.5217,desc:'موقع تراث عالمي يُعتقد أنه كان حاضرة دلمون القديمة، وتعلوه بقايا حصن من العهد البرتغالي.'},
+    {id:'barbar',name:'معبد باربار',tier:'silver',era:'pre-islamic',lat:26.2262,lng:50.4841,desc:'مجمّع معابد من الألفية الثالثة قبل الميلاد، يرتبط بالمعتقدات الدينية في حضارة دلمون.'},
+    {id:'museum',name:'متحف البحرين الوطني',tier:'silver',era:'modernnature',lat:26.2361,lng:50.5876,desc:'أكبر متحف عام في البحرين، ويضم مقتنيات أثرية وتاريخية تمتد من العصور الدلمونية إلى التاريخ الحديث.'},
+    {id:'babbahrain',name:'باب البحرين',tier:'silver',era:'modernnature',lat:26.2286,lng:50.5819,desc:'بوابة تاريخية في قلب المنامة تُعد المدخل الأشهر إلى سوق المنامة التقليدي.'},
+    {id:'souq',name:'سوق المنامة والقيصرية',tier:'silver',era:'khalifa',lat:26.2296,lng:50.5836,desc:'سوق تقليدي متفرّع من باب البحرين، وواحد من أقدم مراكز التبادل التجاري في المنامة.'},
+    {id:'alfateh',name:'مسجد الفاتح الكبير',tier:'silver',era:'modernnature',lat:26.2225,lng:50.5967,desc:'من أكبر مساجد البحرين، ويُعد معلماً دينياً ومعمارياً بارزاً في مدينة المنامة.'},
+    {id:'pearlingpath',name:'طريق اللؤلؤ وقلعة بوماهر',tier:'silver',era:'khalifa',unesco:true,lat:26.2414,lng:50.6136,desc:'موقع تراث عالمي يشهد على اقتصاد الغوص واللؤلؤ، ويمتد عبر مجموعة مبانٍ ومسارات في المحرق.'},
+    {id:'arad',name:'قلعة عراد',tier:'silver',era:'islamic',lat:26.2656,lng:50.6350,desc:'حصن تاريخي في المحرق يمثّل نموذجاً مميزاً للعمارة العسكرية الإسلامية في الخليج.'},
+    {id:'sheikhisa',name:'بيت الشيخ عيسى بن علي',tier:'silver',era:'khalifa',lat:26.2539,lng:50.6129,desc:'بيت تقليدي من القرن التاسع عشر في المحرق، وكان مقراً للإقامة ومجلساً للحكم.'},
+    {id:'treeoflife',name:'شجرة الحياة',tier:'silver',era:'modernnature',lat:25.9256,lng:50.5681,desc:'شجرة معمّرة قائمة في الصحراء الجنوبية، وهي من أشهر المعالم الطبيعية في البحرين.'},
+    {id:'aljasra',name:'مركز الجسرة للحرف',tier:'silver',era:'khalifa',lat:26.1660,lng:50.4500,desc:'مركز يعرض الحرف اليدوية البحرينية التقليدية بجوار بيت الجسرة التاريخي على الساحل الغربي.'},
+    {id:'hawar',name:'جزر حوار',tier:'silver',era:'modernnature',lat:25.6500,lng:50.7833,desc:'أرخبيل جنوب البحرين يضم موائل طبيعية مهمة للطيور المهاجرة والحياة البرية؛ تشير الإحداثيات إلى الجزيرة الرئيسية.'}
+  ];
+
+  const ZUBARA = {id:'zubara',name:'الزبارة — قلعة صبحا',tier:'offmap',lat:25.9803,lng:51.0264,desc:'مدينة تاريخية في قطر الحالية ارتبطت بتاريخ آل خليفة قبل فتح البحرين في القرن الثامن عشر.'};
+  const IBNMAJID = {id:'ibnmajid',name:'أحمد بن ماجد البحّار',desc:'ربّان وعالم ملاحة عربي ارتبط اسمه بتاريخ الملاحة في الخليج والمحيط الهندي. يظهر هنا كعنصر دليل، لأنه لا يرتبط بموقع واحد داخل البحرين.'};
+
+  const map = L.map('map',{zoomControl:true,scrollWheelZoom:true}).setView([26.05,50.62],10);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+    subdomains:'abcd',
+    maxZoom:19
+  }).addTo(map);
+
+  const landmarkSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8v10h10V8M4 21h16"></path></svg>';
+  const pointSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle></svg>';
+
+  function pinIcon(item){
+    let inner;
+    if(item.tier==='gold') inner='<span class="halo"></span><span class="core gold">'+landmarkSvg+'</span>';
+    else if(item.tier==='offmap') inner='<span class="core offmap">'+pointSvg+'</span>';
+    else inner='<span class="core">'+pointSvg+'</span>';
+    return L.divIcon({html:'<div class="pin-wrap">'+inner+'</div>',className:'custom-pin',iconSize:[34,34],iconAnchor:[17,17]});
+  }
+
+  const markerRefs=[];
+  LANDMARKS.forEach(function(item){
+    const marker=L.marker([item.lat,item.lng],{icon:pinIcon(item),keyboard:true,title:item.name}).addTo(map);
+    marker.bindTooltip(item.name,{direction:'top',offset:[0,-15]});
+    marker.on('click',function(){openPanel(item);map.flyTo([item.lat,item.lng],Math.max(map.getZoom(),14),{duration:.6});});
+    markerRefs.push({item:item,marker:marker});
+  });
+
+  const zbMarker=L.marker([ZUBARA.lat,ZUBARA.lng],{icon:pinIcon(ZUBARA),keyboard:true,title:ZUBARA.name}).addTo(map);
+  zbMarker.bindTooltip(ZUBARA.name,{direction:'top',offset:[0,-15]});
+  zbMarker.on('click',function(){openPanel(ZUBARA);});
+
+  const rifaItem=LANDMARKS.find(function(item){return item.id==='rifa';});
+  const routeLine=L.polyline([[ZUBARA.lat,ZUBARA.lng],[26.06,50.60],[rifaItem.lat,rifaItem.lng]],{color:'#b08a3e',weight:2.5,dashArray:'2,8',opacity:.85}).addTo(map);
+  routeLine.bindTooltip('مسار تاريخي من الزبارة إلى البحرين',{permanent:true,direction:'center',className:'route-tooltip'});
+
+  const IbnMajidControl=L.Control.extend({
+    options:{position:'bottomleft'},
+    onAdd:function(){
+      const div=L.DomUtil.create('div','ibnmajid-control');
+      div.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 8h14M7 8v10h10V8M4 21h16"></path></svg><span>دليل ابن ماجد</span>';
+      div.setAttribute('role','button');
+      div.setAttribute('tabindex','0');
+      div.setAttribute('aria-label','فتح دليل أحمد بن ماجد البحار');
+      L.DomEvent.disableClickPropagation(div);
+      L.DomEvent.on(div,'click',function(){openPanel(IBNMAJID);});
+      L.DomEvent.on(div,'keydown',function(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();openPanel(IBNMAJID);}});
+      return div;
+    }
+  });
+  map.addControl(new IbnMajidControl());
+
+  const allPoints=LANDMARKS.map(function(item){return [item.lat,item.lng];}).concat([[ZUBARA.lat,ZUBARA.lng]]);
+  map.fitBounds(L.latLngBounds(allPoints),{padding:[35,35]});
+
+  const panel=document.getElementById('infoPanel');
+  const panelContent=document.getElementById('panelContent');
+  const scrim=document.getElementById('scrim');
+  const panelClose=document.getElementById('panelClose');
+  let lastFocusedElement=null;
+
+  function openPanel(item){
+    lastFocusedElement=document.activeElement;
+    let html='';
+    if(item.era) html+='<span class="panel-eyebrow">'+ERA_LABELS[item.era]+'</span>';
+    else if(item.id==='zubara') html+='<span class="panel-eyebrow">معلم مرتبط تاريخياً خارج حدود مملكة البحرين</span>';
+    else html+='<span class="panel-eyebrow">دليل الخريطة</span>';
+    html+='<h2 id="panelTitle">'+item.name+'</h2>';
+    if(item.tier==='gold') html+='<span class="badge gold">ملف موثّق داخل المنصة</span>';
+    else if(item.tier==='silver') html+='<span class="badge silver">معلم تراثي أو سياحي</span>';
+    html+='<p>'+item.desc+'</p>';
+    if(item.tier==='gold') html+='<p class="panel-note">يتوفر لهذا المعلم بحث موسّع ومراجع ضمن المحتوى الرئيسي لمنصة سُطور من أوال.</p>';
+    panelContent.innerHTML=html;
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden','false');
+    scrim.classList.add('open');
+    panelClose.focus();
+  }
+
+  function closePanel(){
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden','true');
+    scrim.classList.remove('open');
+    if(lastFocusedElement&&typeof lastFocusedElement.focus==='function') lastFocusedElement.focus();
+  }
+
+  panelClose.addEventListener('click',closePanel);
+  scrim.addEventListener('click',closePanel);
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&panel.classList.contains('open')) closePanel();});
+
+  const searchInput=document.getElementById('searchInput');
+  const chips=document.querySelectorAll('.chip');
+  const counterText=document.getElementById('counterText');
+  let activeMode='all';
+
+  function normalizeArabic(value){
+    return (value||'').toString().replace(/[\u064B-\u0652]/g,'').replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').trim();
+  }
+
+  function applyFilters(){
+    const query=normalizeArabic(searchInput.value);
+    let visibleCount=0;
+    markerRefs.forEach(function(ref){
+      const item=ref.item;
+      let visible=true;
+      if(activeMode==='unesco') visible=Boolean(item.unesco);
+      else if(activeMode!=='all') visible=item.era===activeMode;
+      if(visible&&query) visible=normalizeArabic(item.name).indexOf(query)!==-1;
+      if(visible){
+        if(!map.hasLayer(ref.marker)) ref.marker.addTo(map);
+        visibleCount+=1;
+      }else if(map.hasLayer(ref.marker)){
+        map.removeLayer(ref.marker);
+      }
+    });
+    counterText.textContent=visibleCount+' / '+LANDMARKS.length;
+  }
+
+  chips.forEach(function(chip){
+    chip.addEventListener('click',function(){
+      chips.forEach(function(current){current.classList.remove('active');current.setAttribute('aria-pressed','false');});
+      chip.classList.add('active');
+      chip.setAttribute('aria-pressed','true');
+      activeMode=chip.getAttribute('data-mode');
+      applyFilters();
+    });
+  });
+  searchInput.addEventListener('input',applyFilters);
+  let resizeTimer;
+  window.addEventListener('resize',function(){
+    window.clearTimeout(resizeTimer);
+    resizeTimer=window.setTimeout(function(){map.invalidateSize({pan:false});},120);
+  });
+  window.addEventListener('orientationchange',function(){
+    window.setTimeout(function(){map.invalidateSize({pan:false});},250);
+  });
+  applyFilters();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>قالب شجرة العائلة — مروحة الأجيال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Reem+Kufi:wght@400..700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/json" id="template-manifest">
+{
+  "id": "ornate-fan-v1",
+  "name": "مروحة الأجيال",
+  "version": "1.0.0",
+  "engine": "tree-engine/1.0",
+  "page": { "size": "A4", "orientation": "portrait", "w": 794, "h": 1123, "cssDpi": 96 },
+  "themes": ["classic", "olive", "najdi", "gilded"],
+  "fonts": ["amiri", "naskh", "ruqaa", "kufi"],
+  "capabilities": ["render", "platform-adapter", "postMessage", "export-svg", "export-png-300dpi", "export-pdf", "print-vector", "save-copy", "autosave"],
+  "slots": { "lineage": { "min": 0, "max": 8 }, "fan": { "rings": 14, "recommended": 120 } },
+  "api": "window.FamilyTreeTemplate"
+}
+</script>
+<script type="application/json" id="ftt-data"></script>
+
+<style>
+  :root{
+    --ui-bg:#141C15; --ui-panel:#1D291E; --ui-line:#31432F;
+    --ui-text:#E6E9DF; --ui-dim:#94A48F; --ui-gold:#D7B457; --ui-grn:#79A85B;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:#0F150F;
+    font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
+    color:var(--ui-text);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── شريط الأدوات ─────────────────────────────── */
+  .bar{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(180deg,#1D291E,#16201700 100%), var(--ui-bg);
+    border-bottom:1px solid var(--ui-line);
+    box-shadow:0 10px 30px -14px #000;
+  }
+  .bar-in{ max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .brand{ display:flex; align-items:center; gap:9px; margin-inline-end:auto; }
+  .brand b{ font-weight:600; font-size:14px; letter-spacing:.2px; }
+  .brand span{ font-size:11px; color:var(--ui-dim); font-variant-numeric:tabular-nums; }
+  .seal{ width:26px; height:26px; flex:0 0 auto; }
+
+  .grp{ display:flex; gap:6px; align-items:center; background:var(--ui-panel); border:1px solid var(--ui-line); border-radius:9px; padding:4px; }
+  .grp > label{ font-size:11px; color:var(--ui-dim); padding-inline:6px; }
+  button, select, input[type=text]{ font-family:inherit; }
+  .btn{
+    appearance:none; border:1px solid transparent; background:transparent; color:var(--ui-text);
+    font-size:12.5px; font-weight:500; padding:6px 11px; border-radius:6px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px; transition:background .13s,color .13s;
+  }
+  .btn:hover{ background:#2A3A29; }
+  .btn:focus-visible{ outline:2px solid var(--ui-gold); outline-offset:1px; }
+  .btn[aria-pressed=true]{ background:var(--ui-grn); color:#0F150F; font-weight:600; }
+  .btn.gold{ background:var(--ui-gold); color:#221B06; font-weight:600; }
+  .btn.gold:hover{ background:#E7C669; }
+  .btn.ghost{ border-color:var(--ui-line); }
+  .btn.ghost:hover{ border-color:#4A6146; }
+  .btn[disabled]{ opacity:.45; pointer-events:none; }
+  .btn svg{ width:14px; height:14px; flex:0 0 auto; }
+  input[type=text]{
+    background:#101810; border:1px solid var(--ui-line); color:var(--ui-text);
+    border-radius:6px; padding:6px 9px; font-size:12.5px; width:150px;
+  }
+  input[type=text]:focus{ outline:none; border-color:var(--ui-gold); }
+  select{
+    background:#101810; border:1px solid var(--ui-line); color:var(--ui-text);
+    border-radius:6px; padding:6px 8px; font-size:12.5px;
+  }
+  .hint{ font-size:11px; color:var(--ui-dim); padding-inline:4px; }
+
+
+  /* ── لوحة تحرير البنية ─────────────────────────── */
+  .wrap{ display:grid; grid-template-columns:1fr 344px; gap:16px; align-items:start;
+         max-width:1340px; margin:0 auto; padding:18px 16px 70px; }
+  .wrap.noedit{ grid-template-columns:1fr; }
+  .wrap.noedit .panel{ display:none; }
+  @media(max-width:1060px){ .wrap{ grid-template-columns:1fr; } }
+  .panel{ position:sticky; top:66px; background:var(--ui-panel); border:1px solid var(--ui-line);
+          border-radius:12px; overflow:hidden; }
+  .phead{ display:flex; align-items:center; justify-content:space-between; gap:8px;
+          padding:9px 12px; background:#16201790; border-block-end:1px solid var(--ui-line); }
+  .phead b{ font-size:12.5px; color:var(--ui-gold); }
+  .pstat{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--ui-line);
+          border-block-end:1px solid var(--ui-line); }
+  .pstat span{ background:var(--ui-panel); padding:7px 4px; text-align:center; font-size:10.5px; color:var(--ui-dim); }
+  .pstat b{ display:block; font-size:15px; color:var(--ui-text); font-weight:600; margin-block-start:1px; }
+  .psec{ border-block-end:1px solid var(--ui-line); }
+  .psec h3{ margin:0; padding:8px 10px 8px 12px; font-size:11.5px; font-weight:600; color:var(--ui-dim);
+            display:flex; align-items:center; justify-content:space-between; gap:6px; }
+  .btn.mini{ font-size:11px; padding:3px 8px; }
+  .plist{ max-height:210px; overflow-y:auto; padding:5px 8px 9px; }
+  .plist.tall{ max-height:330px; }
+  .erow{ display:grid; grid-template-columns:1fr auto; gap:4px; align-items:center; padding:2px 0;
+         margin-inline-start:calc(var(--d,0) * 13px); }
+  .enm{ background:#101810; border:1px solid var(--ui-line); border-radius:5px; color:var(--ui-text);
+        font:inherit; font-size:12px; padding:4px 7px; width:100%; min-width:0; }
+  .enm::placeholder{ color:#5D6E59; }
+  .enm:focus{ outline:none; border-color:var(--ui-gold); }
+  .erow.sel .enm{ border-color:var(--ui-grn); box-shadow:0 0 0 1px var(--ui-grn); }
+  .ebtns{ display:flex; gap:1px; }
+  .eb{ width:21px; height:21px; border:1px solid transparent; background:transparent; color:var(--ui-dim);
+       border-radius:4px; cursor:pointer; font-size:11px; line-height:1; display:grid; place-items:center;
+       font-family:inherit; padding:0; }
+  .eb:hover{ background:#2C3D2B; color:var(--ui-text); }
+  .eb.del:hover{ background:#5C2424; color:#FFDCDC; }
+  .eb[disabled]{ opacity:.3; pointer-events:none; }
+  .ehint{ margin:0; padding:8px 12px; font-size:10.5px; color:var(--ui-dim); line-height:1.6; }
+  #tpl .node-hit.sel .plate{ stroke:#2F7D32; stroke-width:3; }
+
+  /* ── منصة العرض ───────────────────────────────── */
+  .stage{ display:flex; justify-content:center; min-width:0; }
+  .sheet-outer{ position:relative; flex:0 0 auto; }
+  .sheet-wrap{ position:absolute; inset-inline-start:0; top:0; transform-origin:top left; }
+  html[dir=rtl] .sheet-wrap{ left:0; right:auto; }
+  .sheet{
+    width:794px; height:1123px; background:#F6F1E0;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .sheet svg{ display:block; width:100%; height:100%; }
+
+  .name-edit{
+    position:fixed; display:none; z-index:40; transform:translate(-50%,-50%);
+    background:#FFFDF3; color:#33291C; border:2px solid #C39B2C; border-radius:6px;
+    padding:5px 9px; font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:15px; font-weight:700;
+    text-align:center; width:190px; box-shadow:0 8px 26px rgba(0,0,0,.45);
+  }
+  .name-edit:focus{ outline:none; }
+
+  .toast{
+    position:fixed; inset-block-end:22px; inset-inline:0; margin-inline:auto; width:max-content; max-width:90vw;
+    background:#233024; border:1px solid var(--ui-line); border-inline-start:3px solid var(--ui-gold);
+    color:var(--ui-text); font-size:12.5px; padding:9px 15px; border-radius:8px;
+    box-shadow:0 14px 36px rgba(0,0,0,.6); opacity:0; transform:translateY(8px);
+    transition:opacity .2s, transform .2s; pointer-events:none; z-index:50;
+  }
+  .toast.on{ opacity:1; transform:none; }
+
+  .node-hit{ cursor:text; }
+  .node-hit:hover .plate{ stroke-width:2.4; }
+
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+
+  /* ── الطباعة ─────────────────────────────────── */
+  @page{ size:A4 portrait; margin:0; }
+  @media print{
+    html,body{ background:#fff; }
+    .bar,.toast,.name-edit,.panel{ display:none !important; }
+    .wrap{ display:block !important; padding:0 !important; max-width:none; }
+    .stage{ padding:0; display:block; }
+    .sheet-outer{ width:auto !important; height:auto !important; position:static; }
+    .sheet-wrap{ position:static; transform:none !important; }
+    .sheet{ width:210mm; height:296.8mm; box-shadow:none; }
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand">
+      <svg class="seal" viewBox="-20 -20 40 40" aria-hidden="true">
+        <circle r="18.5" fill="none" stroke="#D7B457" stroke-width="1.6"/>
+        <rect x="-9.5" y="-9.5" width="19" height="19" fill="none" stroke="#79A85B" stroke-width="1.3"/>
+        <rect x="-9.5" y="-9.5" width="19" height="19" fill="none" stroke="#5F8FB0" stroke-width="1.3" transform="rotate(45)"/>
+        <circle r="3" fill="#D7B457"/>
+      </svg>
+      <div>
+        <b>قالب شجرة العائلة — مروحة الأجيال</b><br>
+        <span>ornate-fan-v1 · A4 · 794×1123</span>
+      </div>
+    </div>
+
+    <div class="grp">
+      <button class="btn" id="b-blank" aria-pressed="true">قالب فارغ</button>
+      <button class="btn" id="b-sample" aria-pressed="false">بيانات تجريبية</button>
+      <button class="btn" id="e-toggle" aria-pressed="true" title="إظهار/إخفاء لوحة التحرير">المحرّر</button>
+    </div>
+
+    <div class="grp">
+      <label for="fontsel">الخط</label>
+      <select id="fontsel">
+        <option value="amiri">أميري</option>
+        <option value="naskh">نسخ نوتو</option>
+        <option value="ruqaa">رقعة عارف</option>
+        <option value="kufi">كوفي ريم</option>
+      </select>
+      <label for="theme">النمط</label>
+      <select id="theme">
+        <option value="classic">كلاسيكي</option>
+        <option value="olive">زيتوني</option>
+        <option value="najdi">نجدي</option>
+        <option value="gilded">مذهّب مزخرف</option>
+      </select>
+    </div>
+
+    <div class="grp">
+      <label for="famname">اسم العائلة</label>
+      <input type="text" id="famname" placeholder="آل ..." autocomplete="off">
+      <button class="btn ghost" id="b-import" title="من نفس النطاق تلقائيًا، أو من ملف JSON المُصدَّر من المنصة">استيراد من المنصة</button>
+    </div>
+
+    <div class="grp">
+      <button class="btn gold" id="b-pdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg>
+        تنزيل PDF
+      </button>
+      <button class="btn ghost" id="b-png">PNG · 300dpi</button>
+      <button class="btn ghost" id="b-svg">SVG</button>
+      <button class="btn ghost" id="b-print">طباعة متجهة</button>
+      <button class="btn ghost" id="b-copy">حفظ نسخة</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" id="wrap">
+<main class="stage" id="stage">
+  <div class="sheet-outer" id="sheetOuter">
+    <div class="sheet-wrap" id="sheetWrap">
+      <div class="sheet">
+
+<svg id="tpl" class="thm-classic" viewBox="0 0 794 1123"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     role="img" aria-label="قالب شجرة عائلة مزخرف">
+<style>
+  #tpl{
+    --paper:#F7F2E2; --paper2:#EBE1C4; --ink:#33291C; --inkSoft:#6B5A42;
+    --gold:#C39B2C; --goldL:#EBD489; --goldD:#8A6A15;
+    --grn:#4F7B3A; --blu:#3F6E8E; --band:#F3EDD9; --braidD:#2B3D21;
+    --bark:#54321C; --barkD:#311C0C; --barkL:#7E5228;
+    --f1:#3F6B2A; --f2:#5E9640; --f3:#84B457; --f4:#AFD07A;
+    --plate:#FFFDF4;
+    --r1:#CFE3B4; --r2:#DEEBC8; --r3:#EAF2DC; --r4:#F4F8EC; --lfStroke:none; --halo:0;
+  }
+  /* مذهّب مزخرف: ذهب مهيمن، أوراق محدّدة بالذهب، وهالة خلف التاج */
+  #tpl.thm-gilded{
+    --paper:#FBF6E4; --paper2:#EEDEB2; --ink:#2A2113; --inkSoft:#6A5426;
+    --gold:#B8912A; --goldL:#F2DE9A; --goldD:#7A5A0E;
+    --grn:#2C5530; --blu:#8A6410; --band:#F8F1D6; --braidD:#2A1F08;
+    --bark:#4A2E14; --barkD:#291708; --barkL:#7E5626;
+    --f1:#2F5A2B; --f2:#4E7F3A; --f3:#75A354; --f4:#A3C77C;
+    --plate:#FFFCEE; --lfStroke:var(--goldD); --halo:.5;
+    --r1:#DBC383; --r2:#E8D7A6; --r3:#F1E7C7; --r4:#F8F3E1;
+  }
+  #tpl.thm-olive{
+    --gold:#A98B3A; --goldL:#DCC886; --goldD:#7A6015;
+    --grn:#5D6B32; --blu:#77813E; --band:#F1EEDB; --braidD:#2F3520;
+    --paper:#F6F3E5; --paper2:#E7E2C8;
+    --f1:#4A5C2C; --f2:#6E8144; --f3:#95A45E; --f4:#BFC98C;
+    --bark:#54401F; --barkD:#33260F; --barkL:#79602E;
+    --r1:#D5D8B0; --r2:#E2E4C6; --r3:#EDEEDA; --r4:#F5F6EA;
+  }
+  #tpl.thm-najdi{
+    --gold:#C2952B; --goldL:#EBD489; --goldD:#8A6115;
+    --grn:#1E7A72; --blu:#9B2A2A; --band:#F4EEDC; --braidD:#3A1B14;
+    --paper:#F8F2DF; --paper2:#EEDFBC;
+    --f1:#2C6B4A; --f2:#4C9163; --f3:#7BB27C; --f4:#AECD98;
+    --bark:#5C331A; --barkD:#391C0A; --barkL:#875A26;
+    --r1:#BFDFD6; --r2:#D5E9E2; --r3:#E6F1ED; --r4:#F2F8F5;
+  }
+  #tpl text{ direction:rtl; }
+  #tpl .t-verse{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:12.4px; fill:var(--inkSoft); }
+  #tpl .t-vref{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:8.6px; fill:var(--goldD); }
+  #tpl .t-title{ font-family:'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif; font-weight:700; font-size:30px; fill:var(--ink); }
+  #tpl .t-fam{ font-family:'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif; font-size:17px; fill:var(--goldD); }
+  /* هالة ورقية رقيقة خلف الحروف: تفصل الاسم عن لون القطاع وعن الأطواق الذهبية */
+  #tpl .t-name{ font-family:'Amiri','Noto Naskh Arabic',serif; font-weight:700; fill:var(--ink);
+                paint-order:stroke fill; stroke:var(--plate); stroke-opacity:.85;
+                stroke-linejoin:round; stroke-linecap:round; }
+  #tpl .node-hit.sel .t-name{ fill:var(--grn); }
+  #tpl.fn-naskh .t-name{ font-family:'Noto Naskh Arabic','Amiri',serif; }
+  #tpl.fn-ruqaa .t-name{ font-family:'Aref Ruqaa','Amiri',serif; }
+  #tpl.fn-kufi  .t-name{ font-family:'Reem Kufi','Amiri',sans-serif; font-weight:600; }
+  #tpl .halo{ opacity:var(--halo); }
+  #tpl .t-ftitle{ font-family:'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif; font-size:12px; fill:var(--goldD); }
+  #tpl .t-fline{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:11px; fill:var(--ink); }
+  #tpl .t-nasab{ font-family:'Amiri','Scheherazade New','Traditional Arabic',serif; font-size:11px; fill:var(--inkSoft); }
+  #tpl .t-dates{ font-family:'Amiri','Scheherazade New','Traditional Arabic',serif; fill:var(--goldD); }
+  #tpl .t-foot{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:9.6px; fill:var(--inkSoft); }
+</style>
+
+<defs>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="11" result="n"/>
+    <feColorMatrix in="n" type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="linear" slope="0.075"/></feComponentTransfer>
+  </filter>
+  <radialGradient id="vign" cx="50%" cy="46%" r="72%">
+    <stop offset="55%" stop-color="var(--paper)" stop-opacity="0"/>
+    <stop offset="100%" stop-color="var(--paper2)" stop-opacity=".9"/>
+  </radialGradient>
+  <linearGradient id="barkG" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="var(--barkD)"/>
+    <stop offset=".26" stop-color="var(--bark)"/>
+    <stop offset=".44" stop-color="var(--barkL)"/>
+    <stop offset=".72" stop-color="var(--bark)"/>
+    <stop offset="1" stop-color="var(--barkD)"/>
+  </linearGradient>
+  <linearGradient id="grassG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="var(--f3)"/>
+    <stop offset="1" stop-color="var(--f1)"/>
+  </linearGradient>
+  <radialGradient id="haloG" cx="50%" cy="50%" r="50%">
+    <stop offset="45%" stop-color="var(--goldL)" stop-opacity=".85"/>
+    <stop offset="100%" stop-color="var(--goldL)" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="fruitG" cx="35%" cy="32%" r="72%">
+    <stop offset="0" stop-color="var(--goldL)"/>
+    <stop offset="1" stop-color="var(--gold)"/>
+  </radialGradient>
+  <filter id="plateSh" x="-40%" y="-80%" width="180%" height="270%">
+    <feDropShadow dx="0" dy="1.5" stdDeviation="1.7" flood-color="#2A1F10" flood-opacity=".3"/>
+  </filter>
+  <clipPath id="contentClip"><rect x="56" y="56" width="682" height="1011"/></clipPath>
+  <clipPath id="braidCross"><rect x="7" y="0" width="10" height="26"/></clipPath>
+
+  <path id="leafP" d="M0,0 C3.4,-4.4 9.2,-5.4 13.6,0 C9.2,5.4 3.4,4.4 0,0 Z"/>
+  <g id="leaf">
+    <use href="#leafP" xlink:href="#leafP"/>
+    <path d="M1.4,0 L12,0" fill="none" stroke="#20340F" stroke-opacity=".22" stroke-width=".55"/>
+  </g>
+
+  <g id="braidUnit">
+    <rect width="24" height="26" fill="var(--band)"/>
+    <g fill="none" stroke-linecap="butt">
+      <path id="strandA" d="M-12,13 C-8,23.8 -4,23.8 0,13 C4,2.2 8,2.2 12,13 C16,23.8 20,23.8 24,13 C28,2.2 32,2.2 36,13"/>
+      <path id="strandB" d="M-12,13 C-8,2.2 -4,2.2 0,13 C4,23.8 8,23.8 12,13 C16,2.2 20,2.2 24,13 C28,23.8 32,23.8 36,13"/>
+      <use href="#strandA" xlink:href="#strandA" stroke="var(--braidD)" stroke-width="6"/>
+      <use href="#strandA" xlink:href="#strandA" stroke="var(--grn)" stroke-width="4"/>
+      <use href="#strandB" xlink:href="#strandB" stroke="var(--braidD)" stroke-width="6"/>
+      <use href="#strandB" xlink:href="#strandB" stroke="var(--blu)" stroke-width="4"/>
+      <g clip-path="url(#braidCross)">
+        <use href="#strandA" xlink:href="#strandA" stroke="var(--braidD)" stroke-width="6"/>
+        <use href="#strandA" xlink:href="#strandA" stroke="var(--grn)" stroke-width="4"/>
+      </g>
+    </g>
+    <circle cx="6" cy="13" r="2.7" fill="var(--gold)"/>
+    <circle cx="18" cy="13" r="2.7" fill="var(--gold)"/>
+  </g>
+
+  <pattern id="braidH" width="24" height="26" patternUnits="userSpaceOnUse">
+    <use href="#braidUnit" xlink:href="#braidUnit"/>
+  </pattern>
+  <pattern id="braidV" width="26" height="24" patternUnits="userSpaceOnUse">
+    <g transform="translate(26,0) rotate(90)"><use href="#braidUnit" xlink:href="#braidUnit"/></g>
+  </pattern>
+
+  <g id="cornerBlock">
+    <rect width="26" height="26" fill="var(--band)"/>
+    <rect x="1.1" y="1.1" width="23.8" height="23.8" fill="none" stroke="var(--gold)" stroke-width="1.5"/>
+    <path d="M13,3.6 L22.4,13 L13,22.4 L3.6,13 Z" fill="var(--grn)"/>
+    <path d="M13,7.4 L18.6,13 L13,18.6 L7.4,13 Z" fill="var(--gold)"/>
+    <circle cx="13" cy="13" r="1.9" fill="var(--band)"/>
+  </g>
+
+  <path id="mpetal" d="M0,-5 C3.1,-9.5 3.1,-13.5 0,-17.6 C-3.1,-13.5 -3.1,-9.5 0,-5 Z"/>
+  <g id="medallion">
+    <circle r="34" fill="var(--band)" stroke="var(--goldD)" stroke-width=".9"/>
+    <circle r="31.6" fill="none" stroke="var(--gold)" stroke-width="2.3"/>
+    <circle r="27.4" fill="none" stroke="var(--goldD)" stroke-width=".6" opacity=".7"/>
+    <rect x="-16.6" y="-16.6" width="33.2" height="33.2" fill="none" stroke="var(--grn)" stroke-width="1.5"/>
+    <rect x="-16.6" y="-16.6" width="33.2" height="33.2" fill="none" stroke="var(--blu)" stroke-width="1.5" transform="rotate(45)"/>
+    <g fill="var(--gold)" opacity=".92">
+      <use href="#mpetal" xlink:href="#mpetal"/>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(45)"/>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(90)"/>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(135)"/>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(180)"/>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(225)"/>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(270)"/>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(315)"/>
+    </g>
+    <circle r="10" fill="var(--band)" stroke="var(--goldD)" stroke-width=".8"/>
+    <circle r="6.4" fill="none" stroke="var(--gold)" stroke-width="1.3"/>
+    <circle r="2.4" fill="var(--gold)"/>
+  </g>
+
+  <g id="fcorner">
+    <path d="M0,34 L0,9 Q0,0 9,0 L34,0" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linecap="round"/>
+    <path d="M5.5,29 L5.5,12 Q5.5,5.5 12,5.5 L29,5.5" fill="none" stroke="var(--goldD)" stroke-width=".6" opacity=".75"/>
+    <path d="M12,22 C12,13.4 18.6,10.4 25,12.4 C18.6,14.6 15,17.4 14,23.4 Z" fill="var(--gold)" opacity=".8"/>
+    <circle cx="8.6" cy="8.6" r="1.9" fill="var(--gold)"/>
+  </g>
+
+  <path id="trunkShape" d="M321,1018 C327,960 331,905 341,850 C349,800 358,745 371,666 L423,666 C436,745 445,800 453,850 C463,905 467,960 473,1018 Z"/>
+  <clipPath id="trunkClip"><use href="#trunkShape" xlink:href="#trunkShape"/></clipPath>
+</defs>
+
+<!-- 1 ▸ الورق -->
+<g id="layer-bg">
+  <rect width="794" height="1123" fill="var(--paper)"/>
+  <rect width="794" height="1123" fill="url(#vign)"/>
+  <rect width="794" height="1123" filter="url(#grain)" opacity=".9"/>
+</g>
+
+<!-- 2 ▸ إطارا الأسفل -->
+<g id="layer-frames"></g>
+
+<!-- 3 ▸ الشجرة (يبنيها المحرك) -->
+<g id="layer-tree" clip-path="url(#contentClip)"></g>
+
+<!-- 4 ▸ الإطار المزخرف -->
+<g id="layer-border">
+  <rect x="17.2" y="17.2" width="759.6" height="1088.6" fill="none" stroke="var(--braidD)" stroke-width="1.1"/>
+  <rect x="44" y="18" width="706" height="26" fill="url(#braidH)"/>
+  <rect x="44" y="1079" width="706" height="26" fill="url(#braidH)"/>
+  <rect x="18" y="44" width="26" height="1035" fill="url(#braidV)"/>
+  <rect x="750" y="44" width="26" height="1035" fill="url(#braidV)"/>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="18" y="18"/>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="750" y="18"/>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="18" y="1079"/>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="750" y="1079"/>
+  <rect x="44.4" y="44.4" width="705.2" height="1034.2" fill="none" stroke="var(--braidD)" stroke-width="1"/>
+  <rect x="52" y="52" width="690" height="1019" fill="none" stroke="var(--gold)" stroke-width="1.6"/>
+  <rect x="57" y="57" width="680" height="1009" fill="none" stroke="var(--goldD)" stroke-width=".55" opacity=".8"/>
+  <use href="#medallion" xlink:href="#medallion" x="108" y="116"/>
+  <use href="#medallion" xlink:href="#medallion" x="686" y="116"/>
+</g>
+
+<!-- 5 ▸ الترويسة -->
+<g id="layer-header">
+
+  <g id="h-cart"></g>
+  <text class="t-nasab" id="h-nasab" x="397" y="204" text-anchor="middle"></text>
+</g>
+
+<!-- 6 ▸ التذييل -->
+<g id="layer-footer">
+  <path d="M330,1046 L464,1046" stroke="var(--gold)" stroke-width=".8" opacity=".55"/>
+  <path d="M397,1042 l4,4 -4,4 -4,-4 Z" fill="var(--gold)"/>
+  <text class="t-foot" id="h-foot" x="397" y="1060" text-anchor="middle"></text>
+</g>
+</svg>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<aside class="panel" id="panel">
+  <div class="phead">
+    <b>محرّر البنية</b>
+    <span class="ebtns">
+      <button class="eb" id="e-undo" title="تراجع — Ctrl+Z">↺</button>
+      <button class="eb" id="e-redo" title="إعادة — Ctrl+Y">↻</button>
+    </span>
+  </div>
+  <div class="pstat">
+    <span>الأفراد<b id="e-count">٠</b></span>
+    <span>الأجيال<b id="e-gen">٠</b></span>
+    <span>الجذع<b id="e-line">٠</b></span>
+  </div>
+  <section class="psec">
+    <h3>سلسلة الجذع (النسب)<button class="btn ghost mini" id="e-addline">+ جدّ</button></h3>
+    <div class="plist" id="p-line"></div>
+  </section>
+  <section class="psec">
+    <h3>أفراد الشجرة<button class="btn ghost mini" id="e-addroot">+ ابن للأصل</button></h3>
+    <div class="plist tall" id="p-tree"></div>
+  </section>
+  <p class="ehint">＋ ابن · ⇄ أخ · ↑↓ ترتيب · ✕ حذف (يشمل الذريّة).<br>اضغط أي اسم على اللوحة ليُحدَّد هنا.</p>
+</aside>
+</div>
+
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+<input class="name-edit" id="nameEdit" type="text" autocomplete="off" spellcheck="false">
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+'use strict';
+
+/* ═══════════════════════════════════════════════════════════
+   ١ ▸ ثوابت التخطيط (بإحداثيات مساحة الرسم 794×1123)
+   ═══════════════════════════════════════════════════════════ */
+const PAGE   = { w: 794, h: 1123 };
+const RING   = { cx: 397, cy: 510, r0: 60, rIn: 79, rOut: 276 };  // قرص الأصل + حلقات تتكيّف مع عمق العائلة
+const FRAMES = [];   /* أُزيل إطارا «كبير العائلة» و«نبذة» */
+const SVGNS  = 'http://www.w3.org/2000/svg';
+const XLINK  = 'http://www.w3.org/1999/xlink';
+const TPL_ID = 'ornate-fan-v1';
+
+const $  = s => document.querySelector(s);
+const svg = $('#tpl');
+
+/* ═══════════════════════════════════════════════════════════
+   ٢ ▸ أدوات
+   ═══════════════════════════════════════════════════════════ */
+function mk(tag, attrs) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) {
+    if (k === 'href') { e.setAttribute('href', attrs[k]); e.setAttributeNS(XLINK, 'xlink:href', attrs[k]); }
+    else e.setAttribute(k, attrs[k]);
+  }
+  return e;
+}
+const rad   = d => d * Math.PI / 180;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* التخزين: يعمل داخل معاينة Claude (window.storage) وعلى أي منصة (localStorage) */
+const mem = {};
+const Store = {
+  async get(k) {
+    if (window.storage) { try { const r = await window.storage.get(k); return r ? JSON.parse(r.value) : null; } catch (e) { return null; } }
+    try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return mem[k] || null; }
+  },
+  async set(k, v) {
+    if (window.storage) { try { await window.storage.set(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+    try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { mem[k] = v; return false; }
+  }
+};
+
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2600);
+}
+function download(blob, name) {
+  const u = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ٣ ▸ البيانات
+   ═══════════════════════════════════════════════════════════ */
+
+function blankData() {
+  const kid = () => ({ name: '', children: [{ name: '' }, { name: '' }, { name: '' }] });
+  return {
+    meta: { verse: '', verseRef: '', title: 'شَجَرَةُ عَائِلَة', family: '', footer: '', theme: 'classic', font: 'amiri', seed: 20260716 },
+    lineage: ['', '', '', '', '', ''],
+    root: { name: '', children: [kid(), kid(), kid(), kid()] },
+    frames: [{ title: 'كبير العائلة', lines: [] }, { title: 'نبذة', lines: [] }]
+  };
+}
+
+function sampleData() {
+  const d = blankData();
+  d.meta.family = 'آل سالم بن راشد';
+  d.meta.footer = 'أُعِدَّت في المنامة · ١٤٤٧هـ';
+  d.lineage = ['إبراهيم', 'حسن بن إبراهيم', 'علي بن حسن', 'محمد بن علي', 'راشد بن محمد', 'سالم بن راشد'];
+  d.root = {
+    name: 'عبدالله بن سالم',
+    children: [
+      { name: 'سالم', children: [
+        { name: 'راشد', children: [{ name: 'سالم' }, { name: 'لطيفة' }] },
+        { name: 'نورة' }, { name: 'محمد', children: [{ name: 'أحمد' }] }] },
+      { name: 'محمد', children: [
+        { name: 'عبدالله', children: [{ name: 'محمد' }, { name: 'شيخة' }] }, { name: 'سارة' }] },
+      { name: 'فاطمة', children: [{ name: 'خالد' }, { name: 'مريم' }, { name: 'ريم' }] },
+      { name: 'خالد', children: [
+        { name: 'سلطان', children: [{ name: 'خالد' }] }, { name: 'هند' }] }
+    ]
+  };
+  d.frames = [
+    { title: 'كبير العائلة', lines: ['عبدالله بن سالم بن راشد', 'وُلد ١٣٧٢هـ — المنامة'] },
+    { title: 'نبذة', lines: ['سكنت العائلة فريق المخارقة', 'واشتهرت بصناعة السفن.'] }
+  ];
+  return d;
+}
+
+/* محوّل بيانات المنصة: {owner, members[{id,name,parent,rel,gender,byear,dyear}]} ← بنية القالب.
+   يفصل تلقائيًا السلسلة الأحادية العليا (نسب الجذع) عن أول تفرّع (أصل التاج). */
+const PLATFORM_KEY = 'sutoor_ansab_tree_v1';
+function fromPlatform(t) {
+  const M = (t && t.members) || [];
+  const ids = new Set(M.map(m => m.id));
+  const kids = new Map();
+  M.forEach(m => {
+    if (!ids.has(m.parent)) return;
+    if (!kids.has(m.parent)) kids.set(m.parent, []);
+    kids.get(m.parent).push(m);
+  });
+  const spouse = m => (m.rel || '').trim().indexOf('زوج') === 0;
+  const build = m => ({
+    name: m.name || '', gender: m.gender || 'm', birth: m.byear || '', death: m.dyear || '',
+    children: (kids.get(m.id) || []).filter(c => !spouse(c)).map(build)
+  });
+  const d = blankData();
+  const top = M.filter(m => !ids.has(m.parent) && !spouse(m));
+  if (!top.length) return d;
+  let root = top.length === 1 ? build(top[0]) : { name: (t && t.owner) || 'العائلة', children: top.map(build) };
+  const lineage = [];
+  while (root.children && root.children.length === 1 && lineage.length < 8) { lineage.push(root.name); root = root.children[0]; }
+  d.lineage = lineage; d.root = root;
+  d.meta.family = (t && t.owner) || '';
+  return d;
+}
+
+let STATE = { data: blankData(), mode: 'blank' };
+
+/* ═══════════════════════════════════════════════════════════
+   ٤ ▸ محرك المروحة (Fan Engine)
+   دائرة كاملة تُقسَم على الأجيال؛ زاوية كل فرد ∝ عدد ذريّته،
+   فتتّسع الفروع المثمرة وتنكمش الخاملة تلقائيًا.
+   ═══════════════════════════════════════════════════════════ */
+const MIN_RW = 13.2;                              // أنحف حلقة تُبقي الاسم مقروءًا (≈٨٫٧px)
+const MAXR = Math.floor((276 - 79) / MIN_RW);     // ١٤ — سقف الورقة لا سقف اعتباطي
+const GEN  = ['الجيل الأول', 'الجيل الثاني', 'الجيل الثالث', 'الجيل الرابع', 'الجيل الخامس',
+              'الجيل السادس', 'الجيل السابع', 'الجيل الثامن', 'الجيل التاسع', 'الجيل العاشر',
+              'الجيل الحادي عشر', 'الجيل الثاني عشر', 'الجيل الثالث عشر', 'الجيل الرابع عشر'];
+const AR_D = '٠١٢٣٤٥٦٧٨٩';
+const arNum = n => String(n).replace(/\d/g, c => AR_D[+c]);
+
+const TreeEngine = {
+  depthOf(n, d) { const k = (n && n.children) || []; return k.length ? Math.max.apply(null, k.map(c => this.depthOf(c, d + 1))) : d; },
+  countOf(n) { return 1 + ((n.children || []).reduce((s, c) => s + this.countOf(c), 0)); },
+  layout(data) {
+    const root = data.root || { name: '', children: [] };
+    const real = this.depthOf(root, 0);
+    const MAXD = clamp(real, 1, MAXR);          // ← الحلقات تتبع عمق العائلة الحقيقي
+    let hidden = 0;
+    const leaves = (n, d) => (d >= MAXD || !n.children || !n.children.length)
+      ? 1 : n.children.reduce((s, c) => s + leaves(c, d + 1), 0);
+    const segs = [];
+    const self = this;
+    (function walk(n, a0, a1, depth, path) {
+      if (depth > 0) segs.push({ person: n, a0, a1, depth, path });
+      const kids = n.children || [];
+      if (!kids.length) return;
+      if (depth >= MAXD) { kids.forEach(c => { hidden += self.countOf(c); }); return; }
+      const tot = kids.reduce((s, c) => s + leaves(c, depth + 1), 0) || 1;
+      let a = a0;
+      kids.forEach((c, i) => {
+        const w = (a1 - a0) * leaves(c, depth + 1) / tot;
+        walk(c, a, a + w, depth + 1, path.concat(i));
+        a += w;
+      });
+    })(root, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2, 0, []);
+    const counts = new Array(MAXD).fill(0);
+    segs.forEach(s => { counts[s.depth - 1]++; });
+    return { segs: segs, dMax: MAXD, hidden: hidden, real: real, counts: counts };
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ٥ ▸ الرسم
+   ═══════════════════════════════════════════════════════════ */
+let FITS = [];
+let RINGS_NOW = [];
+const RP = (r, a) => [RING.cx + Math.cos(a) * r, RING.cy + Math.sin(a) * r];
+const f1 = v => v.toFixed(1);
+
+const FS_MAX = 13.5;   // سقف حجم الاسم
+const FS_MIN = 6.2;    // أدنى حجم يبقى مقروءًا على A4 (≈٤٫٧ نقطة)
+const FS_REF = 10;     // حجم القياس المرجعي
+const RW_CAP = 78;     // سقف عرض الحلقة كي لا تتضخّم في العائلات القصيرة
+
+/* قطاع حلقي؛ ويعالج حالة الابن الوحيد الذي يملأ الدائرة كاملة */
+function sector(r0, r1, a0, a1) {
+  const c = RING.cx, y = RING.cy;
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) {
+    return `M${c - r1},${y} A${r1},${r1} 0 1 1 ${c + r1},${y} A${r1},${r1} 0 1 1 ${c - r1},${y} Z ` +
+           `M${c - r0},${y} A${r0},${r0} 0 1 0 ${c + r0},${y} A${r0},${r0} 0 1 0 ${c - r0},${y} Z`;
+  }
+  const la = (a1 - a0) > Math.PI ? 1 : 0;
+  const [x1, y1] = RP(r1, a0), [x2, y2] = RP(r1, a1), [x3, y3] = RP(r0, a1), [x4, y4] = RP(r0, a0);
+  return `M${f1(x1)},${f1(y1)} A${r1},${r1} 0 ${la} 1 ${f1(x2)},${f1(y2)} ` +
+         `L${f1(x3)},${f1(y3)} A${r0},${r0} 0 ${la} 0 ${f1(x4)},${f1(y4)} Z`;
+}
+
+/* أقطار الحلقات: تتّسع كلما ابتعد الجيل، لأن قطاعاته أضيق زاويةً
+   فيعوّضها المدى الشعاعي الذي يُكتب فيه الاسم. */
+function ringRadii(dMax, counts) {
+  const budget = RING.rOut - RING.rIn;
+  const even = budget / dMax;
+  /* حلقة مزدحمة تحتاج سُمكًا لتُكتب أسماؤها شعاعيًا؛ وحلقة واسعة يكفيها ارتفاع السطر.
+     أما إذا ضاقت الورقة (نسبٌ ممتدّ) فلا فضل لحلقة على أخرى: القسمة بالسواء. */
+  const wts = [];
+  for (let i = 0; i < dMax; i++) {
+    const c = (counts && counts[i]) || 1;
+    wts.push(1 + 0.95 * (even < 24 ? 0 : clamp((c - 24) / 36, 0, 1)));
+  }
+  const sw = wts.reduce((a, b) => a + b, 0);
+  let ws = wts.map(w => budget * w / sw);
+  /* سقف الحلقة الواحدة: ما يفيض عنها يعود على أخواتها */
+  let over = 0, rest = 0;
+  ws.forEach(w => { if (w > RW_CAP) over += w - RW_CAP; else rest += w; });
+  if (over > 0 && rest > 0) ws = ws.map(w => w > RW_CAP ? RW_CAP : w * (1 + over / rest));
+  const rings = [RING.rIn];
+  ws.forEach(w => rings.push(rings[rings.length - 1] + w));
+  return rings;
+}
+
+function drawTree() {
+  const g = $('#layer-tree');
+  while (g.firstChild) g.removeChild(g.firstChild);
+  const d = STATE.data;
+  const R = TreeEngine.layout(d);
+  const segs = R.segs, dMax = R.dMax;
+  const gSec = mk('g', {}), gRule = mk('g', {}), gTxt = mk('g', {}), gHub = mk('g', {});
+  [gSec, gRule, gTxt, gHub].forEach(x => g.appendChild(x));
+
+  const rings = ringRadii(dMax, R.counts);
+  RINGS_NOW = rings;
+  const tone = dep => dMax <= 1 ? 1 : Math.round(1 + (dep - 1) * 3 / (dMax - 1));
+
+  /* القطاعات: لون الحلقة يفتَحّ كلما ابتعد الجيل */
+  segs.forEach((s, i) => {
+    gSec.appendChild(mk('path', {
+      d: sector(rings[s.depth - 1], rings[s.depth], s.a0, s.a1),
+      'fill-rule': 'evenodd', fill: `var(--r${tone(s.depth)})`, 'fill-opacity': (i % 2 ? '.8' : '1'),
+      stroke: 'var(--gold)', 'stroke-width': '.9', 'stroke-linejoin': 'round'
+    }));
+  });
+
+  /* الأطواق الذهبية الفاصلة */
+  const last = rings.length - 1;
+  rings.forEach((r, i) => gRule.appendChild(mk('circle', {
+    cx: RING.cx, cy: RING.cy, r: f1(r), fill: 'none',
+    stroke: i === last ? 'var(--goldD)' : 'var(--gold)', 'stroke-width': i === last ? '2.2' : '1'
+  })));
+  gRule.appendChild(mk('circle', { cx: RING.cx, cy: RING.cy, r: f1(rings[last] + 5.5), fill: 'none', stroke: 'var(--gold)', 'stroke-width': '.7', opacity: '.75' }));
+
+  /* الأسماء: تُنشأ هنا ويُحسم اتجاهها وحجمها بعد القياس في fitAll */
+  segs.forEach(s => sectorLabel(gTxt, s, rings[s.depth - 1], rings[s.depth]));
+
+  hub(gHub, d, rings[0]);
+  /* أُزيل إطار «دليل الأجيال» */
+}
+
+/* ── اسم داخل قطاع ─────────────────────────────────────────── */
+function sectorLabel(parent, s, r0, r1) {
+  const am = (s.a0 + s.a1) / 2, rm = (r0 + r1) / 2;
+  const [x, y] = RP(rm, am);
+  const tang = upright(am * 180 / Math.PI + 90);
+  const g = mk('g', { class: 'node-hit', transform: `translate(${f1(x)},${f1(y)}) rotate(${f1(tang)})` });
+  const hit = mk('rect', { x: '-11', y: '-9', width: '22', height: '18', fill: 'transparent' });
+  g.appendChild(hit);
+
+  const nm = (s.person.name || '').trim();
+  if (nm) {
+    const t = mk('text', { class: 't-name', x: '0', y: '0', 'text-anchor': 'middle', 'font-size': FS_REF, 'stroke-width': '2' });
+    t.textContent = nm;
+    g.appendChild(t);
+    g._fit = { g, t, hit, raw: nm, seg: s, r0, r1, rm, am };
+  } else {
+    /* مكان شاغر: شَرطة على اتجاه القراءة نفسه */
+    const dA = s.a1 - s.a0, capT = Math.min(dA * rm * 0.9, 92), capR = (r1 - r0) - 10;
+    const useR = capR > capT;
+    const len = Math.max(0, useR ? capR : capT);
+    if (useR) g.setAttribute('transform', `translate(${f1(x)},${f1(y)}) rotate(${f1(upright(am * 180 / Math.PI))})`);
+    if (len > 16) {
+      g.appendChild(mk('line', { x1: f1(-len / 2 + 2), y1: '2.5', x2: f1(len / 2 - 2), y2: '2.5', stroke: 'var(--goldD)', 'stroke-width': '.6', 'stroke-dasharray': '2 2.6', opacity: '.6' }));
+      hit.setAttribute('x', f1(-len / 2)); hit.setAttribute('width', f1(len));
+    }
+  }
+  g.__path = s.path; g.__pos = { x, y }; g.__name = s.person.name || '';
+  parent.appendChild(g); FITS.push(g);
+}
+
+/* اسم أفقي ثابت (قرص الأصل) */
+function flatLabel(parent, x, y, maxW, name, path, fs) {
+  const g = mk('g', { class: 'node-hit', transform: `translate(${f1(x)},${f1(y)})` });
+  g.appendChild(mk('rect', { x: f1(-maxW / 2), y: '-11', width: f1(maxW), height: '22', fill: 'transparent' }));
+  if (name && name.trim()) {
+    const t = mk('text', { class: 't-name', x: '0', y: f1(fs * 0.34), 'text-anchor': 'middle', 'font-size': f1(fs), 'stroke-width': '0' });
+    t.textContent = name; g.appendChild(t);
+    g._fit = { flat: true, t, ax: 0, maxW, fs };
+  }
+  g.__path = path; g.__pos = { x, y }; g.__name = name || '';
+  parent.appendChild(g); FITS.push(g);
+}
+
+/* زاوية لا تنقلب رأسًا على عقب أبدًا */
+function upright(deg) {
+  let a = ((deg % 360) + 360) % 360;
+  if (a > 90 && a < 270) a -= 180;
+  return a;
+}
+
+/* قلب المروحة: قرص أصل العائلة يحفّه إكليل بتلات */
+function hub(parent, d, rIn) {
+  const c = RING.cx, y = RING.cy, r = RING.r0;
+  parent.appendChild(mk('circle', { cx: c, cy: y, r: f1(rIn), fill: 'var(--band)', stroke: 'var(--gold)', 'stroke-width': '1.4' }));
+  const pet = mk('g', { fill: 'var(--gold)', opacity: '.5', transform: `translate(${c},${y})` });
+  for (let k = 0; k < 18; k++) pet.appendChild(mk('use', { href: '#mpetal', transform: `rotate(${k * 20}) translate(0,${-r})` }));
+  parent.appendChild(pet);
+  parent.appendChild(mk('circle', { cx: c, cy: y, r: r, fill: 'var(--plate)', stroke: 'var(--gold)', 'stroke-width': '2' }));
+  parent.appendChild(mk('circle', { cx: c, cy: y, r: r - 4.5, fill: 'none', stroke: 'var(--goldD)', 'stroke-width': '.6', opacity: '.7' }));
+  const lab = mk('text', { class: 't-ftitle', x: c, y: y - 20, 'text-anchor': 'middle', 'font-size': '8.6' });
+  lab.textContent = 'أصل العائلة'; parent.appendChild(lab);
+  parent.appendChild(mk('path', { d: `M${c - 22},${y - 14} L${c + 22},${y - 14}`, stroke: 'var(--gold)', 'stroke-width': '.6', opacity: '.6' }));
+  flatLabel(parent, c, y + 4, (r - 7) * 2, (d.root && d.root.name) || '', 'root', 14);
+}
+
+/* دليل الحلقات في الفراغ بين إطاري التدوين */
+function legend(parent, segs, dMax, tone, hidden) {
+  const y0 = 830, g = mk('g', {});
+  const two  = dMax > 7;                       // نسبٌ ممتدّ: عمودان، وإلا فعمود واحد كما كان
+  const rows = two ? Math.ceil(dMax / 2) : dMax;
+  const step = two ? 20 : (dMax > 4 ? Math.min(25, 150 / dMax) : 25);
+  const half = two ? 100 : 46;
+
+  const ttl = mk('text', { class: 't-ftitle', x: 397, y: y0, 'text-anchor': 'middle', 'font-size': '11' });
+  ttl.textContent = 'دليل الأجيال'; g.appendChild(ttl);
+  g.appendChild(mk('path', { d: `M${397 - half},${y0 + 8} L${397 + half},${y0 + 8}`, stroke: 'var(--gold)', 'stroke-width': '.7', opacity: '.6' }));
+
+  GEN.slice(0, dMax).forEach((nm, i) => {
+    const n = segs.filter(s => s.depth === i + 1 && (s.person.name || '').trim()).length;
+    const col = (two && i >= rows) ? 1 : 0;    // العمود الأول إلى اليمين، اتّباعًا لاتجاه القراءة
+    const x = two ? (col ? 360 : 478) : 452;
+    const y = y0 + 30 + (i - col * rows) * step;
+    g.appendChild(mk('rect', { x: x, y: y - 9, width: 24, height: 13, rx: 1.5, fill: `var(--r${tone(i + 1)})`, stroke: 'var(--gold)', 'stroke-width': '.6' }));
+    const t = mk('text', { class: 't-fline', x: x - 8, y: y + 1.5, 'text-anchor': 'start', 'font-size': two ? '9.2' : '10' });
+    const lb = two ? `الجيل ${arNum(i + 1)}` : nm;
+    t.textContent = n ? `${lb} · ${arNum(n)}` : lb;
+    g.appendChild(t);
+  });
+
+  if (hidden) {                                // لا يُحذف أحد بصمت: تُذكر البقيّة صراحةً
+    const h = mk('text', { class: 't-vref', x: 397, y: y0 + 34 + rows * step, 'text-anchor': 'middle', 'font-size': '8.6' });
+    h.textContent = `— لم تتّسع المروحة لـ ${arNum(hidden)} من الأجيال الأبعد —`;
+    g.appendChild(h);
+  }
+  parent.appendChild(g);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ملاءمة الأسماء: قياسٌ واحد لكل اسم، ثم اختيار اتجاه الحلقة
+   (مماسّ للقوس أو شعاعي مع نصف القطر) ثم الحجم وعدد الأسطر.
+   الاتجاه الشعاعي هو ما ينقذ الحلقات الخارجية: قطاعها ضيّق
+   زاويةً وواسع شعاعًا، فالكتابة على امتداد الشعاع تضاعف الحجم.
+   ═══════════════════════════════════════════════════════════ */
+function fitAll() {
+  const list = [];
+  /* ١ ▸ قياس مرجعي واحد لكل اسم */
+  FITS.forEach(g => {
+    const f = g._fit; if (!f) return;
+    if (f.flat) { fitFlat(f); return; }
+    f.t.setAttribute('font-size', FS_REF);
+    try { f.L = f.t.getComputedTextLength(); } catch (e) { f.L = 0; }
+    if (!f.L) return;
+    f.opt = options(f);
+    list.push(f);
+  });
+  /* ٢ ▸ اتجاه موحّد لكل حلقة — يُختار لإنقاذ أضيق أسمائها */
+  const byRing = {}, mode = {};
+  list.forEach(f => { (byRing[f.seg.depth] = byRing[f.seg.depth] || []).push(f); });
+  for (const dep in byRing) {
+    const q = k => {
+      const v = byRing[dep].map(f => f.opt[k].fs).sort((a, b) => a - b);
+      return v[Math.floor(v.length * 0.25)];
+    };
+    mode[dep] = q('r') > q('t') * 1.02 ? 'r' : 't';
+  }
+  /* ٣ ▸ التطبيق — مع استثناء فردي للاسم المختنق داخل حلقة مريحة */
+  list.forEach(f => {
+    let o = f.opt[mode[f.seg.depth]];
+    const alt = f.opt[o.m === 't' ? 'r' : 't'];
+    if (o.fs < 7.6 && alt.fs > o.fs * 1.25) o = alt;
+    apply(f, o);
+  });
+}
+
+/* أفضل ما يمكن بلوغه في كلا الاتجاهين */
+function options(f) {
+  const dA = f.seg.a1 - f.seg.a0, L = f.L;
+  const ringW = f.r1 - f.r0, rm = f.rm;
+  const halfA = Math.min(dA / 2, 1.35);
+  /* مماسّ: الوتر محصور بين ضلعَي القطاع ودون الطوق الخارجي */
+  const capT = Math.min(2 * rm * Math.tan(halfA), 2 * Math.sqrt(Math.max(1, f.r1 * f.r1 - rm * rm)), 170) * 0.94;
+  const hT   = ringW * 0.66;
+  /* شعاعي: الطول = سُمك الحلقة، والارتفاع = أضيق موضع (الطرف الداخلي) */
+  const capR = ringW - 8;
+  const hR   = 2 * (f.r0 + 4) * Math.sin(halfA) * 0.86;
+
+  const w = f.raw.split(/\s+/);
+  let frac = 0;
+  if (w.length > 1) {                       // أقرب قصّة إلى التوازن بين السطرين
+    let best = 1, diff = 1e9;
+    for (let i = 1; i < w.length; i++) {
+      const a = w.slice(0, i).join(' ').length, b = w.slice(i).join(' ').length;
+      if (Math.abs(a - b) < diff) { diff = Math.abs(a - b); best = i; }
+    }
+    const a = w.slice(0, best).join(' ').length, b = w.slice(best).join(' ').length;
+    frac = Math.max(a, b) / (a + b + 1); f.split = best;
+  }
+  const pick = (cap, h, h2) => {
+    const one = { n: 1, fs: Math.min(FS_MAX, FS_REF * cap / L, h) };
+    if (!frac) return one;
+    const two = { n: 2, fs: Math.min(FS_MAX, FS_REF * cap / (L * frac), h2) };
+    return two.fs > one.fs * 1.06 ? two : one;
+  };
+  const t = pick(capT, hT, ringW * 0.38); t.m = 't'; t.cap = capT; t.h = ringW;
+  const r = pick(capR, hR, hR * 0.42);    r.m = 'r'; r.cap = capR; r.h = hR;
+  return { t: t, r: r };
+}
+
+/* تثبيت الاتجاه والحجم والأسطر */
+function apply(f, o) {
+  const t = f.t, fs = Math.max(FS_MIN, o.fs);
+  const th = upright(f.am * 180 / Math.PI + (o.m === 'r' ? 0 : 90));
+  const [x, y] = RP(f.rm, f.am);
+  f.g.setAttribute('transform', `translate(${f1(x)},${f1(y)}) rotate(${f1(th)})`);
+
+  t.removeAttribute('textLength'); t.removeAttribute('lengthAdjust');
+  t.setAttribute('font-size', fs.toFixed(2));
+  t.setAttribute('stroke-width', clamp(fs * 0.17, 1.05, 2.3).toFixed(2));
+  t.textContent = f.raw;
+
+  if (o.n === 2) {
+    const w = f.raw.split(/\s+/);
+    t.textContent = ''; t.setAttribute('y', '0');
+    const a = mk('tspan', { x: '0', dy: '-0.22em' }); a.textContent = w.slice(0, f.split).join(' ');
+    const b = mk('tspan', { x: '0', dy: '1.04em' }); b.textContent = w.slice(f.split).join(' ');
+    t.appendChild(a); t.appendChild(b);
+  } else {
+    t.setAttribute('y', (fs * 0.34).toFixed(2));
+    if (o.fs < FS_MIN) {                    // بلغنا الحدّ الأدنى: ضغطٌ خفيف بدل التصغير
+      let L = 0; try { L = t.getComputedTextLength(); } catch (e) {}
+      if (L > o.cap + 0.5) { t.setAttribute('textLength', f1(Math.max(8, o.cap))); t.setAttribute('lengthAdjust', 'spacingAndGlyphs'); }
+    }
+  }
+  const hw = Math.max(o.cap, 18), hh = clamp(fs * (o.n === 2 ? 2.5 : 1.6), 12, o.h);
+  f.hit.setAttribute('x', f1(-hw / 2)); f.hit.setAttribute('width', f1(hw));
+  f.hit.setAttribute('y', f1(-hh / 2)); f.hit.setAttribute('height', f1(hh));
+}
+
+/* اسم القرص: تصغير ثم سطران */
+function fitFlat(f) {
+  const { t, ax, maxW, fs } = f;
+  t.setAttribute('font-size', f1(fs));
+  let L = 0; try { L = t.getComputedTextLength(); } catch (e) { return; }
+  if (!L || L <= maxW) return;
+  const s2 = Math.max(fs * 0.7, fs * maxW / L);
+  t.setAttribute('font-size', s2.toFixed(2));
+  L = t.getComputedTextLength();
+  if (L <= maxW) return;
+  const w = t.textContent.trim().split(/\s+/);
+  if (w.length < 2) { t.setAttribute('textLength', f1(maxW)); t.setAttribute('lengthAdjust', 'spacingAndGlyphs'); return; }
+  let best = 1, diff = 1e9;
+  for (let i = 1; i < w.length; i++) {
+    const dd = Math.abs(w.slice(0, i).join(' ').length - w.slice(i).join(' ').length);
+    if (dd < diff) { diff = dd; best = i; }
+  }
+  const s3 = fs * 0.76;
+  t.textContent = ''; t.setAttribute('font-size', s3.toFixed(2));
+  const a = mk('tspan', { x: ax, dy: '-0.24em' }); a.textContent = w.slice(0, best).join(' ');
+  const b = mk('tspan', { x: ax, dy: '1.02em' }); b.textContent = w.slice(best).join(' ');
+  t.appendChild(a); t.appendChild(b);
+  if (t.getComputedTextLength() > maxW * 2.1) t.setAttribute('font-size', (s3 * 0.84).toFixed(2));
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ٦ ▸ الترويسة والإطارات
+   ═══════════════════════════════════════════════════════════ */
+function drawChrome() {
+  const m = STATE.data.meta;
+  svg.setAttribute('class', 'thm-' + (m.theme || 'classic') + ' fn-' + (m.font || 'amiri'));
+  $('#h-foot').textContent  = m.footer || '';
+
+  const nas = $('#h-nasab');
+  if (nas) {
+    const LN = (STATE.data.lineage || []).filter(Boolean);
+    nas.textContent = LN.length ? 'بن ' + LN.slice().reverse().join(' بن ') : '';
+    nas.setAttribute('font-size', '11');
+    let W = 0; try { W = nas.getComputedTextLength(); } catch (e) {}
+    if (W > 610) nas.setAttribute('font-size', (11 * 610 / W).toFixed(1));
+  }
+
+  drawTitle();
+
+  const g = $('#layer-frames');
+  while (g.firstChild) g.removeChild(g.firstChild);
+  FRAMES.forEach((f, i) => {
+    const info = (STATE.data.frames && STATE.data.frames[i]) || { title: '', lines: [] };
+    g.appendChild(mk('rect', { x: f.x, y: f.y, width: f.w, height: f.h, rx: 2, fill: 'var(--band)', stroke: 'var(--goldD)', 'stroke-width': '.8', opacity: '.95' }));
+    g.appendChild(mk('rect', { x: f.x + 8, y: f.y + 8, width: f.w - 16, height: f.h - 16, fill: 'none', stroke: 'var(--gold)', 'stroke-width': '.7', opacity: '.75' }));
+    [[f.x, f.y, 1, 1], [f.x + f.w, f.y, -1, 1], [f.x, f.y + f.h, 1, -1], [f.x + f.w, f.y + f.h, -1, -1]].forEach(c => {
+      g.appendChild(mk('use', { href: '#fcorner', transform: `translate(${c[0]},${c[1]}) scale(${c[2]},${c[3]})` }));
+    });
+    if (info.title) {
+      const tt = mk('text', { class: 't-ftitle', x: f.x + f.w / 2, y: f.y + 34, 'text-anchor': 'middle' });
+      tt.textContent = info.title; g.appendChild(tt);
+      g.appendChild(mk('path', { d: `M${f.x + 44},${f.y + 42} L${f.x + f.w - 44},${f.y + 42}`, stroke: 'var(--gold)', 'stroke-width': '.7', opacity: '.6' }));
+    }
+    const lines = info.lines || [];
+    for (let k = 0; k < 4; k++) {
+      const y = f.y + 66 + k * 27;
+      if (lines[k]) {
+        const tl = mk('text', { class: 't-fline', x: f.x + f.w / 2, y: y, 'text-anchor': 'middle' });
+        tl.textContent = lines[k]; g.appendChild(tl);
+      } else {
+        g.appendChild(mk('line', { x1: f.x + 24, y1: y + 3, x2: f.x + f.w - 24, y2: y + 3, stroke: 'var(--goldD)', 'stroke-width': '.55', 'stroke-dasharray': '2 3', opacity: '.5' }));
+      }
+    }
+  });
+}
+
+/* العنوان: «شَجَرَةُ عَائِلَة + اسم العائلة» سطرٌ واحد بحجم واحد،
+   والخرطوش يتنفّس مع طول الاسم ولا يصطدم بالميداليتين. */
+function drawTitle() {
+  const g = $('#h-cart');
+  while (g.firstChild) g.removeChild(g.firstChild);
+  const m = STATE.data.meta;
+  const fam = (m.family || '').trim();
+  const full = (m.title || 'شَجَرَةُ عَائِلَة') + ' ' + (fam || 'ـــــــــــ');
+  const CY = 144, MAXW = 404, CUT = 26;
+  const t = mk('text', { class: 't-title', x: '397', y: CY, 'text-anchor': 'middle', 'font-size': '30' });
+  t.textContent = full;
+  g.appendChild(t);
+  /* يُقاس صندوق النصّ الفعليّ (لا طولُه وحده) ثمّ يُبنى الخرطوش عليه
+     ويُوسَّط النصّ في جوفه — فلا تخرج التشكيلة ولا رؤوس الحروف عن الإطار. */
+  const LIP = 5, PADV = 9, PADH = 42;
+  const H_MIN = 28, H_MAX = 42, W_MIN = 152, W_MAX = 244;
+  const MAX_TXT_H = 2 * (H_MAX - LIP - PADV);
+  const MAX_TXT_W = Math.min(MAXW, 2 * (W_MAX - PADH));
+  let fs = 30, bb = null;
+  try { bb = t.getBBox(); } catch (e) {}
+  if (bb && bb.width && bb.height) {
+    const k = Math.min(MAX_TXT_W / bb.width, MAX_TXT_H / bb.height, 1);
+    if (k < 1) { fs = Math.max(13, 30 * k); t.style.fontSize = fs.toFixed(1) + 'px'; bb = t.getBBox(); }
+    const dy = CY - (bb.y + bb.height / 2);
+    if (Math.abs(dy) > .05) { t.setAttribute('y', (CY + dy).toFixed(1)); bb = t.getBBox(); }
+  } else {                                  /* متصفّح بلا getBBox: تقديرٌ آمن */
+    let w0 = 0; try { w0 = t.getComputedTextLength(); } catch (e) { w0 = full.length * 14; }
+    if (w0 > MAX_TXT_W) { fs = Math.max(13, 30 * MAX_TXT_W / w0); t.style.fontSize = fs.toFixed(1) + 'px'; }
+    t.setAttribute('y', (CY + fs * 0.34).toFixed(1));
+    bb = { width: Math.min(w0, MAX_TXT_W), height: fs * 1.15 };
+  }
+  const half = clamp(bb.width / 2 + PADH, W_MIN, W_MAX);
+  const h    = clamp(bb.height / 2 + PADV + LIP, H_MIN, H_MAX);
+  const box = (hh, vv) => `M${(397 - hh).toFixed(1)},${CY} L${(397 - hh + CUT).toFixed(1)},${CY - vv} ` +
+    `L${(397 + hh - CUT).toFixed(1)},${CY - vv} L${(397 + hh).toFixed(1)},${CY} ` +
+    `L${(397 + hh - CUT).toFixed(1)},${CY + vv} L${(397 - hh + CUT).toFixed(1)},${CY + vv} Z`;
+  const inner = mk('path', { d: box(half - 8, h - 5), fill: 'none', stroke: 'var(--goldD)', 'stroke-width': '.6', opacity: '.8' });
+  const outer = mk('path', { d: box(half, h), fill: 'var(--band)', stroke: 'var(--gold)', 'stroke-width': '2' });
+  g.insertBefore(inner, t); g.insertBefore(outer, inner);
+
+  if (half < 230) {                       // كرمة تحفّ الخرطوش إن بقي متّسع دون الميداليات
+    const L = 397 - half, R = 397 + half;
+    const lv = mk('g', { fill: 'var(--gold)', opacity: '.85' });
+    [[L - 47, CY - 2, 196, .8], [L - 28, CY - 7, 174, .7], [R + 47, CY - 2, -16, .8], [R + 28, CY - 7, 6, .7]]
+      .forEach(a => lv.appendChild(mk('use', { href: '#leafP', transform: `translate(${a[0].toFixed(1)},${a[1]}) rotate(${a[2]}) scale(${a[3]})` })));
+    g.insertBefore(lv, g.firstChild);
+    const v = mk('g', { fill: 'none', stroke: 'var(--gold)', 'stroke-width': '1.1', 'stroke-linecap': 'round' });
+    v.appendChild(mk('path', { d: `M${(L - 4).toFixed(1)},${CY} C${(L - 25).toFixed(1)},${CY - 8} ${(L - 45).toFixed(1)},${CY - 4} ${(L - 61).toFixed(1)},${CY + 6}` }));
+    v.appendChild(mk('path', { d: `M${(R + 4).toFixed(1)},${CY} C${(R + 25).toFixed(1)},${CY - 8} ${(R + 45).toFixed(1)},${CY - 4} ${(R + 61).toFixed(1)},${CY + 6}` }));
+    g.insertBefore(v, g.firstChild);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ٧ ▸ دورة العرض
+   ═══════════════════════════════════════════════════════════ */
+let renderQueued = false;
+function render() {
+  FITS = [];
+  drawChrome();
+  drawTree();
+  fitAll();
+  markSel();
+  fit();
+  refitOnFont();          // الخط قد يصل بعد القياس، فتُعاد الملاءمة حين يصل
+}
+
+/* القياس يقع على الخط الاحتياطي إن لم يكن المختار قد نزل بعد؛
+   نسخ وكوفي لا يُنزَّلان عند الإقلاع لأن لا نصّ يستعملهما.       */
+const FONT_SEEN = {};
+function refitOnFont() {
+  const key = (STATE.data.meta && STATE.data.meta.font) || 'amiri';
+  const fam = FONT_MAP[key] || 'Amiri';
+  if (FONT_SEEN[fam] || !document.fonts || !document.fonts.load) return;
+  const wt = key === 'kufi' ? 600 : 700;
+  document.fonts.load(`${wt} 14px "${fam}"`)
+    .then(() => { FONT_SEEN[fam] = 1; fitAll(); })
+    .catch(() => { FONT_SEEN[fam] = 1; });
+}
+function rerender() {
+  if (renderQueued) return;
+  renderQueued = true;
+  requestAnimationFrame(() => { renderQueued = false; render(); save(); });
+}
+async function save() { await Store.set('ftt:' + TPL_ID, STATE); }
+
+/* مقياس العرض */
+function fit() {
+  const st = $('#stage');
+  const avail = Math.min(st.clientWidth - 28, 900);
+  const z = clamp(avail / PAGE.w, 0.24, 1);
+  $('#sheetWrap').style.transform = `scale(${z})`;
+  $('#sheetOuter').style.width = (PAGE.w * z) + 'px';
+  $('#sheetOuter').style.height = (PAGE.h * z) + 'px';
+}
+addEventListener('resize', fit);
+
+/* ═══════════════════════════════════════════════════════════
+   ٨ ▸ التحرير المباشر على البيضاويات
+   ═══════════════════════════════════════════════════════════ */
+function setNameAt(path, name) {
+  const d = STATE.data;
+  if (path === 'root') { d.root.name = name; return; }
+  if (Array.isArray(path) && path[0] === 'L') { d.lineage[path[1]] = name; return; }
+  let n = d.root;
+  for (const i of path) n = n.children[i];
+  n.name = name;
+}
+let editing = null;
+const inp = $('#nameEdit');
+
+$('#layer-tree').addEventListener('click', e => {
+  const g = e.target.closest('.node-hit'); if (!g) return;
+  const pt = svg.createSVGPoint(); pt.x = g.__pos.x; pt.y = g.__pos.y;
+  const p = pt.matrixTransform(svg.getScreenCTM());
+  inp.style.display = 'block';
+  inp.style.left = p.x + 'px'; inp.style.top = p.y + 'px';
+  inp.value = g.__name; editing = g.__path;
+  selectPath(g.__path);
+  inp.focus(); inp.select();
+});
+function commit() {
+  if (editing === null) return;
+  setNameAt(editing, inp.value.trim());
+  editing = null; inp.style.display = 'none';
+  History.snap(); refresh();
+}
+inp.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); commit(); }
+  if (e.key === 'Escape') { editing = null; inp.style.display = 'none'; }
+});
+inp.addEventListener('blur', commit);
+
+/* ═══════════════════════════════════════════════════════════
+   ٩ ▸ التصدير
+   ═══════════════════════════════════════════════════════════ */
+const FONT_CSS = 'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Reem+Kufi:wght@400..700&display=swap';
+let _fontBlock = null;
+const FONT_MAP = { amiri: 'Amiri', naskh: 'Noto Naskh Arabic', ruqaa: 'Aref Ruqaa', kufi: 'Reem Kufi' };
+const USED_FONTS = () => new RegExp('Amiri|Aref Ruqaa|' + (FONT_MAP[STATE.data.meta.font] || 'Amiri'), 'i');
+
+function b64(buf) {
+  const b = new Uint8Array(buf); let s = '';
+  for (let i = 0; i < b.length; i += 8192) s += String.fromCharCode.apply(null, b.subarray(i, i + 8192));
+  return btoa(s);
+}
+async function embeddedFonts() {
+  if (_fontBlock !== null) return _fontBlock;
+  try {
+    const css = await (await fetch(FONT_CSS)).text();
+    const faces = css.split('@font-face').slice(1).map(x => '@font-face' + x.split('}')[0] + '}');
+    const out = [];
+    for (const f of faces) {
+      const ur = /unicode-range:\s*([^;]+);/.exec(f);
+      if (ur && !/U\+06|U\+0600|U\+FE|U\+FB/i.test(ur[1])) continue;   // الشرائح العربية فقط
+      const u = /url\((https:\/\/[^)]+)\)/.exec(f); if (!u) continue;
+      const fam = (/font-family:\s*([^;]+);/.exec(f) || [, "'Amiri'"])[1];
+      if (!USED_FONTS().test(fam)) continue;      // لا نُضخّم الملف إلا بالخطوط المستعملة
+      const wt  = (/font-weight:\s*([^;]+);/.exec(f) || [, '400'])[1];
+      const buf = await (await fetch(u[1])).arrayBuffer();
+      out.push(`@font-face{font-family:${fam};font-style:normal;font-weight:${wt};src:url(data:font/woff2;base64,${b64(buf)}) format('woff2');}`);
+    }
+    _fontBlock = out.join('\n');
+  } catch (e) { _fontBlock = ''; }
+  return _fontBlock;
+}
+async function svgString(withFonts) {
+  const c = svg.cloneNode(true);
+  c.setAttribute('xmlns', SVGNS);
+  c.setAttribute('xmlns:xlink', XLINK);
+  c.setAttribute('width', PAGE.w); c.setAttribute('height', PAGE.h);
+  if (withFonts) {
+    const f = await embeddedFonts();
+    if (f) { const st = document.createElementNS(SVGNS, 'style'); st.textContent = f; c.insertBefore(st, c.firstChild); }
+  }
+  return '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(c);
+}
+async function raster(dpi, type, q) {
+  const s = await svgString(true);
+  const url = URL.createObjectURL(new Blob([s], { type: 'image/svg+xml;charset=utf-8' }));
+  const img = new Image();
+  await new Promise((res, rej) => { img.onload = res; img.onerror = () => rej(new Error('svg')); img.src = url; });
+  const W = Math.round(PAGE.w * dpi / 96), H = Math.round(PAGE.h * dpi / 96);
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const cx = cv.getContext('2d');
+  cx.fillStyle = '#FFFFFF'; cx.fillRect(0, 0, W, H);
+  cx.drawImage(img, 0, 0, W, H);
+  URL.revokeObjectURL(url);
+  const blob = await new Promise(r => cv.toBlob(r, type, q));
+  return { blob, W, H };
+}
+/* PDF بمقاس A4 يحتوي الصورة بدقة 300 نقطة */
+function pdfFromJpeg(bytes, w, h) {
+  const PW = 595.276, PH = 841.89, enc = new TextEncoder();
+  const parts = []; let pos = 0; const off = {};
+  const put = d => { const u = typeof d === 'string' ? enc.encode(d) : d; parts.push(u); pos += u.length; };
+  put('%PDF-1.4\n'); put(new Uint8Array([0x25, 0xE2, 0xE3, 0xCF, 0xD3, 0x0A]));
+  off[1] = pos; put('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  off[2] = pos; put('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+  off[3] = pos; put('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + PW + ' ' + PH + '] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+  off[4] = pos; put('4 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + w + ' /Height ' + h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + bytes.length + ' >>\nstream\n');
+  put(bytes); put('\nendstream\nendobj\n');
+  const ct = 'q\n' + PW + ' 0 0 ' + PH + ' 0 0 cm\n/Im0 Do\nQ\n';
+  off[5] = pos; put('5 0 obj\n<< /Length ' + ct.length + ' >>\nstream\n' + ct + 'endstream\nendobj\n');
+  const xref = pos;
+  let x = 'xref\n0 6\n0000000000 65535 f \n';
+  for (let i = 1; i <= 5; i++) x += String(off[i]).padStart(10, '0') + ' 00000 n \n';
+  put(x); put('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n');
+  return new Blob(parts, { type: 'application/pdf' });
+}
+const fname = () => 'شجرة-' + ((STATE.data.meta.family || 'العائلة').replace(/\s+/g, '-'));
+
+async function busy(btn, label, fn) {
+  const old = btn.innerHTML; btn.disabled = true; btn.textContent = label;
+  try { await fn(); } catch (e) { toast('تعذّر التصدير: ' + e.message); }
+  btn.disabled = false; btn.innerHTML = old;
+}
+$('#b-svg').onclick = () => busy($('#b-svg'), '…', async () => {
+  download(new Blob([await svgString(false)], { type: 'image/svg+xml;charset=utf-8' }), fname() + '.svg');
+  toast('نُزِّل ملف SVG متجه — قابل للتكبير بلا حدود.');
+});
+$('#b-png').onclick = () => busy($('#b-png'), 'جارٍ…', async () => {
+  const r = await raster(300, 'image/png');
+  download(r.blob, fname() + '.png');
+  toast('نُزِّلت صورة ' + r.W + '×' + r.H + ' بكسل (A4 · 300dpi).');
+});
+$('#b-pdf').onclick = () => busy($('#b-pdf'), 'جارٍ التجهيز…', async () => {
+  const r = await raster(300, 'image/jpeg', 0.95);
+  const buf = new Uint8Array(await r.blob.arrayBuffer());
+  download(pdfFromJpeg(buf, r.W, r.H), fname() + '.pdf');
+  toast('نُزِّل ملف PDF بمقاس A4 ودقة 300 نقطة/بوصة.');
+});
+$('#b-print').onclick = () => { toast('في نافذة الطباعة: اختر A4، الهوامش «بلا»، وفعّل «الرسوم الخلفية».'); setTimeout(() => window.print(), 700); };
+$('#b-copy').onclick = () => {
+  const c = document.documentElement.cloneNode(true);
+  c.querySelector('#ftt-data').textContent = JSON.stringify(STATE.data).replace(/</g, '\\u003c');
+  const lt = c.querySelector('#layer-tree'); while (lt.firstChild) lt.removeChild(lt.firstChild);
+  const lf = c.querySelector('#layer-frames'); while (lf.firstChild) lf.removeChild(lf.firstChild);
+  download(new Blob(['<!DOCTYPE html>\n' + c.outerHTML], { type: 'text/html;charset=utf-8' }), fname() + '.html');
+  toast('حُفظت نسخة كاملة تحمل بياناتها — تُفتح في أي متصفح بلا إنترنت.');
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ١٠ ▸ عناصر التحكم
+   ═══════════════════════════════════════════════════════════ */
+function setMode(m) {
+  STATE.mode = m;
+  STATE.data = m === 'sample' ? sampleData() : blankData();
+  $('#b-blank').setAttribute('aria-pressed', String(m === 'blank'));
+  $('#b-sample').setAttribute('aria-pressed', String(m === 'sample'));
+  $('#famname').value = STATE.data.meta.family;
+  $('#theme').value = STATE.data.meta.theme;
+  SEL = null; refresh(); History.reset();
+}
+$('#b-blank').onclick  = () => setMode('blank');
+$('#b-sample').onclick = () => setMode('sample');
+$('#theme').onchange   = e => { STATE.data.meta.theme = e.target.value; rerender(); };
+$('#fontsel').onchange = e => { STATE.data.meta.font = e.target.value; rerender(); };
+$('#famname').oninput  = e => { STATE.data.meta.family = e.target.value; rerender(); };
+/* الاستيراد يعمل بثلاث طرق: نفس النطاق ← ملف JSON مُصدَّر ← رابط دعوة #invite= */
+function adopt(tree, how) {
+  if (!tree || !tree.members || !tree.members.length) { toast('البيانات لا تحوي أفرادًا (members).'); return false; }
+  STATE.data = fromPlatform(tree); STATE.mode = 'platform';
+  $('#famname').value = STATE.data.meta.family || '';
+  $('#theme').value = STATE.data.meta.theme || 'classic';
+  $('#fontsel').value = STATE.data.meta.font || 'amiri';
+  $('#b-blank').setAttribute('aria-pressed', 'false');
+  $('#b-sample').setAttribute('aria-pressed', 'false');
+  SEL = null; refresh(); History.reset();
+  toast('استُوردت شجرتك ' + how + ' — ' + arNumE(Ops.count()) + ' فردًا.');
+  return true;
+}
+$('#b-import').onclick = () => {
+  let raw = null;
+  try { raw = localStorage.getItem(PLATFORM_KEY); } catch (e) {}
+  if (raw) { try { if (adopt(JSON.parse(raw), 'من هذا المتصفح')) return; } catch (e) {} }
+  toast('لم أجد شجرة على هذا النطاق — اختر ملف JSON الذي صدّرته من المنصة.');
+  $('#importFile').click();
+};
+$('#importFile').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { try { adopt(JSON.parse(rd.result), 'من الملف'); } catch (err) { toast('ملف غير صالح — تأكّد أنه ملف التصدير من المنصة.'); } };
+  rd.onerror = () => toast('تعذّرت قراءة الملف.');
+  rd.readAsText(f, 'utf-8');
+  e.target.value = '';
+};
+const bRe = $('#b-reshape'); if (bRe) bRe.onclick = () => { STATE.data.meta.seed = Math.floor(Math.random() * 1e9); rerender(); toast('أُعيد توزيع الأغصان بنفس الأسماء.'); };
+
+/* ═══════════════════════════════════════════════════════════
+   ١١ ▸ واجهة المنصة
+   ═══════════════════════════════════════════════════════════ */
+window.FamilyTreeTemplate = {
+  manifest: JSON.parse($('#template-manifest').textContent),
+  getData: () => JSON.parse(JSON.stringify(STATE.data)),
+  render(data) { STATE.data = Object.assign(blankData(), data); render(); save(); },
+  fromPlatform: fromPlatform,
+  renderPlatform(tree) { this.render(fromPlatform(tree)); },
+  patch(p) { Object.assign(STATE.data.meta, p.meta || {}); if (p.lineage) STATE.data.lineage = p.lineage; if (p.root) STATE.data.root = p.root; if (p.frames) STATE.data.frames = p.frames; rerender(); },
+  toSVG: () => svgString(true),
+  toPNGBlob: async (dpi) => (await raster(dpi || 300, 'image/png')).blob,
+  async toPDFBlob() { const r = await raster(300, 'image/jpeg', 0.95); return pdfFromJpeg(new Uint8Array(await r.blob.arrayBuffer()), r.W, r.H); },
+  print: () => window.print(),
+  /* عمليات البنية — تعمل على JSON ثم يعيد المحرّك التخطيط */
+  ops: {
+    addChild: p => { const r = Ops.addChild(p); History.snap(); refresh(); return r; },
+    addSibling: p => { const r = Ops.addSibling(p); History.snap(); refresh(); return r; },
+    remove: p => { const r = Ops.remove(p); History.snap(); refresh(); return r; },
+    move: (p, d) => { const r = Ops.move(p, d); History.snap(); refresh(); return r; },
+    rename: (p, v) => { if (p === 'root') STATE.data.root.name = v; else if (p[0] === 'L') STATE.data.lineage[p[1]] = v; else Ops.at(p).name = v; History.snap(); refresh(); },
+    lineageAdd: i => { Ops.lineAdd(i === undefined ? STATE.data.lineage.length : i); History.snap(); refresh(); },
+    lineageRemove: i => { Ops.lineDel(i); History.snap(); refresh(); },
+    undo: () => History.undo(), redo: () => History.redo(),
+    list: () => Ops.flat(STATE.data.root, 'root', 0, []).map(x => ({ path: x.path, name: x.n.name, depth: x.depth }))
+  },
+  setEditable(on) { const w = document.querySelector('.wrap'); w.classList.toggle('noedit', !on); fit(); }
+};
+addEventListener('message', async e => {
+  const m = e.data; if (!m || typeof m !== 'object' || !m.type) return;
+  const reply = (type, payload) => e.source && e.source.postMessage({ type, id: m.id, payload }, '*');
+  if (m.type === 'ftt:render') { window.FamilyTreeTemplate.render(m.payload); reply('ftt:rendered'); }
+  if (m.type === 'ftt:renderPlatform') { window.FamilyTreeTemplate.renderPlatform(m.payload); reply('ftt:rendered'); }
+  if (m.type === 'ftt:get')    reply('ftt:data', window.FamilyTreeTemplate.getData());
+  if (m.type === 'ftt:svg')    reply('ftt:svg', await window.FamilyTreeTemplate.toSVG());
+  if (m.type === 'ftt:print')  window.print();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   ١٢ ▸ الإقلاع: بيانات مضمّنة ← محفوظة ← فارغة
+   ═══════════════════════════════════════════════════════════ */
+let BOOTED = false;
+(async function boot() {
+  await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 2500))]);
+  try {                                   // رابط دعوة المنصة: #invite=base64
+    const h = location.hash || '';
+    if (h.indexOf('#invite=') === 0) {
+      const pl = JSON.parse(decodeURIComponent(escape(atob(h.slice(8)))));
+      if (pl && pl.tree && pl.tree.members) { STATE.data = fromPlatform(pl.tree); STATE.mode = 'platform'; BOOTED = true; }
+    }
+  } catch (e) {}
+  let embedded = null;
+  try { const raw = ($('#ftt-data').textContent || '').trim(); if (raw) embedded = JSON.parse(raw); } catch (e) {}
+  if (BOOTED) { /* من رابط الدعوة */ }
+  else if (embedded) { STATE.data = Object.assign(blankData(), embedded); STATE.mode = 'custom'; }
+  else {
+    const saved = await Store.get('ftt:' + TPL_ID);
+    if (saved && saved.data) { STATE = saved; }
+  }
+  $('#famname').value = STATE.data.meta.family || '';
+  $('#theme').value = STATE.data.meta.theme || 'classic';
+  $('#fontsel').value = STATE.data.meta.font || 'amiri';
+  $('#b-blank').setAttribute('aria-pressed', String(STATE.mode === 'blank'));
+  $('#b-sample').setAttribute('aria-pressed', String(STATE.mode === 'sample'));
+  render();
+  buildPanel();
+  History.reset();
+  try { parent && parent.postMessage({ type: 'ftt:ready', payload: window.FamilyTreeTemplate.manifest }, '*'); } catch (e) {}
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   ١٣ ▸ محرّر البنية — يضيف ويحذف ويحرّك الأفراد، لا الأسماء فقط
+   كل عملية تُغيّر JSON ثم يعيد المحرّك حساب التخطيط من الصفر.
+   ═══════════════════════════════════════════════════════════ */
+let SEL = null;                     // مسار المحدَّد (JSON نصّي)
+const P = s => document.querySelector(s);
+
+/* ── العمليات على البيانات ─────────────────────────── */
+const Ops = {
+  at(p) { if (p === 'root') return STATE.data.root; let n = STATE.data.root; for (const i of p) n = n.children[i]; return n; },
+  parentOf(p) { if (p === 'root' || !Array.isArray(p) || p[0] === 'L') return null; return p.length === 1 ? 'root' : p.slice(0, -1); },
+  base(p) { return p === 'root' ? [] : p; },
+
+  addChild(p) {
+    const n = this.at(p); n.children = n.children || [];
+    n.children.push({ name: '' });
+    return this.base(p).concat(n.children.length - 1);
+  },
+  addSibling(p) {
+    const pp = this.parentOf(p); if (!pp) return null;
+    const i = p[p.length - 1];
+    this.at(pp).children.splice(i + 1, 0, { name: '' });
+    return this.base(pp).concat(i + 1);
+  },
+  remove(p) {
+    const pp = this.parentOf(p); if (!pp) return false;
+    this.at(pp).children.splice(p[p.length - 1], 1);
+    return true;
+  },
+  move(p, d) {
+    const pp = this.parentOf(p); if (!pp) return false;
+    const ks = this.at(pp).children, i = p[p.length - 1], j = i + d;
+    if (j < 0 || j >= ks.length) return false;
+    const t = ks[i]; ks[i] = ks[j]; ks[j] = t;
+    return this.base(pp).concat(j);
+  },
+  /* الجذع: سلسلة النسب — [0] الأقدم في الأسفل */
+  lineAdd(i) { STATE.data.lineage.splice(i, 0, ''); },
+  lineDel(i) { STATE.data.lineage.splice(i, 1); },
+  lineMove(i, d) { const L = STATE.data.lineage, j = i + d; if (j < 0 || j >= L.length) return; const t = L[i]; L[i] = L[j]; L[j] = t; },
+
+  count(n) { n = n || STATE.data.root; return 1 + (n.children || []).reduce((s, c) => s + this.count(c), 0); },
+  depth(n, d) { n = n || STATE.data.root; d = d || 0; const k = n.children || []; return k.length ? Math.max.apply(null, k.map(c => this.depth(c, d + 1))) : d; },
+  flat(n, p, d, out) {
+    out.push({ n, path: p, depth: d });
+    (n.children || []).forEach((c, i) => this.flat(c, this.base(p).concat(i), d + 1, out));
+    return out;
+  }
+};
+
+/* ── التاريخ: تراجع/إعادة ──────────────────────────── */
+const History = {
+  st: [], i: -1,
+  snap() {
+    const s = JSON.stringify(STATE.data);
+    if (this.st[this.i] === s) return;
+    this.st = this.st.slice(0, this.i + 1);
+    this.st.push(s);
+    if (this.st.length > 60) { this.st.shift(); }
+    this.i = this.st.length - 1;
+    syncHist();
+  },
+  undo() { if (this.i <= 0) return; this.i--; restore(); },
+  redo() { if (this.i >= this.st.length - 1) return; this.i++; restore(); },
+  reset() { this.st = []; this.i = -1; this.snap(); }
+};
+function restore() { STATE.data = JSON.parse(History.st[History.i]); SEL = null; refresh(); syncHist(); }
+function syncHist() {
+  const u = P('#e-undo'), r = P('#e-redo');
+  if (u) u.disabled = History.i <= 0;
+  if (r) r.disabled = History.i >= History.st.length - 1;
+}
+
+/* ── دورة التحديث ──────────────────────────────────── */
+function refresh() { render(); buildPanel(); save(); }
+function mutate(fn) {
+  const nxt = fn();
+  if (nxt === false) return;
+  if (nxt) SEL = JSON.stringify(nxt);
+  History.snap();
+  refresh();
+  if (nxt) { const r = P('.erow.sel .enm'); if (r) { r.focus(); r.select(); } }
+}
+function markSel() {
+  FITS.forEach(g => { g.classList.toggle('sel', !!SEL && JSON.stringify(g.__path) === SEL); });
+}
+function selectPath(p) {
+  SEL = JSON.stringify(p);
+  markSel();
+  document.querySelectorAll('.erow').forEach(r => r.classList.toggle('sel', r.dataset.path === SEL));
+  const r = P('.erow.sel');
+  if (r) r.scrollIntoView({ block: 'nearest' });
+}
+
+/* ── بناء اللوحة ───────────────────────────────────── */
+function eb(txt, title, fn, cls) {
+  const b = document.createElement('button');
+  b.className = 'eb' + (cls ? ' ' + cls : ''); b.textContent = txt; b.title = title;
+  b.onclick = e => { e.stopPropagation(); fn(); };
+  return b;
+}
+function erow(path, name, depth, kind) {
+  const r = document.createElement('div');
+  r.className = 'erow'; r.style.setProperty('--d', depth);
+  r.dataset.path = JSON.stringify(path);
+  if (SEL === r.dataset.path) r.classList.add('sel');
+
+  const i = document.createElement('input');
+  i.className = 'enm'; i.value = name || ''; i.placeholder = kind === 'line' ? 'اسم في الجذع' : 'بلا اسم';
+  i.onfocus = () => selectPath(path);
+  i.oninput = () => {
+    if (kind === 'line') STATE.data.lineage[path[1]] = i.value;
+    else Ops.at(path).name = i.value;
+    render(); save();
+  };
+  i.onchange = () => History.snap();
+  i.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); i.blur(); } };
+  r.appendChild(i);
+
+  const bs = document.createElement('span'); bs.className = 'ebtns';
+  if (kind === 'line') {
+    const k = path[1];
+    bs.appendChild(eb('↑', 'تحريك للأعلى', () => mutate(() => { Ops.lineMove(k, 1); })));
+    bs.appendChild(eb('↓', 'تحريك للأسفل', () => mutate(() => { Ops.lineMove(k, -1); })));
+    bs.appendChild(eb('＋', 'إدراج اسم فوقه', () => mutate(() => { Ops.lineAdd(k + 1); return ['L', k + 1]; })));
+    bs.appendChild(eb('✕', 'حذف من الجذع', () => mutate(() => { Ops.lineDel(k); }), 'del'));
+  } else {
+    bs.appendChild(eb('＋', 'إضافة ابن/ابنة', () => mutate(() => Ops.addChild(path))));
+    if (kind !== 'root') {
+      bs.appendChild(eb('⇄', 'إضافة أخ/أخت', () => mutate(() => Ops.addSibling(path))));
+      bs.appendChild(eb('↑', 'تقديم', () => mutate(() => Ops.move(path, -1))));
+      bs.appendChild(eb('↓', 'تأخير', () => mutate(() => Ops.move(path, 1))));
+      bs.appendChild(eb('✕', 'حذف هو وذريّته', () => {
+        const n = Ops.at(path), c = Ops.count(n) - 1;
+        const msg = c ? `حذف «${n.name || 'بلا اسم'}» سيحذف ${c} من ذريّته أيضًا. متابعة؟` : `حذف «${n.name || 'بلا اسم'}»؟`;
+        if (confirm(msg)) mutate(() => { Ops.remove(path); SEL = null; });
+      }, 'del'));
+    }
+  }
+  r.appendChild(bs);
+  return r;
+}
+
+function buildPanel() {
+  const L = P('#p-line'); if (!L) return;
+  L.textContent = '';
+  const lin = STATE.data.lineage || [];
+  /* الأقدم في الأسفل — نعرضه بترتيب الجذع نفسه */
+  for (let i = lin.length - 1; i >= 0; i--) L.appendChild(erow(['L', i], lin[i], 0, 'line'));
+  if (!lin.length) {
+    const e = document.createElement('p'); e.className = 'ehint';
+    e.textContent = 'لا سلسلة نسب — أضف أسماء الأجداد لتظهر على الجذع.';
+    L.appendChild(e);
+  }
+
+  const T = P('#p-tree'); T.textContent = '';
+  Ops.flat(STATE.data.root, 'root', 0, []).forEach(x =>
+    T.appendChild(erow(x.path, x.n.name, x.depth, x.path === 'root' ? 'root' : 'node')));
+
+  P('#e-count').textContent = arNumE(Ops.count());
+  P('#e-gen').textContent = arNumE(Ops.depth() + 1);
+  P('#e-line').textContent = arNumE(lin.length);
+  markSel();
+  syncHist();
+}
+const AR_E = '٠١٢٣٤٥٦٧٨٩';
+const arNumE = n => String(n).replace(/\d/g, c => AR_E[+c]);
+
+/* ── الربط ─────────────────────────────────────────── */
+P('#e-addline').onclick = () => mutate(() => { STATE.data.lineage.push(''); return ['L', STATE.data.lineage.length - 1]; });
+P('#e-addroot').onclick = () => mutate(() => Ops.addChild('root'));
+P('#e-undo').onclick = () => History.undo();
+P('#e-redo').onclick = () => History.redo();
+P('#e-toggle').onclick = () => {
+  const w = P('.wrap'); const on = w.classList.toggle('noedit');
+  P('#e-toggle').setAttribute('aria-pressed', String(!on));
+  fit();
+};
+addEventListener('keydown', e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  if (e.key === 'z' && !e.shiftKey) { e.preventDefault(); History.undo(); }
+  if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) { e.preventDefault(); History.redo(); }
+});
+
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     جسر سُطور الأنساب — يصل القالب بالمنصّة دون المساس بمحرّكه.
+     مُدرَج آليًّا؛ لا تعتمد عليه أجزاءُ القالب الأخرى.
+     ══════════════════════════════════════════════════════════════════ -->
+<style id="sutoor-bridge-css">
+  /* داخل الاستوديو: هويّة القالب يعرضها الشريط الأعلى، فلا تُكرَّر هنا */
+  html.in-shell .brand > div{ display:none; }
+  html.in-shell .bar{ box-shadow:none; }
+  html.in-shell .bar-in{ padding-block:8px; }
+
+  .sutoor-back{
+    display:inline-flex; align-items:center; gap:6px;
+    font:500 12.5px/1 'IBM Plex Sans Arabic', system-ui, sans-serif;
+    color:#D7B457; text-decoration:none;
+    border:1px solid #31432F; background:#1D291E;
+    padding:7px 11px; border-radius:8px; margin-inline-end:10px;
+    transition:background .14s ease, border-color .14s ease;
+  }
+  .sutoor-back:hover{ background:#243021; border-color:#D7B457; }
+  .sutoor-back:focus-visible{ outline:2px solid #D7B457; outline-offset:2px; }
+  .sutoor-back svg{ width:13px; height:13px; flex:none; }
+  @media print{ .sutoor-back{ display:none; } }
+</style>
+<script id="sutoor-bridge">
+(function(){
+  var KEY = 'tribe';
+  var embedded; try { embedded = window.parent && window.parent !== window; } catch(e){ embedded = true; }
+
+  if (embedded){
+    document.documentElement.classList.add('in-shell');
+
+    function announce(){
+      var api = window.FamilyTreeTemplate;
+      try {
+        parent.postMessage({
+          type: 'ftt:ready',
+          key : KEY,
+          payload: (api && api.manifest) || { id: KEY }
+        }, '*');
+      } catch(e){}
+    }
+    /* الاستوديو قد يتأخّر في الإنصات، والمحرّك قد يتأخّر في الإقلاع؛
+       فيُعاد الإعلان بلطف حتى يلتقيا. */
+    var n = 0, iv = setInterval(function(){
+      if (window.FamilyTreeTemplate){ announce(); clearInterval(iv); }
+      if (++n > 60) clearInterval(iv);
+    }, 120);
+    addEventListener('load', announce);
+    addEventListener('message', function(e){
+      var m = e.data;
+      if (m && m.type === 'ftt:hello') announce();
+    });
+  } else {
+    /* قالب مفتوح وحده: نافذةُ عودة إلى واجهة المنصّة */
+    var bar = document.querySelector('.bar-in');
+    if (bar){
+      var a = document.createElement('a');
+      a.className = 'sutoor-back';
+      a.href = 'index.html';
+      a.setAttribute('aria-label', 'العودة إلى سُطور الأنساب');
+      a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
+                  + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                  + '<path d="M9 5l7 7-7 7"/></svg>سُطور الأنساب';
+      bar.insertBefore(a, bar.firstChild);
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

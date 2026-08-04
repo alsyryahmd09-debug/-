@@ -1,0 +1,5 @@
+﻿metric_ar,metric_en,value,unit,notes_ar
+"عدد المشاركين","participant_count","20","participants","بيانات مجمعة دون معرّفات شخصية"
+"متوسط مقياس قابلية الاستخدام","sus_score","84.25","points","الدرجة المعلنة في المنصة"
+"معامل كرونباخ ألفا","cronbach_alpha","0.891","coefficient","اتساق داخلي مرتفع"
+"حالة إخفاء الهوية","anonymized","true","boolean","لا يتضمن الملف بيانات فردية أو كاشفة"

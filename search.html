@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>اسأل الأرشيف الموثّق — سُطور من أوال</title>
+
+<!-- ملفات JSON إضافية تُفهرَس تلقائياً (اختياري): أضف مساراتها هنا ولا تلمس كود المحرّك -->
+<meta name="sutoor-sources" content="">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./search.css">
+
+<style>
+  /* تنسيقات صفحة التجربة فقط — لا علاقة لها بالمحرّك */
+  body { margin:0; background:var(--sutoor-parchment); color:var(--sutoor-text);
+         font-family:'Tajawal',system-ui,sans-serif; }
+  .demo { max-width:900px; margin:0 auto; padding:10px 20px 90px; }
+  .demo h2 { font-family:'Amiri',serif; color:var(--sutoor-olive); font-size:1.25rem;
+             margin:34px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--sutoor-border); }
+  .card { background:var(--sutoor-surface); border:1px solid var(--sutoor-border);
+          border-radius:16px; padding:18px 22px; margin-bottom:14px;
+          box-shadow:var(--sutoor-shadow-soft); }
+  .card h3 { font-family:'Amiri',serif; margin:0 0 8px; color:var(--sutoor-green); font-size:1.15rem; }
+  .card p  { margin:0; line-height:1.95; font-size:.94rem; color:var(--sutoor-text-2); }
+</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     (1) سطح «اسأل الأرشيف الموثّق» — واجهة الدخول في الصفحة
+     data-sutoor-ask        : يعلن الحاوية سطحَ بحث مرتبطاً بالمحرّك
+     data-sutoor-ask-input  : حقل السؤال
+     data-sutoor-ask-submit : زر التنفيذ
+     data-fill              : شريحة تملأ السؤال وتنفّذه فوراً
+     data-sutoor-skip       : يستثني القسم من الفهرسة (واجهة لا محتوى)
+     ========================================================================== -->
+<section class="sutoor-ask" data-sutoor-ask data-sutoor-skip aria-labelledby="askTitle">
+  <div class="sutoor-ask-inner">
+
+    <span class="sutoor-eyebrow">اسأل الأرشيف</span>
+
+    <h2 class="sutoor-ask-title" id="askTitle">اسأل الأرشيف الموثّق</h2>
+
+    <p class="sutoor-ask-sub">
+      إجابات مبنية حصراً على وثائق مُدقَّقة من أرشيف المنصّة — لا على الويب العام.
+    </p>
+
+    <div class="sutoor-ask-bar">
+      <label class="sutoor-sr-only" for="askInput">اكتب سؤالك للأرشيف</label>
+      <input id="askInput" class="sutoor-ask-input" data-sutoor-ask-input
+             type="search" autocomplete="off" spellcheck="false"
+             placeholder="مثال: متى تأسس مسجد الخميس؟">
+      <button type="button" class="sutoor-ask-submit" data-sutoor-ask-submit aria-label="اسأل الأرشيف الموثّق">
+        <span class="sutoor-ask-submit-mark" aria-hidden="true">
+          <img src="/assets/ask-archive-mark.svg" alt="" width="44" height="44">
+        </span>
+        <span>اسأل</span>
+      </button>
+    </div>
+
+    <div class="sutoor-ask-chips">
+      <button type="button" class="sutoor-chip" data-fill="متى تأسس مسجد الخميس؟">متى تأسس مسجد الخميس؟</button>
+      <button type="button" class="sutoor-chip" data-fill="دلمون وقلعة البحرين">دلمون وقلعة البحرين</button>
+      <button type="button" class="sutoor-chip" data-fill="التلال الملكية بعالي">التلال الملكية بعالي</button>
+      <button type="button" class="sutoor-chip" data-fill="درب اللؤلؤ">درب اللؤلؤ</button>
+    </div>
+
+    <p class="sutoor-ask-note">
+      بحث محلي داخل وثائق المنصّة الموثّقة فقط — لا يستدعي أيّ خدمة ذكاء اصطناعي خارجية،
+      حفاظاً على دقّة المعلومة ومنعاً لأيّ تخمين.
+    </p>
+
+  </div>
+</section>
+
+<div class="demo">
+
+  <!-- ======================================================================
+       (2) محتوى قابل للفهرسة
+       الوسوم الاختيارية على أيّ عنصر:
+         data-sutoor-index    : يعلن العنصر وحدةَ فهرسة مستقلّة
+         data-sutoor-title    : العنوان (وإلا أُخذ من أول عنوان داخلي)
+         data-sutoor-section  : القسم التابع له
+         data-sutoor-type     : النوع (معلم/مخطوطة/شخصية/حدث/نسب/مرجع)
+         data-sutoor-keywords : كلمات مفتاحية إضافية
+         data-sutoor-thumb    : صورة مصغّرة
+         data-sutoor-rank     : أهمية القسم في الترتيب (1 = المعتاد)
+         data-sutoor-updated  : تاريخ آخر تحديث (ISO) لمكافأة الحداثة
+         data-sutoor-skip     : على أيّ حاوية لاستثنائها وما بداخلها
+       ====================================================================== -->
+
+  <h2>المعالم</h2>
+  <section id="landmarks" data-sutoor-section="المعالم">
+
+    <article class="card" id="khamis" data-sutoor-index
+             data-sutoor-type="معلم" data-sutoor-rank="1.25"
+             data-sutoor-keywords="بلاد القديم المنارتان النقش الوقفية عمر بن عبد العزيز كيرفران">
+      <h3>مسجد الخميس</h3>
+      <p>بُني في عهد عمر بن عبد العزيز (٩٩–١٠١هـ) حسب المصادر الرسمية، وأكّدت ذلك نتائج
+         البعثة الفرنسية للتنقيب بقيادة مونيك كيرفران التي بدأت عام ١٩٨٤. وتبقى طبقات
+         الترميم ونقشا المنارة ٧٢٤هـ والوقفية ٧٧٦هـ شواهد مؤرَّخة على تعاقب العمارة فيه.</p>
+    </article>
+
+    <article class="card" id="mounds" data-sutoor-index
+             data-sutoor-type="معلم" data-sutoor-rank="1.25"
+             data-sutoor-keywords="عالي التلال الملكية اليونسكو التراث العالمي دلمون">
+      <h3>تلال مدافن دلمون بعالي</h3>
+      <p>أُدرجت على قائمة التراث العالمي لليونسكو عام ٢٠١٩ في واحد وعشرين موقعاً تضمّ نحو
+         ١١٬٧٧٤ تلّة، يعود أقدمها إلى ٢٠٥٠ ق.م. وتُعدّ التلال الملكية أضخم شواهد العمارة
+         الجنائزية في حضارة دلمون.</p>
+    </article>
+
+    <article class="card" id="samahij" data-sutoor-index
+             data-sutoor-type="معلم"
+             data-sutoor-keywords="ميشماهيج كنيسة المشرق إنسول المحاري إكستر">
+      <h3>قرية سماهيج والوجود المسيحي المبكر</h3>
+      <p>أُعلن عام ٢٠٢٤ اكتشاف أوّل مبنى مسيحي في البحرين يعود إلى القرن الرابع الميلادي،
+         ضمن ما عُرف بأبرشية ميشماهيج التابعة لكنيسة المشرق، بتنقيب مشترك بين جامعة إكستر
+         وهيئة البحرين للثقافة والآثار.</p>
+    </article>
+
+  </section>
+
+  <h2>فهرس المخطوطات</h2>
+  <section id="manuscripts" data-sutoor-section="فهرس المخطوطات">
+    <article class="card" id="ms-hamasa" data-sutoor-index
+             data-sutoor-type="مخطوطة"
+             data-sutoor-keywords="أحمد بن غانم البحراني الناسخ بني جامع تركيا">
+      <h3>مخطوط الحماسة</h3>
+      <p>نسخة نقلها أحمد بن غانم البحراني، محفوظة ضمن مجموعة بني جامع بتركيا برقم ١٣٧٣٩،
+         وتُعدّ شاهداً على حركة النسخ في أوال واتّصالها بمراكز الرواية.</p>
+    </article>
+  </section>
+
+  <!-- ======================================================================
+       (3) قاعدة بيانات مضمَّنة — تُفهرَس كما هي دون كود إضافي
+       ====================================================================== -->
+  <script type="application/json" data-sutoor-source data-sutoor-section="الخط الزمني">
+  [
+    { "title": "قيام الدولة العيونية",
+      "type": "حدث",
+      "url": "#landmarks",
+      "description": "قيام الدولة العيونية سنة ٤٦٩هـ/١٠٧٧م بعد ثورة أبي البهلول وسقوط حكم القرامطة.",
+      "keywords": ["العيونيون", "عبد الله بن علي العيوني", "القرامطة", "أبو البهلول"] },
+    { "title": "تحوّل اسم أوال إلى البحرين",
+      "type": "حدث",
+      "url": "#landmarks",
+      "description": "يوثّق نصّ الفوائد لأحمد بن ماجد (٨٩٥هـ) بدء تحوّل الاسم من أوال إلى البحرين.",
+      "keywords": ["أوال", "ابن ماجد", "الفوائد", "٨٩٥هـ", "درب اللؤلؤ"] }
+  ]
+  </script>
+
+</div>
+
+<!-- ==========================================================================
+     (4) هيكل النافذة
+     يُحقن تلقائياً إن لم يوجد؛ ووضعُه صراحةً يمنع أيّ وميض عند أول فتح.
+     ========================================================================== -->
+<div class="sutoor-modal" id="sutoorSearchModal" role="dialog" aria-modal="true"
+     aria-labelledby="sutoorSearchLabel" hidden data-sutoor-skip>
+  <div class="sutoor-search-box" role="document">
+
+    <div class="sutoor-search-header">
+      <svg class="sutoor-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
+      </svg>
+      <label class="sutoor-sr-only" id="sutoorSearchLabel" for="sutoorSearchInput">اسأل الأرشيف الموثّق</label>
+      <input id="sutoorSearchInput" class="sutoor-search-input" type="search"
+             autocomplete="off" spellcheck="false"
+             placeholder="مثال: متى تأسس مسجد الخميس؟"
+             role="combobox" aria-expanded="false" aria-controls="sutoorResults" aria-autocomplete="list">
+      <kbd class="sutoor-shortcut-hint">Esc</kbd>
+      <button type="button" class="sutoor-close" aria-label="إغلاق البحث">&times;</button>
+    </div>
+
+    <!-- شريط التصفية بالأقسام: يُملأ من إحصاء النتائج -->
+    <div class="sutoor-filters" id="sutoorFilters" hidden></div>
+
+    <!-- سطح عرض النتائج الشاملة -->
+    <div class="sutoor-results-container" id="sutoorResults" role="listbox" aria-label="نتائج البحث"></div>
+
+    <div class="sutoor-search-footer">
+      <span class="sutoor-legend"><kbd>↑</kbd><kbd>↓</kbd> تنقّل</span>
+      <span class="sutoor-legend"><kbd>↵</kbd> فتح النتيجة</span>
+      <span class="sutoor-legend"><kbd>Ctrl</kbd>+<kbd>K</kbd> فتح البحث</span>
+      <span class="sutoor-stat" id="sutoorStat"></span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==========================================================================
+     (5) التحميل — بهذا الترتيب حصراً
+     العامل (Worker) يحتاج خادماً؛ وعند فتح الملف عبر file:// ينتقل المحرّك
+     تلقائياً إلى وضع مبسّط في الخيط الرئيسي دون أن يتعطّل.
+     ========================================================================== -->
+<script>
+  window.SUTOOR_WORKER_URL = './search-worker.js';
+  window.SUTOOR_SEARCH_CONFIG = { sources: [], maxBodyChars: 4000 };
+</script>
+<script src="./search-index.js"></script>
+<script src="./search-engine.js" defer></script>
+
+</body>
+</html>
