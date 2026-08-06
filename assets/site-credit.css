@@ -1,0 +1,66 @@
+.site-credit {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 30px clamp(20px, 5vw, 72px) 34px;
+  overflow: hidden;
+  color: #273b34;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(176, 139, 72, 0.12), transparent 28%),
+    linear-gradient(180deg, #f6f0e1 0%, #eee4cf 100%);
+  border-top: 1px solid rgba(132, 106, 60, 0.28);
+  text-align: center;
+}
+
+.site-credit::before {
+  display: block;
+  width: 76px;
+  height: 1px;
+  margin: 0 auto 18px;
+  background: #a9864d;
+  content: "";
+}
+
+.site-credit__arabic,
+.site-credit__english {
+  margin: 0;
+}
+
+.site-credit__arabic {
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.9;
+}
+
+.site-credit__arabic strong {
+  display: block;
+  color: #163d31;
+  font-size: 1.08em;
+}
+
+.site-credit__english {
+  margin-top: 12px;
+  color: #6c6a5f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(11px, 0.9vw, 13px);
+  line-height: 1.65;
+  letter-spacing: 0.025em;
+}
+
+.site-credit__english strong {
+  color: #3f4f48;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .site-credit {
+    padding-block: 24px 28px;
+  }
+}
+
+@media print {
+  .site-credit {
+    background: #fff;
+    border-top-color: #c9bea6;
+  }
+}
