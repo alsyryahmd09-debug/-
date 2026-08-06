@@ -51,6 +51,41 @@
     Content-Type = "application/javascript; charset=utf-8"
 
 [[redirects]]
+  from = "/ontology-platform"
+  to = "/ontology-platform.html"
+  status = 200
+
+[[redirects]]
+  from = "/download-center"
+  to = "/download-center.html"
+  status = 200
+
+[[redirects]]
+  from = "/interactive-landmarks"
+  to = "/interactive-landmarks.html"
+  status = 200
+
+[[redirects]]
+  from = "/digital-heritage-documentation"
+  to = "/digital-heritage-documentation.html"
+  status = 200
+
+[[redirects]]
+  from = "/Burial-Mounds-of-Bahrain-Illustrated-Summary"
+  to = "/Burial-Mounds-of-Bahrain-Illustrated-Summary.html"
+  status = 200
+
+[[redirects]]
+  from = "/burial-mounds-of-bahrain-illustrated-summary"
+  to = "/Burial-Mounds-of-Bahrain-Illustrated-Summary.html"
+  status = 200
+
+[[redirects]]
+  from = "/Islamic-Funerary-Inscriptions-of-Bahrain-Illustrated-Summary"
+  to = "/Islamic-Funerary-Inscriptions-of-Bahrain-Illustrated-Summary.html"
+  status = 200
+
+[[redirects]]
   from = "/سوتور-البحث/*"
   to = "/sutoor-search/:splat"
   status = 200
