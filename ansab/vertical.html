@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>قالب شجرة العائلة — المشجّر العمودي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Aref+Ruqaa:wght@400;700&amp;family=Noto+Naskh+Arabic:wght@400;700&amp;family=Reem+Kufi:wght@400..700&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;display=swap" rel="stylesheet">
+
+<script type="application/json" id="template-manifest">
+{
+  "id": "ornate-chart-v-v1",
+  "name": "المشجّر العمودي",
+  "version": "1.0.0",
+  "engine": "tree-engine/1.0",
+  "page": { "size": "A4", "orientation": "landscape", "w": 1123, "h": 794, "cssDpi": 96 },
+  "themes": ["classic", "olive", "najdi", "gilded"],
+  "fonts": ["amiri", "naskh", "ruqaa", "kufi"],
+  "capabilities": ["render", "platform-adapter", "postMessage", "export-svg", "export-png-300dpi", "export-pdf", "print-vector", "save-copy", "autosave"],
+  "slots": { "lineage": { "min": 0, "max": 8 }, "chart": { "maxDepth": 5, "recommended": 40 } },
+  "api": "window.FamilyTreeTemplate"
+}
+</script>
+<script type="application/json" id="ftt-data"></script>
+
+<style>
+  :root{
+    --ui-bg:#141C15; --ui-panel:#1D291E; --ui-line:#31432F;
+    --ui-text:#E6E9DF; --ui-dim:#94A48F; --ui-gold:#D7B457; --ui-grn:#79A85B;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:#0F150F;
+    font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
+    color:var(--ui-text);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── شريط الأدوات ─────────────────────────────── */
+  .bar{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(180deg,#1D291E,#16201700 100%), var(--ui-bg);
+    border-bottom:1px solid var(--ui-line);
+    box-shadow:0 10px 30px -14px #000;
+  }
+  .bar-in{ max-width:1180px; margin:0 auto; padding:10px 16px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .brand{ display:flex; align-items:center; gap:9px; margin-inline-end:auto; }
+  .brand b{ font-weight:600; font-size:14px; letter-spacing:.2px; }
+  .brand span{ font-size:11px; color:var(--ui-dim); font-variant-numeric:tabular-nums; }
+  .seal{ width:26px; height:26px; flex:0 0 auto; }
+
+  .grp{ display:flex; gap:6px; align-items:center; background:var(--ui-panel); border:1px solid var(--ui-line); border-radius:9px; padding:4px; }
+  .grp > label{ font-size:11px; color:var(--ui-dim); padding-inline:6px; }
+  button, select, input[type=text]{ font-family:inherit; }
+  .btn{
+    appearance:none; border:1px solid transparent; background:transparent; color:var(--ui-text);
+    font-size:12.5px; font-weight:500; padding:6px 11px; border-radius:6px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px; transition:background .13s,color .13s;
+  }
+  .btn:hover{ background:#2A3A29; }
+  .btn:focus-visible{ outline:2px solid var(--ui-gold); outline-offset:1px; }
+  .btn[aria-pressed=true]{ background:var(--ui-grn); color:#0F150F; font-weight:600; }
+  .btn.gold{ background:var(--ui-gold); color:#221B06; font-weight:600; }
+  .btn.gold:hover{ background:#E7C669; }
+  .btn.ghost{ border-color:var(--ui-line); }
+  .btn.ghost:hover{ border-color:#4A6146; }
+  .btn[disabled]{ opacity:.45; pointer-events:none; }
+  .btn svg{ width:14px; height:14px; flex:0 0 auto; }
+  .nav-home{ display:inline-flex; align-items:center; gap:6px; color:#F4E7BD; background:#5D481C; border:1px solid #B9953A; border-radius:7px; padding:6px 10px; text-decoration:none; font-size:12px; font-weight:700; transition:transform .13s ease,background .13s ease; }
+  .nav-home:hover{ background:#765C24; transform:translateY(-1px); }
+  .nav-home:focus-visible{ outline:2px solid #D7B457; outline-offset:2px; }
+  .nav-home svg{ width:14px; height:14px; flex:none; }
+  input[type=text]{
+    background:#101810; border:1px solid var(--ui-line); color:var(--ui-text);
+    border-radius:6px; padding:6px 9px; font-size:12.5px; width:150px;
+  }
+  input[type=text]:focus{ outline:none; border-color:var(--ui-gold); }
+  select{
+    background:#101810; border:1px solid var(--ui-line); color:var(--ui-text);
+    border-radius:6px; padding:6px 8px; font-size:12.5px;
+  }
+  .hint{ font-size:11px; color:var(--ui-dim); padding-inline:4px; }
+
+
+  /* ── لوحة تحرير البنية ─────────────────────────── */
+  .wrap{ display:grid; grid-template-columns:1fr 344px; gap:16px; align-items:start;
+         max-width:1620px; margin:0 auto; padding:18px 16px 70px; }
+  .wrap.noedit{ grid-template-columns:1fr; }
+  .wrap.noedit .panel{ display:none; }
+  @media(max-width:1240px){ .wrap{ grid-template-columns:1fr; } }
+  .panel{ position:sticky; top:66px; background:var(--ui-panel); border:1px solid var(--ui-line);
+          border-radius:12px; overflow:hidden; }
+  .phead{ display:flex; align-items:center; justify-content:space-between; gap:8px;
+          padding:9px 12px; background:#16201790; border-block-end:1px solid var(--ui-line); }
+  .phead b{ font-size:12.5px; color:var(--ui-gold); }
+  .pstat{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--ui-line);
+          border-block-end:1px solid var(--ui-line); }
+  .pstat span{ background:var(--ui-panel); padding:7px 4px; text-align:center; font-size:10.5px; color:var(--ui-dim); }
+  .pstat b{ display:block; font-size:15px; color:var(--ui-text); font-weight:600; margin-block-start:1px; }
+  .psec{ border-block-end:1px solid var(--ui-line); }
+  .psec h3{ margin:0; padding:8px 10px 8px 12px; font-size:11.5px; font-weight:600; color:var(--ui-dim);
+            display:flex; align-items:center; justify-content:space-between; gap:6px; }
+  .btn.mini{ font-size:11px; padding:3px 8px; }
+  .plist{ max-height:210px; overflow-y:auto; padding:5px 8px 9px; }
+  .plist.tall{ max-height:330px; }
+  .erow{ display:grid; grid-template-columns:1fr auto; gap:4px; align-items:center; padding:2px 0;
+         margin-inline-start:calc(var(--d,0) * 13px); }
+  .enm{ background:#101810; border:1px solid var(--ui-line); border-radius:5px; color:var(--ui-text);
+        font:inherit; font-size:12px; padding:4px 7px; width:100%; min-width:0; }
+  .enm::placeholder{ color:#5D6E59; }
+  .enm:focus{ outline:none; border-color:var(--ui-gold); }
+  .erow.sel .enm{ border-color:var(--ui-grn); box-shadow:0 0 0 1px var(--ui-grn); }
+  .ebtns{ display:flex; gap:1px; }
+  .eb{ width:21px; height:21px; border:1px solid transparent; background:transparent; color:var(--ui-dim);
+       border-radius:4px; cursor:pointer; font-size:11px; line-height:1; display:grid; place-items:center;
+       font-family:inherit; padding:0; }
+  .eb:hover{ background:#2C3D2B; color:var(--ui-text); }
+  .eb.del:hover{ background:#5C2424; color:#FFDCDC; }
+  .eb[disabled]{ opacity:.3; pointer-events:none; }
+  .ehint{ margin:0; padding:8px 12px; font-size:10.5px; color:var(--ui-dim); line-height:1.6; }
+  #tpl .node-hit.sel .plate{ stroke:#2F7D32; stroke-width:3; }
+
+  /* ── منصة العرض ───────────────────────────────── */
+  .stage{ display:flex; justify-content:center; min-width:0; }
+  .sheet-outer{ position:relative; flex:0 0 auto; }
+  .sheet-wrap{ position:absolute; inset-inline-start:0; top:0; transform-origin:top left; }
+  html[dir=rtl] .sheet-wrap{ left:0; right:auto; }
+  .sheet{
+    width:1123px; height:794px; background:#F6F1E0;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .sheet svg{ display:block; width:100%; height:100%; }
+
+  .name-edit{
+    position:fixed; display:none; z-index:40; transform:translate(-50%,-50%);
+    background:#FFFDF3; color:#33291C; border:2px solid #C39B2C; border-radius:6px;
+    padding:5px 9px; font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:15px; font-weight:700;
+    text-align:center; width:190px; box-shadow:0 8px 26px rgba(0,0,0,.45);
+  }
+  .name-edit:focus{ outline:none; }
+
+  .toast{
+    position:fixed; inset-block-end:22px; inset-inline:0; margin-inline:auto; width:max-content; max-width:90vw;
+    background:#233024; border:1px solid var(--ui-line); border-inline-start:3px solid var(--ui-gold);
+    color:var(--ui-text); font-size:12.5px; padding:9px 15px; border-radius:8px;
+    box-shadow:0 14px 36px rgba(0,0,0,.6); opacity:0; transform:translateY(8px);
+    transition:opacity .2s, transform .2s; pointer-events:none; z-index:50;
+  }
+  .toast.on{ opacity:1; transform:none; }
+
+  .node-hit{ cursor:text; }
+  .node-hit:hover .plate{ stroke-width:2.4; }
+
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+
+  /* ── الطباعة ─────────────────────────────────── */
+  @page{ size:A4 landscape; margin:0; }
+  @media print{
+    html,body{ background:#fff; }
+    .bar,.toast,.name-edit,.panel{ display:none !important; }
+    .wrap{ display:block !important; padding:0 !important; max-width:none; }
+    .stage{ padding:0; display:block; }
+    .sheet-outer{ width:auto !important; height:auto !important; position:static; }
+    .sheet-wrap{ position:static; transform:none !important; }
+    .sheet{ width:296.8mm; height:210mm; box-shadow:none; }
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand">
+      <svg class="seal" viewBox="-20 -20 40 40" aria-hidden="true">
+        <circle r="18.5" fill="none" stroke="#D7B457" stroke-width="1.6"></circle>
+        <rect x="-9.5" y="-9.5" width="19" height="19" fill="none" stroke="#79A85B" stroke-width="1.3"></rect>
+        <rect x="-9.5" y="-9.5" width="19" height="19" fill="none" stroke="#5F8FB0" stroke-width="1.3" transform="rotate(45)"></rect>
+        <circle r="3" fill="#D7B457"></circle>
+      </svg>
+      <div>
+        <b>قالب شجرة العائلة — المشجّر العمودي</b><br>
+        <span>ornate-chart-v-v1 · A4 أفقي · 1123×794</span>
+      </div>
+    </div>
+
+    <a aria-label="العودة إلى فهرس سُطور الأنساب" class="nav-home" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18-6-6 6-6"></path><path d="M3 12h18"></path></svg>
+      العودة إلى القوالب
+    </a>
+
+    <div class="grp">
+      <button class="btn" id="b-blank" aria-pressed="true">قالب فارغ</button>
+      <button class="btn" id="b-sample" aria-pressed="false">بيانات تجريبية</button>
+      <button class="btn" id="e-toggle" aria-pressed="true" title="إظهار/إخفاء لوحة التحرير">المحرّر</button>
+    </div>
+
+    <div class="grp">
+      <label for="fontsel">الخط</label>
+      <select id="fontsel">
+        <option value="amiri">أميري</option>
+        <option value="naskh">نسخ نوتو</option>
+        <option value="ruqaa">رقعة عارف</option>
+        <option value="kufi">كوفي ريم</option>
+      </select>
+      <label for="theme">النمط</label>
+      <select id="theme">
+        <option value="classic">كلاسيكي</option>
+        <option value="olive">زيتوني</option>
+        <option value="najdi">نجدي</option>
+        <option value="gilded">مذهّب مزخرف</option>
+      </select>
+    </div>
+
+    <div class="grp">
+      <label for="famname">اسم العائلة</label>
+      <input type="text" id="famname" placeholder="آل ..." autocomplete="off">
+      <button class="btn ghost" id="b-import" title="من نفس النطاق تلقائيًا، أو من ملف JSON المُصدَّر من المنصة">استيراد من المنصة</button>
+    </div>
+
+    <div class="grp">
+      <button class="btn gold" id="b-pdf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        تنزيل PDF
+      </button>
+      <button class="btn ghost" id="b-png">PNG · 300dpi</button>
+      <button class="btn ghost" id="b-svg">SVG</button>
+      <button class="btn ghost" id="b-print">طباعة متجهة</button>
+      <button class="btn ghost" id="b-copy">حفظ نسخة</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" id="wrap">
+<main class="stage" id="stage">
+  <div class="sheet-outer" id="sheetOuter" style="width: 976px; height: 690.066px;">
+    <div class="sheet-wrap" id="sheetWrap" style="transform: scale(0.869101);">
+      <div class="sheet">
+
+<svg id="tpl" class="thm-classic fn-amiri" viewBox="0 0 1123 794" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="قالب شجرة عائلة مزخرف أفقي">
+<style>
+  #tpl{
+    --paper:#F7F2E2; --paper2:#EBE1C4; --ink:#33291C; --inkSoft:#6B5A42;
+    --gold:#C39B2C; --goldL:#EBD489; --goldD:#8A6A15;
+    --grn:#4F7B3A; --blu:#3F6E8E; --band:#F3EDD9; --braidD:#2B3D21;
+    --bark:#54321C; --barkD:#311C0C; --barkL:#7E5228;
+    --f1:#3F6B2A; --f2:#5E9640; --f3:#84B457; --f4:#AFD07A;
+    --plate:#FFFDF4; --lfStroke:none; --halo:0;
+  }
+  /* مذهّب مزخرف: ذهب مهيمن، أوراق محدّدة بالذهب، وهالة خلف التاج */
+  #tpl.thm-gilded{
+    --paper:#FBF6E4; --paper2:#EEDEB2; --ink:#2A2113; --inkSoft:#6A5426;
+    --gold:#B8912A; --goldL:#F2DE9A; --goldD:#7A5A0E;
+    --grn:#2C5530; --blu:#8A6410; --band:#F8F1D6; --braidD:#2A1F08;
+    --bark:#4A2E14; --barkD:#291708; --barkL:#7E5626;
+    --f1:#2F5A2B; --f2:#4E7F3A; --f3:#75A354; --f4:#A3C77C;
+    --plate:#FFFCEE; --lfStroke:var(--goldD); --halo:.5;
+  }
+  #tpl.thm-olive{
+    --gold:#A98B3A; --goldL:#DCC886; --goldD:#7A6015;
+    --grn:#5D6B32; --blu:#77813E; --band:#F1EEDB; --braidD:#2F3520;
+    --paper:#F6F3E5; --paper2:#E7E2C8;
+    --f1:#4A5C2C; --f2:#6E8144; --f3:#95A45E; --f4:#BFC98C;
+    --bark:#54401F; --barkD:#33260F; --barkL:#79602E;
+  }
+  #tpl.thm-najdi{
+    --gold:#C2952B; --goldL:#EBD489; --goldD:#8A6115;
+    --grn:#1E7A72; --blu:#9B2A2A; --band:#F4EEDC; --braidD:#3A1B14;
+    --paper:#F8F2DF; --paper2:#EEDFBC;
+    --f1:#2C6B4A; --f2:#4C9163; --f3:#7BB27C; --f4:#AECD98;
+    --bark:#5C331A; --barkD:#391C0A; --barkL:#875A26;
+  }
+  #tpl text{ direction:rtl; }
+  #tpl .t-verse{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:12.4px; fill:var(--inkSoft); }
+  #tpl .t-vref{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:8.6px; fill:var(--goldD); }
+  #tpl .t-title{ font-family:'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif; font-weight:700; font-size:30px; fill:var(--ink); }
+  #tpl .t-fam{ font-family:'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif; font-size:17px; fill:var(--goldD); }
+  #tpl .t-name{ font-family:'Amiri','Noto Naskh Arabic',serif; font-weight:700; fill:var(--ink); }
+  #tpl.fn-naskh .t-name{ font-family:'Noto Naskh Arabic','Amiri',serif; }
+  #tpl.fn-ruqaa .t-name{ font-family:'Aref Ruqaa','Amiri',serif; }
+  #tpl.fn-kufi  .t-name{ font-family:'Reem Kufi','Amiri',sans-serif; font-weight:600; }
+  #tpl .halo{ opacity:var(--halo); }
+  #tpl .t-ftitle{ font-family:'Aref Ruqaa','Amiri','Scheherazade New','Traditional Arabic',serif; font-size:12px; fill:var(--goldD); }
+  #tpl .t-fline{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:11px; fill:var(--ink); }
+  #tpl .t-nasab{ font-family:'Amiri','Scheherazade New','Traditional Arabic',serif; font-size:11px; fill:var(--inkSoft); }
+  #tpl .t-dates{ font-family:'Amiri','Scheherazade New','Traditional Arabic',serif; fill:var(--goldD); }
+  #tpl .t-foot{ font-family:'Amiri','Scheherazade New','Noto Naskh Arabic','Traditional Arabic',serif; font-size:9.6px; fill:var(--inkSoft); }
+</style>
+
+<defs>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" seed="11" result="n"></feTurbulence>
+    <feColorMatrix in="n" type="saturate" values="0"></feColorMatrix>
+    <feComponentTransfer><feFuncA type="linear" slope="0.075"></feFuncA></feComponentTransfer>
+  </filter>
+  <radialGradient id="vign" cx="50%" cy="46%" r="72%">
+    <stop offset="55%" stop-color="var(--paper)" stop-opacity="0"></stop>
+    <stop offset="100%" stop-color="var(--paper2)" stop-opacity=".9"></stop>
+  </radialGradient>
+  <linearGradient id="barkG" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="var(--barkD)"></stop>
+    <stop offset=".26" stop-color="var(--bark)"></stop>
+    <stop offset=".44" stop-color="var(--barkL)"></stop>
+    <stop offset=".72" stop-color="var(--bark)"></stop>
+    <stop offset="1" stop-color="var(--barkD)"></stop>
+  </linearGradient>
+  <linearGradient id="grassG" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="var(--f3)"></stop>
+    <stop offset="1" stop-color="var(--f1)"></stop>
+  </linearGradient>
+  <radialGradient id="haloG" cx="50%" cy="50%" r="50%">
+    <stop offset="45%" stop-color="var(--goldL)" stop-opacity=".85"></stop>
+    <stop offset="100%" stop-color="var(--goldL)" stop-opacity="0"></stop>
+  </radialGradient>
+  <radialGradient id="fruitG" cx="35%" cy="32%" r="72%">
+    <stop offset="0" stop-color="var(--goldL)"></stop>
+    <stop offset="1" stop-color="var(--gold)"></stop>
+  </radialGradient>
+  <filter id="plateSh" x="-40%" y="-80%" width="180%" height="270%">
+    <feDropShadow dx="0" dy="1.5" stdDeviation="1.7" flood-color="#2A1F10" flood-opacity=".3"></feDropShadow>
+  </filter>
+  <clipPath id="contentClip"><rect x="56" y="56" width="1011" height="682"></rect></clipPath>
+  <clipPath id="braidCross"><rect x="7" y="0" width="10" height="26"></rect></clipPath>
+
+  <path id="leafP" d="M0,0 C3.4,-4.4 9.2,-5.4 13.6,0 C9.2,5.4 3.4,4.4 0,0 Z"></path>
+  <g id="leaf">
+    <use href="#leafP" xlink:href="#leafP"></use>
+    <path d="M1.4,0 L12,0" fill="none" stroke="#20340F" stroke-opacity=".22" stroke-width=".55"></path>
+  </g>
+
+  <g id="braidUnit">
+    <rect width="24" height="26" fill="var(--band)"></rect>
+    <g fill="none" stroke-linecap="butt">
+      <path id="strandA" d="M-12,13 C-8,23.8 -4,23.8 0,13 C4,2.2 8,2.2 12,13 C16,23.8 20,23.8 24,13 C28,2.2 32,2.2 36,13"></path>
+      <path id="strandB" d="M-12,13 C-8,2.2 -4,2.2 0,13 C4,23.8 8,23.8 12,13 C16,2.2 20,2.2 24,13 C28,23.8 32,23.8 36,13"></path>
+      <use href="#strandA" xlink:href="#strandA" stroke="var(--braidD)" stroke-width="6"></use>
+      <use href="#strandA" xlink:href="#strandA" stroke="var(--grn)" stroke-width="4"></use>
+      <use href="#strandB" xlink:href="#strandB" stroke="var(--braidD)" stroke-width="6"></use>
+      <use href="#strandB" xlink:href="#strandB" stroke="var(--blu)" stroke-width="4"></use>
+      <g clip-path="url(#braidCross)">
+        <use href="#strandA" xlink:href="#strandA" stroke="var(--braidD)" stroke-width="6"></use>
+        <use href="#strandA" xlink:href="#strandA" stroke="var(--grn)" stroke-width="4"></use>
+      </g>
+    </g>
+    <circle cx="6" cy="13" r="2.7" fill="var(--gold)"></circle>
+    <circle cx="18" cy="13" r="2.7" fill="var(--gold)"></circle>
+  </g>
+
+  <pattern id="braidH" width="24" height="26" patternUnits="userSpaceOnUse">
+    <use href="#braidUnit" xlink:href="#braidUnit"></use>
+  </pattern>
+  <pattern id="braidV" width="26" height="24" patternUnits="userSpaceOnUse">
+    <g transform="translate(26,0) rotate(90)"><use href="#braidUnit" xlink:href="#braidUnit"></use></g>
+  </pattern>
+
+  <g id="cornerBlock">
+    <rect width="26" height="26" fill="var(--band)"></rect>
+    <rect x="1.1" y="1.1" width="23.8" height="23.8" fill="none" stroke="var(--gold)" stroke-width="1.5"></rect>
+    <path d="M13,3.6 L22.4,13 L13,22.4 L3.6,13 Z" fill="var(--grn)"></path>
+    <path d="M13,7.4 L18.6,13 L13,18.6 L7.4,13 Z" fill="var(--gold)"></path>
+    <circle cx="13" cy="13" r="1.9" fill="var(--band)"></circle>
+  </g>
+
+  <path id="mpetal" d="M0,-5 C3.1,-9.5 3.1,-13.5 0,-17.6 C-3.1,-13.5 -3.1,-9.5 0,-5 Z"></path>
+  <g id="medallion">
+    <circle r="34" fill="var(--band)" stroke="var(--goldD)" stroke-width=".9"></circle>
+    <circle r="31.6" fill="none" stroke="var(--gold)" stroke-width="2.3"></circle>
+    <circle r="27.4" fill="none" stroke="var(--goldD)" stroke-width=".6" opacity=".7"></circle>
+    <rect x="-16.6" y="-16.6" width="33.2" height="33.2" fill="none" stroke="var(--grn)" stroke-width="1.5"></rect>
+    <rect x="-16.6" y="-16.6" width="33.2" height="33.2" fill="none" stroke="var(--blu)" stroke-width="1.5" transform="rotate(45)"></rect>
+    <g fill="var(--gold)" opacity=".92">
+      <use href="#mpetal" xlink:href="#mpetal"></use>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(45)"></use>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(90)"></use>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(135)"></use>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(180)"></use>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(225)"></use>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(270)"></use>
+      <use href="#mpetal" xlink:href="#mpetal" transform="rotate(315)"></use>
+    </g>
+    <circle r="10" fill="var(--band)" stroke="var(--goldD)" stroke-width=".8"></circle>
+    <circle r="6.4" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
+    <circle r="2.4" fill="var(--gold)"></circle>
+  </g>
+
+  <g id="fcorner">
+    <path d="M0,34 L0,9 Q0,0 9,0 L34,0" fill="none" stroke="var(--gold)" stroke-width="1.7" stroke-linecap="round"></path>
+    <path d="M5.5,29 L5.5,12 Q5.5,5.5 12,5.5 L29,5.5" fill="none" stroke="var(--goldD)" stroke-width=".6" opacity=".75"></path>
+    <path d="M12,22 C12,13.4 18.6,10.4 25,12.4 C18.6,14.6 15,17.4 14,23.4 Z" fill="var(--gold)" opacity=".8"></path>
+    <circle cx="8.6" cy="8.6" r="1.9" fill="var(--gold)"></circle>
+  </g>
+
+</defs>
+
+<!-- 1 ▸ الورق -->
+<g id="layer-bg">
+  <rect width="1123" height="794" fill="var(--paper)"></rect>
+  <rect width="1123" height="794" fill="url(#vign)"></rect>
+  <rect width="1123" height="794" filter="url(#grain)" opacity=".9"></rect>
+</g>
+
+<!-- 2 ▸ إطارا التدوين (أسفل) -->
+<g id="layer-frames"></g>
+
+<!-- 3 ▸ الشجرة (يبنيها المحرك) -->
+<g id="layer-tree" clip-path="url(#contentClip)"></g>
+
+<!-- 4 ▸ الإطار المزخرف (أفقي) -->
+<g id="layer-border">
+  <rect x="17.2" y="17.2" width="1088.6" height="759.6" fill="none" stroke="var(--braidD)" stroke-width="1.1"></rect>
+  <rect x="44" y="18" width="1035" height="26" fill="url(#braidH)"></rect>
+  <rect x="44" y="750" width="1035" height="26" fill="url(#braidH)"></rect>
+  <rect x="18" y="44" width="26" height="706" fill="url(#braidV)"></rect>
+  <rect x="1079" y="44" width="26" height="706" fill="url(#braidV)"></rect>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="18" y="18"></use>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="1079" y="18"></use>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="18" y="750"></use>
+  <use href="#cornerBlock" xlink:href="#cornerBlock" x="1079" y="750"></use>
+  <rect x="44.4" y="44.4" width="1034.2" height="705.2" fill="none" stroke="var(--braidD)" stroke-width="1"></rect>
+  <rect x="52" y="52" width="1019" height="690" fill="none" stroke="var(--gold)" stroke-width="1.6"></rect>
+  <rect x="57" y="57" width="1009" height="680" fill="none" stroke="var(--goldD)" stroke-width=".55" opacity=".8"></rect>
+  <use href="#medallion" xlink:href="#medallion" x="110" y="110"></use>
+  <use href="#medallion" xlink:href="#medallion" x="1013" y="110"></use>
+</g>
+
+<!-- 5 ▸ الترويسة -->
+<g id="layer-header">
+
+  <g id="h-cart"><g fill="none" stroke="var(--gold)" stroke-width="1.1" stroke-linecap="round"><path d="M397.5,118 C376.5,110 356.5,114 340.5,124"></path><path d="M725.5,118 C746.5,110 766.5,114 782.5,124"></path></g><g fill="var(--gold)" opacity=".85"><use href="#leafP" xlink:href="#leafP" transform="translate(354.5,116) rotate(196) scale(0.8)"></use><use href="#leafP" xlink:href="#leafP" transform="translate(373.5,111) rotate(174) scale(0.7)"></use><use href="#leafP" xlink:href="#leafP" transform="translate(768.5,116) rotate(-16) scale(0.8)"></use><use href="#leafP" xlink:href="#leafP" transform="translate(749.5,111) rotate(6) scale(0.7)"></use></g><path d="M401.5,118 L427.5,82 L695.5,82 L721.5,118 L695.5,154 L427.5,154 Z" fill="var(--band)" stroke="var(--gold)" stroke-width="2"></path><path d="M409.5,118 L435.5,87 L687.5,87 L713.5,118 L687.5,149 L435.5,149 Z" fill="none" stroke="var(--goldD)" stroke-width=".6" opacity=".8"></path><text class="t-title" x="561.5" y="132.4" text-anchor="middle" font-size="30">شَجَرَةُ عَائِلَة العسيري</text></g>
+  <text class="t-nasab" id="h-nasab" x="561.5" y="156" text-anchor="middle" font-size="11"></text>
+</g>
+
+<!-- 6 ▸ التذييل -->
+<g id="layer-footer">
+  <path d="M494,760 L629,760" stroke="var(--gold)" stroke-width=".8" opacity=".55"></path>
+  <path d="M561.5,756 l4,4 -4,4 -4,-4 Z" fill="var(--gold)"></path>
+  <text class="t-foot" id="h-foot" x="561.5" y="774" text-anchor="middle"></text>
+</g>
+</svg>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<aside class="panel" id="panel">
+  <div class="phead">
+    <b>محرّر البنية</b>
+    <span class="ebtns">
+      <button class="eb" id="e-undo" title="تراجع — Ctrl+Z">↺</button>
+      <button class="eb" id="e-redo" title="إعادة — Ctrl+Y" disabled="">↻</button>
+    </span>
+  </div>
+  <div class="pstat">
+    <span>الأفراد<b id="e-count">٤٨</b></span>
+    <span>الأجيال<b id="e-gen">٩</b></span>
+    <span>الجذع<b id="e-line">٦</b></span>
+  </div>
+  <section class="psec">
+    <h3>سلسلة الجذع (النسب)<button class="btn ghost mini" id="e-addline">+ جدّ</button></h3>
+    <div class="plist" id="p-line"><div class="erow" data-path="[&quot;L&quot;,5]" style="--d: 0;"><input class="enm" placeholder="اسم في الجذع"><span class="ebtns"><button class="eb" title="تحريك للأعلى">↑</button><button class="eb" title="تحريك للأسفل">↓</button><button class="eb" title="إدراج اسم فوقه">＋</button><button class="eb del" title="حذف من الجذع">✕</button></span></div><div class="erow" data-path="[&quot;L&quot;,4]" style="--d: 0;"><input class="enm" placeholder="اسم في الجذع"><span class="ebtns"><button class="eb" title="تحريك للأعلى">↑</button><button class="eb" title="تحريك للأسفل">↓</button><button class="eb" title="إدراج اسم فوقه">＋</button><button class="eb del" title="حذف من الجذع">✕</button></span></div><div class="erow" data-path="[&quot;L&quot;,3]" style="--d: 0;"><input class="enm" placeholder="اسم في الجذع"><span class="ebtns"><button class="eb" title="تحريك للأعلى">↑</button><button class="eb" title="تحريك للأسفل">↓</button><button class="eb" title="إدراج اسم فوقه">＋</button><button class="eb del" title="حذف من الجذع">✕</button></span></div><div class="erow" data-path="[&quot;L&quot;,2]" style="--d: 0;"><input class="enm" placeholder="اسم في الجذع"><span class="ebtns"><button class="eb" title="تحريك للأعلى">↑</button><button class="eb" title="تحريك للأسفل">↓</button><button class="eb" title="إدراج اسم فوقه">＋</button><button class="eb del" title="حذف من الجذع">✕</button></span></div><div class="erow" data-path="[&quot;L&quot;,1]" style="--d: 0;"><input class="enm" placeholder="اسم في الجذع"><span class="ebtns"><button class="eb" title="تحريك للأعلى">↑</button><button class="eb" title="تحريك للأسفل">↓</button><button class="eb" title="إدراج اسم فوقه">＋</button><button class="eb del" title="حذف من الجذع">✕</button></span></div><div class="erow" data-path="[&quot;L&quot;,0]" style="--d: 0;"><input class="enm" placeholder="اسم في الجذع"><span class="ebtns"><button class="eb" title="تحريك للأعلى">↑</button><button class="eb" title="تحريك للأسفل">↓</button><button class="eb" title="إدراج اسم فوقه">＋</button><button class="eb del" title="حذف من الجذع">✕</button></span></div></div>
+  </section>
+  <section class="psec">
+    <h3>أفراد الشجرة<button class="btn ghost mini" id="e-addroot">+ ابن للأصل</button></h3>
+    <div class="plist tall" id="p-tree"><div class="erow" data-path="&quot;root&quot;" style="--d: 0;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button></span></div><div class="erow" data-path="[0]" style="--d: 1;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0]" style="--d: 2;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0]" style="--d: 3;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0]" style="--d: 4;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0,0]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0,0,0]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0,0,1]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0,1]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0,1,0]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0,2]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,0,2,0]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0,0]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0,0,0]" style="--d: 8;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0,0,1]" style="--d: 8;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0,1]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0,2]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0,2,0]" style="--d: 8;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,1,0,2,1]" style="--d: 8;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,2]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,2,0]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,2,0,0]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,2,1]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,0,0,0,2,1,0]" style="--d: 7;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,1]" style="--d: 2;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,1,0]" style="--d: 3;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2]" style="--d: 2;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0]" style="--d: 3;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0]" style="--d: 4;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0,0]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0,1]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0,2]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0,3]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0,4]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0,5]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,0,6]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1]" style="--d: 4;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1,0]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1,0,0]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow sel" data-path="[0,2,0,1,0,1]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1,1]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1,1,0]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1,2]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1,2,0]" style="--d: 6;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div><div class="erow" data-path="[0,2,0,1,3]" style="--d: 5;"><input class="enm" placeholder="بلا اسم"><span class="ebtns"><button class="eb" title="إضافة ابن/ابنة">＋</button><button class="eb" title="إضافة أخ/أخت">⇄</button><button class="eb" title="تقديم">↑</button><button class="eb" title="تأخير">↓</button><button class="eb del" title="حذف هو وذريّته">✕</button></span></div></div>
+  </section>
+  <p class="ehint">＋ ابن · ⇄ أخ · ↑↓ ترتيب · ✕ حذف (يشمل الذريّة).<br>اضغط أي اسم على اللوحة ليُحدَّد هنا.</p>
+</aside>
+</div>
+
+<input type="file" id="importFile" accept=".json,application/json" hidden="">
+<input class="name-edit" id="nameEdit" type="text" autocomplete="off" spellcheck="false" style="display: none; left: 603.57px; top: 435.955px;">
+<div class="toast on" id="toast">نُزِّلت صورة 3509×2481 بكسل (A4 · 300dpi).</div>
+
+<script>
+(function () {
+'use strict';
+
+/* ═══════════════════════════════════════════════════════════
+   ١ ▸ ثوابت التخطيط (بإحداثيات مساحة الرسم 1123×794 — أفقي A4)
+   المشجّر عموديّ من الأعلى للأسفل: اسم العائلة في التاج أعلى الصفحة،
+   ثم الجذّ تحته، وتتفرّع الأجيال نازلةً؛ والإخوة يُرصّون أفقيًا
+   من اليمين لليسار موافقةً للعربية.
+   ═══════════════════════════════════════════════════════════ */
+const PAGE   = { w: 1123, h: 794 };
+/* top/bot = المدى الرأسيّ للأجيال (العمق) · left/right = المدى الأفقيّ للأفراد
+   vGen = مسافة رأسية قصوى بين جيلٍ وجيل · hLeaf = مسافة أفقية قصوى بين فردٍ وفرد
+   vGap/hGap = الفجوة الدنيا المضمونة كي لا تتلامس المربّعات رأسيًا وأفقيًا     */
+const CHART  = { top: 170, bot: 720, left: 56, right: 1067,
+                 nodeH: 38, nodeW: 152,
+                 vGen: 116, vGap: 40,
+                 hLeaf: 152, hGap: 16 };
+const SVGNS  = 'http://www.w3.org/2000/svg';
+const XLINK  = 'http://www.w3.org/1999/xlink';
+const TPL_ID = 'ornate-chart-v-v1';
+
+const $  = s => document.querySelector(s);
+const svg = $('#tpl');
+
+/* ═══════════════════════════════════════════════════════════
+   ٢ ▸ أدوات
+   ═══════════════════════════════════════════════════════════ */
+function mk(tag, attrs) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) {
+    if (k === 'href') { e.setAttribute('href', attrs[k]); e.setAttributeNS(XLINK, 'xlink:href', attrs[k]); }
+    else e.setAttribute(k, attrs[k]);
+  }
+  return e;
+}
+const rad   = d => d * Math.PI / 180;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* التخزين: يعمل داخل معاينة Claude (window.storage) وعلى أي منصة (localStorage) */
+const mem = {};
+const Store = {
+  async get(k) {
+    if (window.storage) { try { const r = await window.storage.get(k); return r ? JSON.parse(r.value) : null; } catch (e) { return null; } }
+    try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return mem[k] || null; }
+  },
+  async set(k, v) {
+    if (window.storage) { try { await window.storage.set(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+    try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { mem[k] = v; return false; }
+  }
+};
+
+let toastT;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2600);
+}
+function download(blob, name) {
+  const u = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 4000);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ٣ ▸ البيانات
+   ═══════════════════════════════════════════════════════════ */
+function blankData() {
+  const kid = () => ({ name: '', children: [{ name: '' }, { name: '' }, { name: '' }] });
+  return {
+    meta: { verse: '', verseRef: '', title: 'شَجَرَةُ عَائِلَة', family: '', footer: '', theme: 'classic', font: 'amiri', seed: 20260716 },
+    lineage: ['', '', '', '', '', ''],
+    root: { name: '', children: [kid(), kid(), kid(), kid()] },
+    frames: [{ title: 'كبير العائلة', lines: [] }, { title: 'نبذة', lines: [] }]
+  };
+}
+
+function sampleData() {
+  const d = blankData();
+  d.meta.family = 'العسيري';
+  d.meta.footer = '';
+  d.lineage = [];                         // الجذّ يظهر كصناديق ضمن الشجرة لا كسطر نسب
+  d.root = {
+    name: 'العسيري',
+    children: [{
+      name: 'عبدالرحمن',
+      children: [{
+        name: 'صالح',
+        children: [
+          { name: 'عبدالجبار', children: [
+            { name: 'محمد', children: [
+              { name: 'إبراهيم', children: [{ name: 'عبدالرحمن' }, { name: 'عبدالله' }] },
+              { name: 'يوسف', children: [
+                { name: 'عبدالعزيز', children: [{ name: 'سعود' }, { name: 'عبدالله' }] },
+                { name: 'جمال' },
+                { name: 'جاسم', children: [{ name: 'عيسى' }, { name: 'محمد' }] },
+                { name: 'خالد' }
+              ] }
+            ] }
+          ] },
+          { name: 'عبدالرحمن', children: [{ name: 'علي' }] },
+          { name: 'يوسف', children: [
+            { name: 'محمد', children: [
+              { name: 'أحمد', children: [
+                { name: 'عبدالرحمن', children: [{ name: 'أحمد' }, { name: 'راشد' }] },
+                { name: 'حسن', children: [
+                  { name: 'محمد', children: [
+                    { name: 'سعود', children: [{ name: 'عبدالعزيز' }, { name: 'خالد' }] },
+                    { name: 'سلمان' }
+                  ] }
+                ] }
+              ] }
+            ] }
+          ] }
+        ]
+      }]
+    }]
+  };
+  return d;
+}
+
+/* محوّل بيانات المنصة: {owner, members[{id,name,parent,rel,gender,byear,dyear}]} ← بنية القالب.
+   يفصل تلقائيًا السلسلة الأحادية العليا (نسب الجذع) عن أول تفرّع (أصل التاج). */
+const PLATFORM_KEY = 'sutoor_ansab_tree_v1';
+function fromPlatform(t) {
+  const M = (t && t.members) || [];
+  const ids = new Set(M.map(m => m.id));
+  const kids = new Map();
+  M.forEach(m => {
+    if (!ids.has(m.parent)) return;
+    if (!kids.has(m.parent)) kids.set(m.parent, []);
+    kids.get(m.parent).push(m);
+  });
+  const spouse = m => (m.rel || '').trim().indexOf('زوج') === 0;
+  const build = m => ({
+    name: m.name || '', gender: m.gender || 'm', birth: m.byear || '', death: m.dyear || '',
+    children: (kids.get(m.id) || []).filter(c => !spouse(c)).map(build)
+  });
+  const d = blankData();
+  const top = M.filter(m => !ids.has(m.parent) && !spouse(m));
+  if (!top.length) return d;
+  let root = top.length === 1 ? build(top[0]) : { name: (t && t.owner) || 'العائلة', children: top.map(build) };
+  const lineage = [];
+  while (root.children && root.children.length === 1 && lineage.length < 8) { lineage.push(root.name); root = root.children[0]; }
+  d.lineage = lineage; d.root = root;
+  d.meta.family = (t && t.owner) || '';
+  return d;
+}
+
+let STATE = { data: blankData(), mode: 'blank' };
+
+/* ═══════════════════════════════════════════════════════════
+   ٤ ▸ محرك المشجّر (Chart Engine)
+   تخطيط هرمي مرتّب على طريقة رينجولد-تِلفورد: الأوراق تتوزّع
+   بالتساوي والآباء يتوسّطون أبناءهم؛ الأجيال تنزل من الأعلى للأسفل،
+   والإخوة يُرصّون أفقيًا من اليمين لليسار.
+   ═══════════════════════════════════════════════════════════ */
+const AR_D = '٠١٢٣٤٥٦٧٨٩';
+const arNum = n => String(n).replace(/\d/g, c => AR_D[+c]);
+
+const TreeEngine = {
+  layout(data) {
+    const nodes = [];
+    const root = { name: (data.root && data.root.name) || '', gender: (data.root && data.root.gender) || 'm',
+                   birth: (data.root && data.root.birth) || '', children: (data.root && data.root.children) || [] };
+    (function walk(p, parent, depth, path) {
+      const i = nodes.length;
+      nodes.push({ person: p, parent, depth, path, kids: [], u: 0, x: 0, y: 0 });
+      if (parent >= 0) nodes[parent].kids.push(i);
+      (p.children || []).forEach((c, j) => walk(c, i, depth + 1, parent < 0 ? [j] : path.concat(j)));
+    })(root, -1, 0, 'root');
+
+    /* u = ترتيب الورقة (0..L-1)؛ الأب يتوسّط أبناءه رأسيًا */
+    let cur = 0;
+    (function assign(i) {
+      const n = nodes[i];
+      if (!n.kids.length) { n.u = cur++; return; }
+      n.kids.forEach(assign);
+      n.u = (nodes[n.kids[0]].u + nodes[n.kids[n.kids.length - 1]].u) / 2;
+    })(0);
+
+    const maxD = Math.max.apply(null, nodes.map(n => n.depth));
+    const L = cur || 1;
+
+    /* ── المحور الرأسيّ: بحسب الجيل (العمق) ينزل من الأعلى للأسفل ──
+       rowStep = أصغر مسافة تُبقي كل الأجيال داخل ارتفاع الرسم، بسقف vGen
+       كي لا تتباعد الأشجار القليلة الأجيال رأسيًا.                    */
+    const availV = CHART.bot - CHART.top;
+    const rowStep = Math.min(CHART.vGen, availV / (maxD + 1));
+    /* ارتفاع المربّع = الخطوة الرأسية ناقص فجوةٍ لا تتجاوز ٤٠٪ منها،
+       فيستحيل التراكب بين جيلٍ وجيل مهما بلغ العمق.                  */
+    const nodeH = Math.min(CHART.nodeH, rowStep - Math.min(CHART.vGap, rowStep * 0.4));
+
+    /* ── المحور الأفقيّ: بحسب ترتيب الورقة، يُرصّ من اليمين لليسار ──
+       colStep = أصغر مسافة تُبقي كل الأفراد داخل عرض الرسم، بسقف hLeaf. */
+    const availH = CHART.right - CHART.left;
+    const colStep = Math.min(CHART.hLeaf, availH / L);
+    /* عرض المربّع = الخطوة الأفقية ناقص فجوةٍ لا تتجاوز ٢٨٪ منها، بلا حدٍّ
+       أدنى يتجاوز الخطوة؛ فتبقى فجوة موجبة دائمًا بين الإخوة مهما كثروا.  */
+    const nodeW = Math.min(CHART.nodeW, colStep - Math.min(CHART.hGap, colStep * 0.28));
+
+    /* توسيط أفقيّ للمشجّر كاملًا، وتثبيتٌ من الأعلى رأسيًا (لا توسيط رأسيّ)
+       كي يبقى الجذّ ملتصقًا بتاج اسم العائلة ثم ينزل.                  */
+    const usedW = L * colStep;
+    const right = CHART.right - Math.max(0, (availH - usedW) / 2);
+
+    nodes.forEach(n => {
+      n.x = right - (n.u + 0.5) * colStep;             // الإخوة يمينًا ← يسارًا
+      n.y = CHART.top + (n.depth + 0.5) * rowStep;     // الأجيال من الأعلى للأسفل
+      n.w = n.depth === 0 ? Math.min(CHART.nodeW + 16, nodeW + 16) : nodeW;
+      n.h = n.depth === 0 ? Math.min(CHART.nodeH, nodeH + 2) : nodeH;
+    });
+    return { nodes, maxD, L, rowStep, colStep, right };
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ٥ ▸ الرسم
+   ═══════════════════════════════════════════════════════════ */
+let FITS = [];
+const f1 = v => v.toFixed(1);
+
+/* خرطوش مثمّن مقصوص الأركان — طراز جداول المخطوطات */
+function cart(x, y, w, h, c) {
+  const l = x - w / 2, r = x + w / 2, t = y - h / 2, b = y + h / 2;
+  return `M${f1(l + c)},${f1(t)} H${f1(r - c)} L${f1(r)},${f1(t + c)} V${f1(b - c)} L${f1(r - c)},${f1(b)} ` +
+         `H${f1(l + c)} L${f1(l)},${f1(b - c)} V${f1(t + c)} Z`;
+}
+const diamond = (x, y, s) => `M${f1(x)},${f1(y - s)} L${f1(x + s)},${f1(y)} L${f1(x)},${f1(y + s)} L${f1(x - s)},${f1(y)} Z`;
+
+function drawTree() {
+  const g = $('#layer-tree');
+  while (g.firstChild) g.removeChild(g.firstChild);
+  const d = STATE.data;
+  const lay = TreeEngine.layout(d);
+  const nodes = lay.nodes;
+  const gLink = mk('g', {}), gNode = mk('g', {});
+  [gLink, gNode].forEach(x => g.appendChild(x));
+
+  /* خطوط الوصل العمودية: نزول من أسفل الأب ← ناقل أفقيّ ← نزول إلى أعلى كل ابن
+     (الإخوة مرصوصون من اليمين لليسار موافقةً للعربية)                          */
+  const dm = [];
+  const lines = [];
+  nodes.forEach(n => {
+    if (!n.kids.length) return;
+    const ks = n.kids.map(i => nodes[i]);
+    const pBot = n.y + n.h / 2;                                     // حافّة الأب السفلى
+    const cTop = Math.min.apply(null, ks.map(k => k.y - k.h / 2));  // أعلى حافّة للأبناء
+    const midY = (pBot + cTop) / 2;                                // موضع الناقل الأفقيّ
+    lines.push(`M${f1(n.x)},${f1(pBot)} V${f1(midY)}`);
+    if (ks.length > 1) {
+      const x0 = Math.min.apply(null, ks.map(k => k.x)), x1 = Math.max.apply(null, ks.map(k => k.x));
+      lines.push(`M${f1(x0)},${f1(midY)} H${f1(x1)}`);
+    }
+    ks.forEach(k => { lines.push(`M${f1(k.x)},${f1(midY)} V${f1(k.y - k.h / 2)}`); dm.push([k.x, midY, 2.2]); });
+    dm.push([n.x, midY, 3.2]);
+  });
+  gLink.appendChild(mk('path', { d: lines.join(' '), fill: 'none', stroke: 'var(--goldD)', 'stroke-width': '1.1', 'stroke-linecap': 'square', opacity: '.9' }));
+  dm.forEach(p => gLink.appendChild(mk('path', { d: diamond(p[0], p[1], p[2]), fill: 'var(--gold)' })));
+
+  /* الخراطيش */
+  nodes.forEach(n => {
+    const dates = [n.person.birth, n.person.death].filter(Boolean).join(' — ');
+    node(gNode, n, dates);
+  });
+}
+
+function node(parent, n, dates) {
+  const g = mk('g', { class: 'node-hit', filter: 'url(#plateSh)' });
+  const root = n.depth === 0;
+  g.appendChild(mk('path', { class: 'plate', d: cart(n.x, n.y, n.w, n.h, 6), fill: root ? 'var(--band)' : 'var(--plate)', stroke: 'var(--gold)', 'stroke-width': root ? '2' : '1.4' }));
+  g.appendChild(mk('path', { d: cart(n.x, n.y, n.w - 6, n.h - 6, 4), fill: 'none', stroke: 'var(--goldD)', 'stroke-width': '.5', opacity: '.6' }));
+  if (root) {
+    g.appendChild(mk('path', { d: diamond(n.x - n.w / 2, n.y, 3.4), fill: 'var(--gold)' }));
+    g.appendChild(mk('path', { d: diamond(n.x + n.w / 2, n.y, 3.4), fill: 'var(--gold)' }));
+  }
+  const nm = (n.person.name || '').trim();
+  const fs = root ? 15 : clamp(n.w / 5.2, 6.6, 12.5);
+  const dy = dates && n.w > 52 ? -3 : 0;
+  if (nm) {
+    const t = mk('text', { class: 't-name', x: f1(n.x), y: f1(n.y + fs * 0.34 + dy), 'text-anchor': 'middle', 'font-size': f1(fs) });
+    t.textContent = nm; g.appendChild(t);
+    g._fit = { t, ax: n.x, maxW: n.w - 9, fs };
+    if (dates && n.w > 52) {
+      const t2 = mk('text', { class: 't-dates', x: f1(n.x), y: f1(n.y + n.h / 2 - 5), 'text-anchor': 'middle', 'font-size': '6.6' });
+      t2.textContent = arNum(dates); g.appendChild(t2);
+    }
+  } else {
+    g.appendChild(mk('line', { x1: f1(n.x - n.w / 2 + 7), y1: f1(n.y + 3), x2: f1(n.x + n.w / 2 - 7), y2: f1(n.y + 3), stroke: 'var(--gold)', 'stroke-width': '.7', 'stroke-dasharray': '2 2.6', opacity: '.6' }));
+  }
+  g.__path = n.path; g.__pos = { x: n.x, y: n.y }; g.__name = nm;
+  parent.appendChild(g); FITS.push(g);
+}
+
+/* ملاءمة الاسم: تصغير ثم سطران */
+function fitAll() {
+  FITS.forEach(g => {
+    const f = g._fit; if (!f) return;
+    const { t, ax, maxW, fs } = f;
+    t.setAttribute('font-size', f1(fs));
+    let L = 0; try { L = t.getComputedTextLength(); } catch (e) { return; }
+    if (!L || L <= maxW) return;
+    const s2 = Math.max(fs * 0.7, fs * maxW / L);
+    t.setAttribute('font-size', s2.toFixed(2));
+    L = t.getComputedTextLength();
+    if (L <= maxW) return;
+    const w = t.textContent.trim().split(/\s+/);
+    if (w.length < 2) { t.setAttribute('textLength', f1(maxW)); t.setAttribute('lengthAdjust', 'spacingAndGlyphs'); return; }
+    let best = 1, diff = 1e9;
+    for (let i = 1; i < w.length; i++) {
+      const dd = Math.abs(w.slice(0, i).join(' ').length - w.slice(i).join(' ').length);
+      if (dd < diff) { diff = dd; best = i; }
+    }
+    const s3 = fs * 0.76;
+    t.textContent = ''; t.setAttribute('font-size', s3.toFixed(2));
+    const a = mk('tspan', { x: f1(ax), dy: '-0.24em' }); a.textContent = w.slice(0, best).join(' ');
+    const b = mk('tspan', { x: f1(ax), dy: '1.02em' }); b.textContent = w.slice(best).join(' ');
+    t.appendChild(a); t.appendChild(b);
+    if (t.getComputedTextLength() > maxW * 2.1) t.setAttribute('font-size', (s3 * 0.84).toFixed(2));
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ٦ ▸ الترويسة والإطارات
+   ═══════════════════════════════════════════════════════════ */
+function drawChrome() {
+  const m = STATE.data.meta;
+  svg.setAttribute('class', 'thm-' + (m.theme || 'classic') + ' fn-' + (m.font || 'amiri'));
+  $('#h-foot').textContent  = m.footer || '';
+
+  const nas = $('#h-nasab');
+  if (nas) {
+    const LN = (STATE.data.lineage || []).filter(Boolean);
+    nas.textContent = LN.length ? 'بن ' + LN.slice().reverse().join(' بن ') : '';
+    nas.setAttribute('font-size', '11');
+    let W = 0; try { W = nas.getComputedTextLength(); } catch (e) {}
+    if (W > 940) nas.setAttribute('font-size', (11 * 940 / W).toFixed(1));
+  }
+
+  drawTitle();
+
+  /* أُزيلت الصناديق السفلية الثلاثة (نبذة · كبير العائلة · حصيلة المشجّر)
+     بناءً على طلب الاقتصار على شجرة الأسماء وحدها.                        */
+  const g = $('#layer-frames');
+  while (g.firstChild) g.removeChild(g.firstChild);
+}
+
+/* العنوان: «شَجَرَةُ عَائِلَة + اسم العائلة» سطرٌ واحد بحجم واحد،
+   والخرطوش يتنفّس مع طول الاسم ولا يصطدم بالميداليتين. */
+function drawTitle() {
+  const g = $('#h-cart');
+  while (g.firstChild) g.removeChild(g.firstChild);
+  const m = STATE.data.meta;
+  const fam = (m.family || '').trim();
+  const full = (m.title || 'شَجَرَةُ عَائِلَة') + ' ' + (fam || 'ـــــــــــ');
+  const CX = 561.5, CY = 108, MAXW = 560, CUT = 26;
+  const t = mk('text', { class: 't-title', x: CX, y: CY, 'text-anchor': 'middle', 'font-size': '30' });
+  t.textContent = full;
+  g.appendChild(t);
+  /* يُقاس صندوق النصّ الفعليّ (لا طولُه وحده) ثمّ يُبنى الخرطوش عليه
+     ويُوسَّط النصّ في جوفه — فلا تخرج التشكيلة ولا رؤوس الحروف عن الإطار. */
+  const LIP = 5, PADV = 9, PADH = 42;
+  const H_MIN = 28, H_MAX = 40, W_MIN = 160, W_MAX = 320;
+  const MAX_TXT_H = 2 * (H_MAX - LIP - PADV);
+  const MAX_TXT_W = Math.min(MAXW, 2 * (W_MAX - PADH));
+  let fs = 30, bb = null;
+  try { bb = t.getBBox(); } catch (e) {}
+  if (bb && bb.width && bb.height) {
+    const k = Math.min(MAX_TXT_W / bb.width, MAX_TXT_H / bb.height, 1);
+    if (k < 1) { fs = Math.max(13, 30 * k); t.style.fontSize = fs.toFixed(1) + 'px'; bb = t.getBBox(); }
+    const dy = CY - (bb.y + bb.height / 2);
+    if (Math.abs(dy) > .05) { t.setAttribute('y', (CY + dy).toFixed(1)); bb = t.getBBox(); }
+  } else {                                  /* متصفّح بلا getBBox: تقديرٌ آمن */
+    let w0 = 0; try { w0 = t.getComputedTextLength(); } catch (e) { w0 = full.length * 14; }
+    if (w0 > MAX_TXT_W) { fs = Math.max(13, 30 * MAX_TXT_W / w0); t.style.fontSize = fs.toFixed(1) + 'px'; }
+    t.setAttribute('y', (CY + fs * 0.34).toFixed(1));
+    bb = { width: Math.min(w0, MAX_TXT_W), height: fs * 1.15 };
+  }
+  const half = clamp(bb.width / 2 + PADH, W_MIN, W_MAX);
+  const h    = clamp(bb.height / 2 + PADV + LIP, H_MIN, H_MAX);
+  const box = (hh, vv) => `M${(CX - hh).toFixed(1)},${CY} L${(CX - hh + CUT).toFixed(1)},${CY - vv} ` +
+    `L${(CX + hh - CUT).toFixed(1)},${CY - vv} L${(CX + hh).toFixed(1)},${CY} ` +
+    `L${(CX + hh - CUT).toFixed(1)},${CY + vv} L${(CX - hh + CUT).toFixed(1)},${CY + vv} Z`;
+  const inner = mk('path', { d: box(half - 8, h - 5), fill: 'none', stroke: 'var(--goldD)', 'stroke-width': '.6', opacity: '.8' });
+  const outer = mk('path', { d: box(half, h), fill: 'var(--band)', stroke: 'var(--gold)', 'stroke-width': '2' });
+  g.insertBefore(inner, t); g.insertBefore(outer, inner);
+
+  if (half < 300) {                       // كرمة تحفّ الخرطوش إن بقي متّسع دون الميداليات
+    const L = CX - half, R = CX + half;
+    const lv = mk('g', { fill: 'var(--gold)', opacity: '.85' });
+    [[L - 47, CY - 2, 196, .8], [L - 28, CY - 7, 174, .7], [R + 47, CY - 2, -16, .8], [R + 28, CY - 7, 6, .7]]
+      .forEach(a => lv.appendChild(mk('use', { href: '#leafP', transform: `translate(${a[0].toFixed(1)},${a[1]}) rotate(${a[2]}) scale(${a[3]})` })));
+    g.insertBefore(lv, g.firstChild);
+    const v = mk('g', { fill: 'none', stroke: 'var(--gold)', 'stroke-width': '1.1', 'stroke-linecap': 'round' });
+    v.appendChild(mk('path', { d: `M${(L - 4).toFixed(1)},${CY} C${(L - 25).toFixed(1)},${CY - 8} ${(L - 45).toFixed(1)},${CY - 4} ${(L - 61).toFixed(1)},${CY + 6}` }));
+    v.appendChild(mk('path', { d: `M${(R + 4).toFixed(1)},${CY} C${(R + 25).toFixed(1)},${CY - 8} ${(R + 45).toFixed(1)},${CY - 4} ${(R + 61).toFixed(1)},${CY + 6}` }));
+    g.insertBefore(v, g.firstChild);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ٧ ▸ دورة العرض
+   ═══════════════════════════════════════════════════════════ */
+let renderQueued = false;
+function render() {
+  FITS = [];
+  drawChrome();
+  drawTree();
+  fitAll();
+  markSel();
+  fit();
+}
+function rerender() {
+  if (renderQueued) return;
+  renderQueued = true;
+  requestAnimationFrame(() => { renderQueued = false; render(); save(); });
+}
+async function save() { await Store.set('ftt:' + TPL_ID, STATE); }
+
+/* مقياس العرض */
+function fit() {
+  const st = $('#stage');
+  const avail = Math.min(st.clientWidth - 28, 1160);
+  const z = clamp(avail / PAGE.w, 0.24, 1);
+  $('#sheetWrap').style.transform = `scale(${z})`;
+  $('#sheetOuter').style.width = (PAGE.w * z) + 'px';
+  $('#sheetOuter').style.height = (PAGE.h * z) + 'px';
+}
+addEventListener('resize', fit);
+
+/* ═══════════════════════════════════════════════════════════
+   ٨ ▸ التحرير المباشر على البيضاويات
+   ═══════════════════════════════════════════════════════════ */
+function setNameAt(path, name) {
+  const d = STATE.data;
+  if (path === 'root') { d.root.name = name; return; }
+  if (Array.isArray(path) && path[0] === 'L') { d.lineage[path[1]] = name; return; }
+  let n = d.root;
+  for (const i of path) n = n.children[i];
+  n.name = name;
+}
+let editing = null;
+const inp = $('#nameEdit');
+
+$('#layer-tree').addEventListener('click', e => {
+  const g = e.target.closest('.node-hit'); if (!g) return;
+  const pt = svg.createSVGPoint(); pt.x = g.__pos.x; pt.y = g.__pos.y;
+  const p = pt.matrixTransform(svg.getScreenCTM());
+  inp.style.display = 'block';
+  inp.style.left = p.x + 'px'; inp.style.top = p.y + 'px';
+  inp.value = g.__name; editing = g.__path;
+  selectPath(g.__path);
+  inp.focus(); inp.select();
+});
+function commit() {
+  if (editing === null) return;
+  setNameAt(editing, inp.value.trim());
+  editing = null; inp.style.display = 'none';
+  History.snap(); refresh();
+}
+inp.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); commit(); }
+  if (e.key === 'Escape') { editing = null; inp.style.display = 'none'; }
+});
+inp.addEventListener('blur', commit);
+
+/* ═══════════════════════════════════════════════════════════
+   ٩ ▸ التصدير
+   ═══════════════════════════════════════════════════════════ */
+const FONT_CSS = 'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Reem+Kufi:wght@400..700&display=swap';
+let _fontBlock = null;
+const FONT_MAP = { amiri: 'Amiri', naskh: 'Noto Naskh Arabic', ruqaa: 'Aref Ruqaa', kufi: 'Reem Kufi' };
+const USED_FONTS = () => new RegExp('Amiri|Aref Ruqaa|' + (FONT_MAP[STATE.data.meta.font] || 'Amiri'), 'i');
+
+function b64(buf) {
+  const b = new Uint8Array(buf); let s = '';
+  for (let i = 0; i < b.length; i += 8192) s += String.fromCharCode.apply(null, b.subarray(i, i + 8192));
+  return btoa(s);
+}
+async function embeddedFonts() {
+  if (_fontBlock !== null) return _fontBlock;
+  try {
+    const css = await (await fetch(FONT_CSS)).text();
+    const faces = css.split('@font-face').slice(1).map(x => '@font-face' + x.split('}')[0] + '}');
+    const out = [];
+    for (const f of faces) {
+      const ur = /unicode-range:\s*([^;]+);/.exec(f);
+      if (ur && !/U\+06|U\+0600|U\+FE|U\+FB/i.test(ur[1])) continue;   // الشرائح العربية فقط
+      const u = /url\((https:\/\/[^)]+)\)/.exec(f); if (!u) continue;
+      const fam = (/font-family:\s*([^;]+);/.exec(f) || [, "'Amiri'"])[1];
+      if (!USED_FONTS().test(fam)) continue;      // لا نُضخّم الملف إلا بالخطوط المستعملة
+      const wt  = (/font-weight:\s*([^;]+);/.exec(f) || [, '400'])[1];
+      const buf = await (await fetch(u[1])).arrayBuffer();
+      out.push(`@font-face{font-family:${fam};font-style:normal;font-weight:${wt};src:url(data:font/woff2;base64,${b64(buf)}) format('woff2');}`);
+    }
+    _fontBlock = out.join('\n');
+  } catch (e) { _fontBlock = ''; }
+  return _fontBlock;
+}
+async function svgString(withFonts) {
+  const c = svg.cloneNode(true);
+  c.setAttribute('xmlns', SVGNS);
+  c.setAttribute('xmlns:xlink', XLINK);
+  c.setAttribute('width', PAGE.w); c.setAttribute('height', PAGE.h);
+  if (withFonts) {
+    const f = await embeddedFonts();
+    if (f) { const st = document.createElementNS(SVGNS, 'style'); st.textContent = f; c.insertBefore(st, c.firstChild); }
+  }
+  return '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(c);
+}
+async function raster(dpi, type, q) {
+  const s = await svgString(true);
+  const url = URL.createObjectURL(new Blob([s], { type: 'image/svg+xml;charset=utf-8' }));
+  const img = new Image();
+  await new Promise((res, rej) => { img.onload = res; img.onerror = () => rej(new Error('svg')); img.src = url; });
+  const W = Math.round(PAGE.w * dpi / 96), H = Math.round(PAGE.h * dpi / 96);
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const cx = cv.getContext('2d');
+  cx.fillStyle = '#FFFFFF'; cx.fillRect(0, 0, W, H);
+  cx.drawImage(img, 0, 0, W, H);
+  URL.revokeObjectURL(url);
+  const blob = await new Promise(r => cv.toBlob(r, type, q));
+  return { blob, W, H };
+}
+/* PDF بمقاس A4 يحتوي الصورة بدقة 300 نقطة */
+function pdfFromJpeg(bytes, w, h) {
+  const PW = 841.89, PH = 595.276, enc = new TextEncoder();
+  const parts = []; let pos = 0; const off = {};
+  const put = d => { const u = typeof d === 'string' ? enc.encode(d) : d; parts.push(u); pos += u.length; };
+  put('%PDF-1.4\n'); put(new Uint8Array([0x25, 0xE2, 0xE3, 0xCF, 0xD3, 0x0A]));
+  off[1] = pos; put('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+  off[2] = pos; put('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+  off[3] = pos; put('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + PW + ' ' + PH + '] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+  off[4] = pos; put('4 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + w + ' /Height ' + h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + bytes.length + ' >>\nstream\n');
+  put(bytes); put('\nendstream\nendobj\n');
+  const ct = 'q\n' + PW + ' 0 0 ' + PH + ' 0 0 cm\n/Im0 Do\nQ\n';
+  off[5] = pos; put('5 0 obj\n<< /Length ' + ct.length + ' >>\nstream\n' + ct + 'endstream\nendobj\n');
+  const xref = pos;
+  let x = 'xref\n0 6\n0000000000 65535 f \n';
+  for (let i = 1; i <= 5; i++) x += String(off[i]).padStart(10, '0') + ' 00000 n \n';
+  put(x); put('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n');
+  return new Blob(parts, { type: 'application/pdf' });
+}
+const fname = () => 'شجرة-' + ((STATE.data.meta.family || 'العائلة').replace(/\s+/g, '-'));
+
+async function busy(btn, label, fn) {
+  const old = btn.innerHTML; btn.disabled = true; btn.textContent = label;
+  try { await fn(); } catch (e) { toast('تعذّر التصدير: ' + e.message); }
+  btn.disabled = false; btn.innerHTML = old;
+}
+$('#b-svg').onclick = () => busy($('#b-svg'), '…', async () => {
+  download(new Blob([await svgString(false)], { type: 'image/svg+xml;charset=utf-8' }), fname() + '.svg');
+  toast('نُزِّل ملف SVG متجه — قابل للتكبير بلا حدود.');
+});
+$('#b-png').onclick = () => busy($('#b-png'), 'جارٍ…', async () => {
+  const r = await raster(300, 'image/png');
+  download(r.blob, fname() + '.png');
+  toast('نُزِّلت صورة ' + r.W + '×' + r.H + ' بكسل (A4 · 300dpi).');
+});
+$('#b-pdf').onclick = () => busy($('#b-pdf'), 'جارٍ التجهيز…', async () => {
+  const r = await raster(300, 'image/jpeg', 0.95);
+  const buf = new Uint8Array(await r.blob.arrayBuffer());
+  download(pdfFromJpeg(buf, r.W, r.H), fname() + '.pdf');
+  toast('نُزِّل ملف PDF بمقاس A4 ودقة 300 نقطة/بوصة.');
+});
+$('#b-print').onclick = () => { toast('في نافذة الطباعة: اختر A4، الهوامش «بلا»، وفعّل «الرسوم الخلفية».'); setTimeout(() => window.print(), 700); };
+$('#b-copy').onclick = () => {
+  const c = document.documentElement.cloneNode(true);
+  c.querySelector('#ftt-data').textContent = JSON.stringify(STATE.data).replace(/</g, '\\u003c');
+  const lt = c.querySelector('#layer-tree'); while (lt.firstChild) lt.removeChild(lt.firstChild);
+  const lf = c.querySelector('#layer-frames'); while (lf.firstChild) lf.removeChild(lf.firstChild);
+  download(new Blob(['<!DOCTYPE html>\n' + c.outerHTML], { type: 'text/html;charset=utf-8' }), fname() + '.html');
+  toast('حُفظت نسخة كاملة تحمل بياناتها — تُفتح في أي متصفح بلا إنترنت.');
+};
+
+/* ═══════════════════════════════════════════════════════════
+   ١٠ ▸ عناصر التحكم
+   ═══════════════════════════════════════════════════════════ */
+function setMode(m) {
+  STATE.mode = m;
+  STATE.data = m === 'sample' ? sampleData() : blankData();
+  $('#b-blank').setAttribute('aria-pressed', String(m === 'blank'));
+  $('#b-sample').setAttribute('aria-pressed', String(m === 'sample'));
+  $('#famname').value = STATE.data.meta.family;
+  $('#theme').value = STATE.data.meta.theme;
+  SEL = null; refresh(); History.reset();
+}
+$('#b-blank').onclick  = () => setMode('blank');
+$('#b-sample').onclick = () => setMode('sample');
+$('#theme').onchange   = e => { STATE.data.meta.theme = e.target.value; rerender(); };
+$('#fontsel').onchange = e => { STATE.data.meta.font = e.target.value; rerender(); };
+$('#famname').oninput  = e => { STATE.data.meta.family = e.target.value; rerender(); };
+/* الاستيراد يعمل بثلاث طرق: نفس النطاق ← ملف JSON مُصدَّر ← رابط دعوة #invite= */
+function adopt(tree, how) {
+  if (!tree || !tree.members || !tree.members.length) { toast('البيانات لا تحوي أفرادًا (members).'); return false; }
+  STATE.data = fromPlatform(tree); STATE.mode = 'platform';
+  $('#famname').value = STATE.data.meta.family || '';
+  $('#theme').value = STATE.data.meta.theme || 'classic';
+  $('#fontsel').value = STATE.data.meta.font || 'amiri';
+  $('#b-blank').setAttribute('aria-pressed', 'false');
+  $('#b-sample').setAttribute('aria-pressed', 'false');
+  SEL = null; refresh(); History.reset();
+  toast('استُوردت شجرتك ' + how + ' — ' + arNumE(Ops.count()) + ' فردًا.');
+  return true;
+}
+$('#b-import').onclick = () => {
+  let raw = null;
+  try { raw = localStorage.getItem(PLATFORM_KEY); } catch (e) {}
+  if (raw) { try { if (adopt(JSON.parse(raw), 'من هذا المتصفح')) return; } catch (e) {} }
+  toast('لم أجد شجرة على هذا النطاق — اختر ملف JSON الذي صدّرته من المنصة.');
+  $('#importFile').click();
+};
+$('#importFile').onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { try { adopt(JSON.parse(rd.result), 'من الملف'); } catch (err) { toast('ملف غير صالح — تأكّد أنه ملف التصدير من المنصة.'); } };
+  rd.onerror = () => toast('تعذّرت قراءة الملف.');
+  rd.readAsText(f, 'utf-8');
+  e.target.value = '';
+};
+const bRe = $('#b-reshape'); if (bRe) bRe.onclick = () => { STATE.data.meta.seed = Math.floor(Math.random() * 1e9); rerender(); toast('أُعيد توزيع الأغصان بنفس الأسماء.'); };
+
+/* ═══════════════════════════════════════════════════════════
+   ١١ ▸ واجهة المنصة
+   ═══════════════════════════════════════════════════════════ */
+window.FamilyTreeTemplate = {
+  manifest: JSON.parse($('#template-manifest').textContent),
+  getData: () => JSON.parse(JSON.stringify(STATE.data)),
+  render(data) { STATE.data = Object.assign(blankData(), data); render(); save(); },
+  fromPlatform: fromPlatform,
+  renderPlatform(tree) { this.render(fromPlatform(tree)); },
+  patch(p) { Object.assign(STATE.data.meta, p.meta || {}); if (p.lineage) STATE.data.lineage = p.lineage; if (p.root) STATE.data.root = p.root; if (p.frames) STATE.data.frames = p.frames; rerender(); },
+  toSVG: () => svgString(true),
+  toPNGBlob: async (dpi) => (await raster(dpi || 300, 'image/png')).blob,
+  async toPDFBlob() { const r = await raster(300, 'image/jpeg', 0.95); return pdfFromJpeg(new Uint8Array(await r.blob.arrayBuffer()), r.W, r.H); },
+  print: () => window.print(),
+  /* عمليات البنية — تعمل على JSON ثم يعيد المحرّك التخطيط */
+  ops: {
+    addChild: p => { const r = Ops.addChild(p); History.snap(); refresh(); return r; },
+    addSibling: p => { const r = Ops.addSibling(p); History.snap(); refresh(); return r; },
+    remove: p => { const r = Ops.remove(p); History.snap(); refresh(); return r; },
+    move: (p, d) => { const r = Ops.move(p, d); History.snap(); refresh(); return r; },
+    rename: (p, v) => { if (p === 'root') STATE.data.root.name = v; else if (p[0] === 'L') STATE.data.lineage[p[1]] = v; else Ops.at(p).name = v; History.snap(); refresh(); },
+    lineageAdd: i => { Ops.lineAdd(i === undefined ? STATE.data.lineage.length : i); History.snap(); refresh(); },
+    lineageRemove: i => { Ops.lineDel(i); History.snap(); refresh(); },
+    undo: () => History.undo(), redo: () => History.redo(),
+    list: () => Ops.flat(STATE.data.root, 'root', 0, []).map(x => ({ path: x.path, name: x.n.name, depth: x.depth }))
+  },
+  setEditable(on) { const w = document.querySelector('.wrap'); w.classList.toggle('noedit', !on); fit(); }
+};
+addEventListener('message', async e => {
+  const m = e.data; if (!m || typeof m !== 'object' || !m.type) return;
+  const reply = (type, payload) => e.source && e.source.postMessage({ type, id: m.id, payload }, '*');
+  if (m.type === 'ftt:render') { window.FamilyTreeTemplate.render(m.payload); reply('ftt:rendered'); }
+  if (m.type === 'ftt:renderPlatform') { window.FamilyTreeTemplate.renderPlatform(m.payload); reply('ftt:rendered'); }
+  if (m.type === 'ftt:get')    reply('ftt:data', window.FamilyTreeTemplate.getData());
+  if (m.type === 'ftt:svg')    reply('ftt:svg', await window.FamilyTreeTemplate.toSVG());
+  if (m.type === 'ftt:print')  window.print();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   ١٢ ▸ الإقلاع: بيانات مضمّنة ← محفوظة ← فارغة
+   ═══════════════════════════════════════════════════════════ */
+let BOOTED = false;
+(async function boot() {
+  await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 2500))]);
+  try {                                   // رابط دعوة المنصة: #invite=base64
+    const h = location.hash || '';
+    if (h.indexOf('#invite=') === 0) {
+      const pl = JSON.parse(decodeURIComponent(escape(atob(h.slice(8)))));
+      if (pl && pl.tree && pl.tree.members) { STATE.data = fromPlatform(pl.tree); STATE.mode = 'platform'; BOOTED = true; }
+    }
+  } catch (e) {}
+  let embedded = null;
+  try { const raw = ($('#ftt-data').textContent || '').trim(); if (raw) embedded = JSON.parse(raw); } catch (e) {}
+  if (BOOTED) { /* من رابط الدعوة */ }
+  else if (embedded) { STATE.data = Object.assign(blankData(), embedded); STATE.mode = 'custom'; }
+  else {
+    const saved = await Store.get('ftt:' + TPL_ID);
+    if (saved && saved.data) { STATE = saved; }
+  }
+  $('#famname').value = STATE.data.meta.family || '';
+  $('#theme').value = STATE.data.meta.theme || 'classic';
+  $('#fontsel').value = STATE.data.meta.font || 'amiri';
+  $('#b-blank').setAttribute('aria-pressed', String(STATE.mode === 'blank'));
+  $('#b-sample').setAttribute('aria-pressed', String(STATE.mode === 'sample'));
+  render();
+  buildPanel();
+  History.reset();
+  try { parent && parent.postMessage({ type: 'ftt:ready', payload: window.FamilyTreeTemplate.manifest }, '*'); } catch (e) {}
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   ١٣ ▸ محرّر البنية — يضيف ويحذف ويحرّك الأفراد، لا الأسماء فقط
+   كل عملية تُغيّر JSON ثم يعيد المحرّك حساب التخطيط من الصفر.
+   ═══════════════════════════════════════════════════════════ */
+let SEL = null;                     // مسار المحدَّد (JSON نصّي)
+const P = s => document.querySelector(s);
+
+/* ── العمليات على البيانات ─────────────────────────── */
+const Ops = {
+  at(p) { if (p === 'root') return STATE.data.root; let n = STATE.data.root; for (const i of p) n = n.children[i]; return n; },
+  parentOf(p) { if (p === 'root' || !Array.isArray(p) || p[0] === 'L') return null; return p.length === 1 ? 'root' : p.slice(0, -1); },
+  base(p) { return p === 'root' ? [] : p; },
+
+  addChild(p) {
+    const n = this.at(p); n.children = n.children || [];
+    n.children.push({ name: '' });
+    return this.base(p).concat(n.children.length - 1);
+  },
+  addSibling(p) {
+    const pp = this.parentOf(p); if (!pp) return null;
+    const i = p[p.length - 1];
+    this.at(pp).children.splice(i + 1, 0, { name: '' });
+    return this.base(pp).concat(i + 1);
+  },
+  remove(p) {
+    const pp = this.parentOf(p); if (!pp) return false;
+    this.at(pp).children.splice(p[p.length - 1], 1);
+    return true;
+  },
+  move(p, d) {
+    const pp = this.parentOf(p); if (!pp) return false;
+    const ks = this.at(pp).children, i = p[p.length - 1], j = i + d;
+    if (j < 0 || j >= ks.length) return false;
+    const t = ks[i]; ks[i] = ks[j]; ks[j] = t;
+    return this.base(pp).concat(j);
+  },
+  /* الجذع: سلسلة النسب — [0] الأقدم في الأسفل */
+  lineAdd(i) { STATE.data.lineage.splice(i, 0, ''); },
+  lineDel(i) { STATE.data.lineage.splice(i, 1); },
+  lineMove(i, d) { const L = STATE.data.lineage, j = i + d; if (j < 0 || j >= L.length) return; const t = L[i]; L[i] = L[j]; L[j] = t; },
+
+  count(n) { n = n || STATE.data.root; return 1 + (n.children || []).reduce((s, c) => s + this.count(c), 0); },
+  depth(n, d) { n = n || STATE.data.root; d = d || 0; const k = n.children || []; return k.length ? Math.max.apply(null, k.map(c => this.depth(c, d + 1))) : d; },
+  flat(n, p, d, out) {
+    out.push({ n, path: p, depth: d });
+    (n.children || []).forEach((c, i) => this.flat(c, this.base(p).concat(i), d + 1, out));
+    return out;
+  }
+};
+
+/* ── التاريخ: تراجع/إعادة ──────────────────────────── */
+const History = {
+  st: [], i: -1,
+  snap() {
+    const s = JSON.stringify(STATE.data);
+    if (this.st[this.i] === s) return;
+    this.st = this.st.slice(0, this.i + 1);
+    this.st.push(s);
+    if (this.st.length > 60) { this.st.shift(); }
+    this.i = this.st.length - 1;
+    syncHist();
+  },
+  undo() { if (this.i <= 0) return; this.i--; restore(); },
+  redo() { if (this.i >= this.st.length - 1) return; this.i++; restore(); },
+  reset() { this.st = []; this.i = -1; this.snap(); }
+};
+function restore() { STATE.data = JSON.parse(History.st[History.i]); SEL = null; refresh(); syncHist(); }
+function syncHist() {
+  const u = P('#e-undo'), r = P('#e-redo');
+  if (u) u.disabled = History.i <= 0;
+  if (r) r.disabled = History.i >= History.st.length - 1;
+}
+
+/* ── دورة التحديث ──────────────────────────────────── */
+function refresh() { render(); buildPanel(); save(); }
+function mutate(fn) {
+  const nxt = fn();
+  if (nxt === false) return;
+  if (nxt) SEL = JSON.stringify(nxt);
+  History.snap();
+  refresh();
+  if (nxt) { const r = P('.erow.sel .enm'); if (r) { r.focus(); r.select(); } }
+}
+function markSel() {
+  FITS.forEach(g => { g.classList.toggle('sel', !!SEL && JSON.stringify(g.__path) === SEL); });
+}
+function selectPath(p) {
+  SEL = JSON.stringify(p);
+  markSel();
+  document.querySelectorAll('.erow').forEach(r => r.classList.toggle('sel', r.dataset.path === SEL));
+  const r = P('.erow.sel');
+  if (r) r.scrollIntoView({ block: 'nearest' });
+}
+
+/* ── بناء اللوحة ───────────────────────────────────── */
+function eb(txt, title, fn, cls) {
+  const b = document.createElement('button');
+  b.className = 'eb' + (cls ? ' ' + cls : ''); b.textContent = txt; b.title = title;
+  b.onclick = e => { e.stopPropagation(); fn(); };
+  return b;
+}
+function erow(path, name, depth, kind) {
+  const r = document.createElement('div');
+  r.className = 'erow'; r.style.setProperty('--d', depth);
+  r.dataset.path = JSON.stringify(path);
+  if (SEL === r.dataset.path) r.classList.add('sel');
+
+  const i = document.createElement('input');
+  i.className = 'enm'; i.value = name || ''; i.placeholder = kind === 'line' ? 'اسم في الجذع' : 'بلا اسم';
+  i.onfocus = () => selectPath(path);
+  i.oninput = () => {
+    if (kind === 'line') STATE.data.lineage[path[1]] = i.value;
+    else Ops.at(path).name = i.value;
+    render(); save();
+  };
+  i.onchange = () => History.snap();
+  i.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); i.blur(); } };
+  r.appendChild(i);
+
+  const bs = document.createElement('span'); bs.className = 'ebtns';
+  if (kind === 'line') {
+    const k = path[1];
+    bs.appendChild(eb('↑', 'تحريك للأعلى', () => mutate(() => { Ops.lineMove(k, 1); })));
+    bs.appendChild(eb('↓', 'تحريك للأسفل', () => mutate(() => { Ops.lineMove(k, -1); })));
+    bs.appendChild(eb('＋', 'إدراج اسم فوقه', () => mutate(() => { Ops.lineAdd(k + 1); return ['L', k + 1]; })));
+    bs.appendChild(eb('✕', 'حذف من الجذع', () => mutate(() => { Ops.lineDel(k); }), 'del'));
+  } else {
+    bs.appendChild(eb('＋', 'إضافة ابن/ابنة', () => mutate(() => Ops.addChild(path))));
+    if (kind !== 'root') {
+      bs.appendChild(eb('⇄', 'إضافة أخ/أخت', () => mutate(() => Ops.addSibling(path))));
+      bs.appendChild(eb('↑', 'تقديم', () => mutate(() => Ops.move(path, -1))));
+      bs.appendChild(eb('↓', 'تأخير', () => mutate(() => Ops.move(path, 1))));
+      bs.appendChild(eb('✕', 'حذف هو وذريّته', () => {
+        const n = Ops.at(path), c = Ops.count(n) - 1;
+        const msg = c ? `حذف «${n.name || 'بلا اسم'}» سيحذف ${c} من ذريّته أيضًا. متابعة؟` : `حذف «${n.name || 'بلا اسم'}»؟`;
+        if (confirm(msg)) mutate(() => { Ops.remove(path); SEL = null; });
+      }, 'del'));
+    }
+  }
+  r.appendChild(bs);
+  return r;
+}
+
+function buildPanel() {
+  const L = P('#p-line'); if (!L) return;
+  L.textContent = '';
+  const lin = STATE.data.lineage || [];
+  /* الأقدم في الأسفل — نعرضه بترتيب الجذع نفسه */
+  for (let i = lin.length - 1; i >= 0; i--) L.appendChild(erow(['L', i], lin[i], 0, 'line'));
+  if (!lin.length) {
+    const e = document.createElement('p'); e.className = 'ehint';
+    e.textContent = 'لا سلسلة نسب — أضف أسماء الأجداد لتظهر على الجذع.';
+    L.appendChild(e);
+  }
+
+  const T = P('#p-tree'); T.textContent = '';
+  Ops.flat(STATE.data.root, 'root', 0, []).forEach(x =>
+    T.appendChild(erow(x.path, x.n.name, x.depth, x.path === 'root' ? 'root' : 'node')));
+
+  P('#e-count').textContent = arNumE(Ops.count());
+  P('#e-gen').textContent = arNumE(Ops.depth() + 1);
+  P('#e-line').textContent = arNumE(lin.length);
+  markSel();
+  syncHist();
+}
+const AR_E = '٠١٢٣٤٥٦٧٨٩';
+const arNumE = n => String(n).replace(/\d/g, c => AR_E[+c]);
+
+/* ── الربط ─────────────────────────────────────────── */
+P('#e-addline').onclick = () => mutate(() => { STATE.data.lineage.push(''); return ['L', STATE.data.lineage.length - 1]; });
+P('#e-addroot').onclick = () => mutate(() => Ops.addChild('root'));
+P('#e-undo').onclick = () => History.undo();
+P('#e-redo').onclick = () => History.redo();
+P('#e-toggle').onclick = () => {
+  const w = P('.wrap'); const on = w.classList.toggle('noedit');
+  P('#e-toggle').setAttribute('aria-pressed', String(!on));
+  fit();
+};
+addEventListener('keydown', e => {
+  if (!(e.ctrlKey || e.metaKey)) return;
+  if (e.key === 'z' && !e.shiftKey) { e.preventDefault(); History.undo(); }
+  if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) { e.preventDefault(); History.redo(); }
+});
+
+})();
+</script>
+
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     جسر سُطور الأنساب — يصل القالب بالمنصّة دون المساس بمحرّكه.
+     مُدرَج آليًّا؛ لا تعتمد عليه أجزاءُ القالب الأخرى.
+     ══════════════════════════════════════════════════════════════════ -->
+<style id="sutoor-bridge-css">
+  /* داخل الاستوديو: هويّة القالب يعرضها الشريط الأعلى، فلا تُكرَّر هنا */
+  html.in-shell .brand > div{ display:none; }
+  html.in-shell .bar{ box-shadow:none; }
+  html.in-shell .bar-in{ padding-block:8px; }
+
+  .sutoor-back{
+    display:inline-flex; align-items:center; gap:6px;
+    font:500 12.5px/1 'IBM Plex Sans Arabic', system-ui, sans-serif;
+    color:#D7B457; text-decoration:none;
+    border:1px solid #31432F; background:#1D291E;
+    padding:7px 11px; border-radius:8px; margin-inline-end:10px;
+    transition:background .14s ease, border-color .14s ease;
+  }
+  .sutoor-back:hover{ background:#243021; border-color:#D7B457; }
+  .sutoor-back:focus-visible{ outline:2px solid #D7B457; outline-offset:2px; }
+  .sutoor-back svg{ width:13px; height:13px; flex:none; }
+  @media print{ .sutoor-back{ display:none; } }
+</style>
+<script id="sutoor-bridge">
+(function(){
+  var KEY = 'vertical';
+  var embedded; try { embedded = window.parent && window.parent !== window; } catch(e){ embedded = true; }
+
+  if (embedded){
+    document.documentElement.classList.add('in-shell');
+
+    function announce(){
+      var api = window.FamilyTreeTemplate;
+      try {
+        parent.postMessage({
+          type: 'ftt:ready',
+          key : KEY,
+          payload: (api && api.manifest) || { id: KEY }
+        }, '*');
+      } catch(e){}
+    }
+    /* الاستوديو قد يتأخّر في الإنصات، والمحرّك قد يتأخّر في الإقلاع؛
+       فيُعاد الإعلان بلطف حتى يلتقيا. */
+    var n = 0, iv = setInterval(function(){
+      if (window.FamilyTreeTemplate){ announce(); clearInterval(iv); }
+      if (++n > 60) clearInterval(iv);
+    }, 120);
+    addEventListener('load', announce);
+    addEventListener('message', function(e){
+      var m = e.data;
+      if (m && m.type === 'ftt:hello') announce();
+    });
+  } else {
+    /* قالب مفتوح وحده: نافذةُ عودة إلى واجهة المنصّة */
+    var bar = document.querySelector('.bar-in');
+    if (bar){
+      var a = document.createElement('a');
+      a.className = 'sutoor-back';
+      a.href = 'index.html';
+      a.setAttribute('aria-label', 'العودة إلى سُطور الأنساب');
+      a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" '
+                  + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                  + '<path d="M9 5l7 7-7 7"/></svg>سُطور الأنساب';
+      bar.insertBefore(a, bar.firstChild);
+    }
+  }
+})();
+</script>
+
+</body></html>

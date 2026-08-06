@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>التوثيق الرقمي للتراث: مدخل مفهومي ومعياري — سُطور من أوال</title>
+<meta name="description" content="مدخل تعريفي يضبط مفاهيم الرقمنة والتوثيق الرقمي والحفظ طويل الأمد، ويعرض المعايير الدولية الحاكمة، ويطبّقها على مدوّنة أوال التراثية في مملكة البحرين.">
+<meta property="og:title" content="التوثيق الرقمي للتراث: مدخل مفهومي ومعياري">
+<meta property="og:description" content="مدخل تعريفي في مفاهيم التوثيق الرقمي ومعاييره الدولية وتطبيقاتها على المدوّنة التراثية البحرينية.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="سُطور من أوال">
+<meta property="og:url" content="https://sutoorawwal.com/#about/framework">
+<link rel="canonical" href="https://sutoorawwal.com/#about/framework">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": "التوثيق الرقمي للتراث: مدخل مفهومي ومعياري",
+  "inLanguage": "ar",
+  "genre": "مدخل تعريفي",
+  "author": {
+    "@type": "Person",
+    "name": "د. أحمد بن عبدالرحمن العسيري",
+    "affiliation": {
+      "@type": "CollegeOrUniversity",
+      "name": "جامعة البحرين — كلية محمد بن جابر الأنصاري"
+    }
+  },
+  "publisher": { "@type": "Organization", "name": "سُطور من أوال" },
+  "isPartOf": { "@type": "WebSite", "name": "سُطور من أوال", "url": "https://sutoorawwal.com" },
+  "url": "https://sutoorawwal.com/#about/framework",
+  "about": ["التوثيق الرقمي", "التراث الثقافي", "الحفظ الرقمي طويل الأمد", "البيانات الوصفية", "مملكة البحرين"]
+}
+</script>
+
+<style>
+:root{
+  /* رقّي */
+  --parchment:      #F4ECDC;
+  --parchment-2:    #EADFC8;
+  --parchment-edge: #DCCDAF;
+  /* زيتوني */
+  --olive-900:      #2E3A22;
+  --olive-700:      #465A33;
+  --olive-500:      #6B7F4C;
+  --olive-100:      #DDE3CE;
+  /* نحاسي */
+  --brass:          #A5762B;
+  --brass-light:    #C79A44;
+  --brass-pale:     #F0E1C2;
+  /* حبر */
+  --ink:            #241F17;
+  --ink-soft:       #4E463A;
+  --rule:           rgba(46,58,34,.18);
+
+  --f-display: "Amiri", "Traditional Arabic", Georgia, serif;
+  --f-body:    "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --f-mono:    "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --maxw: 74ch;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:5rem}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 90% -10%, rgba(197,154,68,.16), transparent 60%),
+    radial-gradient(900px 500px at -10% 5%, rgba(107,127,76,.14), transparent 60%),
+    var(--parchment);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.95;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── شريط علوي ───────────────────────────────── */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  display:flex; align-items:center; gap:.9rem;
+  padding:.7rem clamp(1rem,4vw,2.4rem);
+  background:rgba(46,58,34,.96);
+  color:var(--parchment);
+  border-bottom:2px solid var(--brass);
+  backdrop-filter:saturate(140%) blur(6px);
+}
+.topbar .mark{
+  font-family:var(--f-display); font-size:1.22rem; font-weight:700;
+  letter-spacing:.2px; color:var(--parchment);
+  text-decoration:none; white-space:nowrap;
+}
+.topbar .mark span{color:var(--brass-light)}
+.topbar .crumb{
+  font-size:.82rem; color:rgba(244,236,220,.72);
+  border-right:1px solid rgba(244,236,220,.28); padding-right:.9rem;
+}
+.topbar .back{
+  margin-inline-start:auto; font-size:.82rem; text-decoration:none;
+  color:var(--parchment); border:1px solid rgba(244,236,220,.35);
+  padding:.32rem .8rem; border-radius:999px; white-space:nowrap;
+}
+.topbar .back:hover{background:rgba(244,236,220,.12); border-color:var(--brass-light)}
+@media(max-width:560px){ .topbar .crumb{display:none} }
+
+/* ── الغلاف ───────────────────────────────────── */
+.hero{
+  padding:clamp(2.6rem,7vw,5rem) clamp(1rem,4vw,2.4rem) 2.2rem;
+  max-width:var(--maxw); margin-inline:auto;
+}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:.55rem;
+  font-size:.74rem; font-weight:600; letter-spacing:.06em;
+  color:var(--olive-700); background:var(--brass-pale);
+  border:1px solid rgba(165,118,43,.4);
+  padding:.3rem .85rem; border-radius:999px;
+}
+.eyebrow::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--brass)}
+h1{
+  font-family:var(--f-display); font-weight:700;
+  font-size:clamp(2.05rem,5.4vw,3.15rem); line-height:1.35;
+  margin:1.1rem 0 .5rem; color:var(--olive-900);
+}
+.dek{
+  font-size:1.06rem; color:var(--ink-soft); margin:0 0 1.6rem;
+  max-width:62ch;
+}
+.byline{
+  display:flex; flex-wrap:wrap; gap:.5rem 1.4rem;
+  font-size:.86rem; color:var(--ink-soft);
+  padding-top:1.1rem; border-top:1px solid var(--rule);
+}
+.byline b{color:var(--olive-900); font-weight:600}
+
+/* ── تنبيه منهجي ─────────────────────────────── */
+.callout{
+  max-width:var(--maxw); margin:0 auto 2.6rem;
+  padding:1.15rem 1.3rem;
+  background:rgba(255,255,255,.55);
+  border:1px solid var(--parchment-edge);
+  border-inline-start:4px solid var(--brass);
+  border-radius:6px;
+  font-size:.94rem; color:var(--ink-soft);
+}
+.callout strong{color:var(--olive-900)}
+
+/* ── فهرس ────────────────────────────────────── */
+.toc{
+  max-width:var(--maxw); margin:0 auto 3rem;
+  padding:1.2rem 1.4rem;
+  background:linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.25));
+  border:1px solid var(--parchment-edge); border-radius:8px;
+}
+.toc h2{
+  font-family:var(--f-body); font-size:.78rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--brass); margin:0 0 .7rem; font-weight:600;
+}
+.toc ol{margin:0; padding-inline-start:1.2rem; columns:2; column-gap:2rem}
+.toc li{margin-bottom:.3rem; break-inside:avoid}
+.toc a{color:var(--olive-700); text-decoration:none; font-size:.93rem}
+.toc a:hover{color:var(--brass); text-decoration:underline}
+@media(max-width:640px){ .toc ol{columns:1} }
+
+/* ── الأقسام ─────────────────────────────────── */
+main{max-width:var(--maxw); margin-inline:auto; padding:0 clamp(1rem,4vw,2.4rem) 3rem}
+section{margin-bottom:3.6rem; scroll-margin-top:5rem}
+h2.sec{
+  font-family:var(--f-display); font-size:clamp(1.5rem,3.6vw,1.95rem);
+  color:var(--olive-900); margin:0 0 1rem; line-height:1.5;
+  display:flex; align-items:baseline; gap:.75rem;
+}
+h2.sec .num{
+  font-family:var(--f-mono); font-size:.72rem; font-weight:500;
+  color:var(--brass); border:1px solid rgba(165,118,43,.45);
+  border-radius:4px; padding:.1rem .42rem; flex:none;
+  transform:translateY(-.25rem);
+}
+h3{
+  font-family:var(--f-body); font-size:1.06rem; font-weight:600;
+  color:var(--olive-700); margin:1.9rem 0 .6rem;
+}
+p{margin:0 0 1.05rem}
+.lead{font-size:1.02rem}
+ul.clean{list-style:none; padding:0; margin:0 0 1.2rem}
+ul.clean li{
+  position:relative; padding-inline-start:1.5rem; margin-bottom:.85rem;
+}
+ul.clean li::before{
+  content:""; position:absolute; inset-inline-start:.35rem; top:.85em;
+  width:6px; height:6px; background:var(--brass); border-radius:1px;
+  transform:rotate(45deg);
+}
+ul.clean li b{color:var(--olive-900); font-weight:600}
+
+/* ── التمييز الثلاثي (العنصر المميّز) ──────────── */
+.triad{display:grid; gap:.9rem; margin:1.4rem 0 1.6rem}
+@media(min-width:760px){ .triad{grid-template-columns:repeat(3,1fr)} }
+.triad .card{
+  background:rgba(255,255,255,.62);
+  border:1px solid var(--parchment-edge);
+  border-top:3px solid var(--olive-500);
+  border-radius:8px; padding:1.05rem 1.05rem 1.15rem;
+}
+.triad .card:nth-child(2){border-top-color:var(--brass-light)}
+.triad .card:nth-child(3){border-top-color:var(--olive-900)}
+.triad .en{
+  font-family:var(--f-mono); font-size:.68rem; color:var(--brass);
+  letter-spacing:.02em; display:block; margin-bottom:.3rem; direction:ltr; text-align:right;
+}
+.triad h4{
+  font-family:var(--f-display); font-size:1.2rem; color:var(--olive-900);
+  margin:0 0 .45rem; font-weight:700;
+}
+.triad p{font-size:.9rem; line-height:1.8; margin:0; color:var(--ink-soft)}
+
+/* ── جدول المعايير ───────────────────────────── */
+.table-wrap{overflow-x:auto; margin:1.3rem 0 1rem; border:1px solid var(--parchment-edge); border-radius:8px}
+table{border-collapse:collapse; width:100%; min-width:540px; background:rgba(255,255,255,.5)}
+caption{
+  caption-side:bottom; text-align:start; font-size:.8rem; color:var(--ink-soft);
+  padding:.7rem .2rem 0;
+}
+th,td{padding:.75rem .9rem; text-align:start; border-bottom:1px solid var(--rule); vertical-align:top}
+thead th{
+  background:var(--olive-900); color:var(--parchment);
+  font-size:.82rem; font-weight:600; letter-spacing:.02em; border-bottom:none;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:rgba(240,225,194,.35)}
+td code, .std{
+  font-family:var(--f-mono); font-size:.8rem; color:var(--olive-700);
+  direction:ltr; unicode-bidi:isolate; display:inline-block;
+}
+td{font-size:.9rem; line-height:1.75}
+
+/* ── بطاقات التطبيق البحريني ─────────────────── */
+.cases{display:grid; gap:1rem; margin:1.4rem 0}
+@media(min-width:720px){ .cases{grid-template-columns:1fr 1fr} }
+.case{
+  background:rgba(255,255,255,.55); border:1px solid var(--parchment-edge);
+  border-radius:8px; padding:1.05rem 1.15rem;
+}
+.case h4{
+  font-family:var(--f-display); font-size:1.14rem; color:var(--olive-900);
+  margin:0 0 .2rem; font-weight:700;
+}
+.case .tag{
+  font-family:var(--f-mono); font-size:.68rem; color:var(--brass);
+  display:block; margin-bottom:.5rem; direction:ltr; text-align:right;
+}
+.case p{font-size:.89rem; line-height:1.8; margin:0; color:var(--ink-soft)}
+
+/* ── حاشية ─────────────────────────────────── */
+.note{
+  font-size:.87rem; color:var(--ink-soft);
+  background:rgba(221,227,206,.55); border:1px dashed rgba(70,90,51,.35);
+  border-radius:6px; padding:.9rem 1.1rem; margin:1.2rem 0;
+}
+.note b{color:var(--olive-900)}
+
+/* ── المراجع ─────────────────────────────────── */
+ol.refs{padding-inline-start:1.4rem; margin:1rem 0 0}
+ol.refs li{margin-bottom:.85rem; font-size:.88rem; line-height:1.8; color:var(--ink-soft)}
+ol.refs li::marker{color:var(--brass); font-family:var(--f-mono); font-size:.8rem}
+ol.refs .en{direction:ltr; unicode-bidi:isolate; display:inline}
+ol.refs a{color:var(--olive-700); word-break:break-word}
+
+/* ── الاستشهاد ───────────────────────────────── */
+.cite-box{
+  background:var(--olive-900); color:var(--parchment);
+  border-radius:8px; padding:1.15rem 1.3rem; margin-top:1.2rem;
+}
+.cite-box h3{color:var(--brass-light); margin:0 0 .6rem; font-size:.95rem}
+.cite-box p{
+  font-family:var(--f-mono); font-size:.78rem; line-height:1.9;
+  color:rgba(244,236,220,.9); margin:0; word-break:break-word;
+}
+
+/* ── تذييل ───────────────────────────────────── */
+footer{
+  border-top:2px solid var(--brass);
+  background:rgba(46,58,34,.06);
+  padding:1.8rem clamp(1rem,4vw,2.4rem) 2.6rem;
+}
+footer .in{max-width:var(--maxw); margin-inline:auto; font-size:.84rem; color:var(--ink-soft)}
+footer a{color:var(--olive-700)}
+
+/* ── زر العودة للأعلى ─────────────────────────── */
+#toTop{
+  position:fixed; bottom:1.1rem; right:1.1rem; z-index:60;
+  width:2.6rem; height:2.6rem; border-radius:50%;
+  background:var(--olive-900); color:var(--brass-light);
+  border:1px solid var(--brass); cursor:pointer;
+  font-size:1rem; line-height:1; display:none;
+  box-shadow:0 4px 14px rgba(36,31,23,.22);
+}
+#toTop.show{display:block}
+#toTop:hover{background:var(--olive-700)}
+
+:focus-visible{outline:2px solid var(--brass); outline-offset:3px; border-radius:3px}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none !important; transition:none !important}
+}
+
+@media print{
+  .topbar,#toTop,.toc{display:none}
+  body{background:#fff}
+  section{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="mark" href="/">سُطور من <span>أوال</span></a>
+  <span class="crumb">الإطار المفهومي</span>
+  <a class="back" href="/#about">‹ عودة إلى «عن المنصّة»</a>
+</div>
+
+<header class="hero">
+  <span class="eyebrow">مدخل تعريفي — ليس دراسة محكّمة</span>
+  <h1>التوثيق الرقمي للتراث:<br>مدخل مفهومي ومعياري</h1>
+  <p class="dek">
+    صفحةٌ تمهيدية تضبط المصطلح قبل الممارسة: ما الفرق بين الرقمنة والتوثيق والحفظ طويل الأمد؟
+    وما المعايير الدولية التي تحكم كلّاً منها؟ وكيف تنعكس هذه المفاهيم على مدوّنةٍ محدّدة
+    هي المخطوط والنقش والأثر في جزيرة أوال؟
+  </p>
+  <div class="byline">
+    <span><b>الإعداد:</b> د. أحمد بن عبدالرحمن العسيري</span>
+    <span><b>القسم:</b> عن المنصّة ← الإطار المفهومي</span>
+    <span><b>آخر تحديث:</b> يوليو 2026</span>
+  </div>
+</header>
+
+<div class="callout">
+  <strong>تنبيه منهجي.</strong>
+  هذه الصفحة <em>مدخلٌ تعريفي</em> إلى حقلٍ مستقرّ، لا بحثاً بإسهامٍ أصيل؛ وظيفتها توحيد المصطلح
+  بين قارئ المنصّة ومحرّرها. وحين تُذكر فيها المعايير الدولية فإنّها تُذكر بوصفها <em>ما توصي به الأدبيات</em>،
+  لا بوصفها ما تطبّقه المنصّة بالفعل؛ فبيان ما هو منفَّذ وما لم يُنفَّذ بعد موضعه
+  <a href="/#about/limits">قسم «حدود العمل»</a> والورقة الموسّعة المنشورة على المنصّة.
+</div>
+
+<nav class="toc" aria-label="محتويات الصفحة">
+  <h2>المحتويات</h2>
+  <ol>
+    <li><a href="#s1">ضبط المصطلح: ثلاثة أفعال لا فعل واحد</a></li>
+    <li><a href="#s2">الدوافع الإستراتيجية</a></li>
+    <li><a href="#s3">المنظومة التقنية وأدوات الالتقاط</a></li>
+    <li><a href="#s4">المعايير الدولية الحاكمة</a></li>
+    <li><a href="#s5">التحديات البنيوية</a></li>
+    <li><a href="#s6">تطبيقات على مدوّنة أوال</a></li>
+    <li><a href="#s7">أفضل الممارسات المنهجية</a></li>
+    <li><a href="#refs">المراجع</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ═══ 1 ═══ -->
+<section id="s1">
+  <h2 class="sec"><span class="num">01</span> ضبط المصطلح: ثلاثة أفعال لا فعل واحد</h2>
+  <p class="lead">
+    يُستعمل تعبير «التوثيق الرقمي للتراث» في الكتابة العربية استعمالاً فضفاضاً يخلط ثلاثة أعمال
+    متمايزة في الغاية والأدوات والمعايير. وأوّل شرطٍ في أيّ مشروعٍ جادّ أن يُفرَّق بينها، لأنّ
+    الاكتفاء بالأوّل — وهو الأشيع — يُنتج أرشيفاً هشّاً يظنّ صاحبه أنّه صانَ ما لم يصُنْه.
+  </p>
+
+  <div class="triad">
+    <div class="card">
+      <span class="en">Digitization</span>
+      <h4>الرقمنة</h4>
+      <p>تحويل الحامل المادّي إلى ملفٍّ رقمي: مسحٌ ضوئي أو تصوير. غايتها نسخةٌ بصرية أمينة،
+      ومقياس جودتها فيزيائي بحت (الدقّة، التدرّج اللوني، أمانة الألوان). وهي لا تُنتج معرفةً
+      بذاتها؛ تُنتج صورة.</p>
+    </div>
+    <div class="card">
+      <span class="en">Documentation</span>
+      <h4>التوثيق</h4>
+      <p>إلحاق بياناتٍ وصفية بالملفّ تجعله قابلاً للاسترجاع والفهم: من أنتجه؟ متى؟ أين؟ بأيّ خطّ؟
+      وما علاقته بغيره؟ هنا يتحوّل الملفّ من صورةٍ إلى <b>كيانٍ معرفيّ</b> يمكن السؤال عنه
+      والربط به.</p>
+    </div>
+    <div class="card">
+      <span class="en">Preservation</span>
+      <h4>الحفظ طويل الأمد</h4>
+      <p>ضمان بقاء الملفّ مقروءاً بعد عقود، رغم تقادم الصيغ والبرمجيات وتلف الوسائط. غايتها
+      الاستمرار لا الإتاحة، ولها معمارٌ مؤسّسي ومعياريّ خاصّ بها. ورفعُ ملفٍّ على موقعٍ ليس حفظاً.</p>
+    </div>
+  </div>
+
+  <p>
+    ويترتّب على هذا التمييز أثرٌ عمليّ مباشر: مشروعٌ يُتقن الرقمنة ويهمل التوثيق يُنتج مكتبةَ صورٍ
+    لا تُبحَث؛ ومشروعٌ يُتقن الاثنين ويهمل الحفظ يُنتج معرفةً مؤقّتة عمرها عمرُ خادمها. والمنصّة
+    الرقمية التراثية الناضجة هي التي تُصرّح بموقعها من الأفعال الثلاثة صراحةً بدل أن تُوهم بها جميعاً.
+  </p>
+
+  <p>
+    وتشمل مادّة هذه الأفعال الثلاثة التراثَ المادّي (المخطوطات، الوثائق، النقوش، المقتنيات
+    والمعالم المعمارية) والتراثَ اللامادي على السواء (الروايات الشفهية، الممارسات الاجتماعية،
+    الحرف)، وإن اختلفت أدوات الالتقاط ومعايير الوصف بينهما اختلافاً بيّناً.
+  </p>
+</section>
+
+<!-- ═══ 2 ═══ -->
+<section id="s2">
+  <h2 class="sec"><span class="num">02</span> الدوافع الإستراتيجية</h2>
+  <p>
+    لا يقف التحوّل الرقمي عند حدود الحفظ الأرشيفي، بل يتعدّاه إلى جملة أهدافٍ تُصاغ عادةً في
+    خمسة محاور:
+  </p>
+  <ul class="clean">
+    <li><b>الصون من التدهور والمخاطر.</b> حماية المادّة النادرة من عوامل التلف الطبيعي (الرطوبة،
+      الحموضة، الحشرات)، ومن المخاطر المفاجئة: الحرائق، الفيضانات، النزاعات المسلّحة، والزحف
+      العمراني على المواقع الأثرية. والنسخة الرقمية هنا وثيقةُ تأمينٍ لا بديلاً عن الأصل.</li>
+    <li><b>إتاحة المعرفة وكسر العائق الجغرافي.</b> المخطوط المحفوظ في خزانةٍ مغلقة لا يُسهم في
+      المعرفة إلّا بقدر ما يُتاح؛ والإتاحة الرقمية تُلغي شرط السفر والإذن والمراسلة الطويلة.</li>
+    <li><b>إثراء البحث بأدوات المعالجة.</b> النصّ الرقمي المُرمَّز يقبل ما لا يقبله الورق: البحث
+      اللفظي، والمقابلة الآلية بين النسخ، وتحليل الشبكات، والتحليل المكاني للأحداث.</li>
+    <li><b>التعليم والوعي العام.</b> إدماج الموارد الموثّقة في المناهج والمعارض الرقمية، بما يوسّع
+      دائرة الانتفاع من المتخصّص إلى المتعلّم.</li>
+    <li><b>التبادل المؤسّسي.</b> فتح قنوات تبادلٍ بين الجامعات والمتاحف والأرشيفات عبر البيانات
+      المفتوحة والبروتوكولات الموحّدة — وهو المحور الذي تنهض عليه فكرة الشبكات الإقليمية للتراث.</li>
+  </ul>
+</section>
+
+<!-- ═══ 3 ═══ -->
+<section id="s3">
+  <h2 class="sec"><span class="num">03</span> المنظومة التقنية وأدوات الالتقاط</h2>
+
+  <h3>أوّلاً: تقنيات الالتقاط</h3>
+  <ul class="clean">
+    <li><b>المسح الضوئي عالي الدقّة.</b> للمستندات المسطّحة والمخطوطات والصور التاريخية،
+      باستعمال ماسحاتٍ لا تُجهد المادّة (مهد على شكل V، إضاءة باردة، لا ضغط على الكعب).</li>
+    <li><b>المسح ثلاثي الأبعاد والقياس التصويري (Photogrammetry).</b> لتوثيق النقوش والتحف
+      والمعالم المعمارية بهندستها وملمسها، وهو ما يجعل النموذج قابلاً للقياس لا للمشاهدة فقط.</li>
+    <li><b>التصوير متعدّد الأطياف (Multispectral Imaging).</b> لاستخراج الطبقات النصية الممحوّة
+      أو المطموسة في الرقوق والمخطوطات المُعاد استعمالها، وهو من أكثر التقنيات أثراً في تحقيق
+      النصوص المتضرّرة.</li>
+    <li><b>الرقمنة السمعية–البصرية.</b> إنقاذ الأشرطة المغناطيسية والتسجيلات القديمة قبل انحلال
+      حاملها، ونقلها إلى صيغٍ حديثة غير مضغوطة.</li>
+  </ul>
+
+  <h3>ثانياً: المعالجة والترميم الرقمي</h3>
+  <p>
+    تُستعمل أدوات معالجة الصورة والصوت لتصحيح التباين والألوان وإزالة الشوائب الناتجة عن
+    الحامل. والقاعدة الأخلاقية الحاكمة هنا صريحة: <b>يُحتفظ دائماً بالنسخة الرئيسة (Master) غير
+    المعالَجة</b>، وتُشتقّ منها نسخُ العرض؛ وأيّ تدخّل تجميلي يُوثَّق ولا يُدمَج في الأصل، لئلّا
+    يتحوّل الترميم إلى تزييف.
+  </p>
+
+  <h3>ثالثاً: التخزين والمستودعات</h3>
+  <p>
+    تُبنى المستودعات الرقمية على قواعد بياناتٍ مهيكلة مدعومة ببيانات وصفية، مع سياسة نسخٍ
+    احتياطي موزّعة جغرافياً وتحقّقٍ دوري من سلامة الملفّات بالبصمات الرقمية (checksums).
+    ومعيار كفاية هذه البنية ليس سعة القرص، بل قدرتها على إثبات أنّ الملفّ اليوم هو نفسه
+    ملفُّ الأمس بتّةً بتّة.
+  </p>
+</section>
+
+<!-- ═══ 4 ═══ -->
+<section id="s4">
+  <h2 class="sec"><span class="num">04</span> المعايير الدولية الحاكمة</h2>
+  <p>
+    يُميَّز في هذا الحقل بين أربع طبقاتٍ من المعايير، لكلٍّ منها سؤالٌ تجيب عنه. والخلط بينها
+    شائعٌ في الأدبيات العربية، ولذلك يُعرَض الجدول التالي مرتّباً بحسب السؤال لا بحسب الشهرة:
+  </p>
+
+  <div class="table-wrap">
+  <table>
+    <caption>جدول (1): طبقات المعايير الأربع في مشروعات التراث الرقمي.</caption>
+    <thead>
+      <tr>
+        <th scope="col">الطبقة</th>
+        <th scope="col">السؤال الذي تجيب عنه</th>
+        <th scope="col">أبرز المعايير</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>جودة الصورة</td>
+        <td>هل النسخة الرقمية أمينةٌ للأصل بدرجةٍ قابلة للقياس؟</td>
+        <td><span class="std">FADGI (3rd ed., 2023)</span><br><span class="std">Metamorfoze</span></td>
+      </tr>
+      <tr>
+        <td>الوصف والبيانات الوصفية</td>
+        <td>كيف يُوصَف العنصر وصفاً يقبله نظامٌ آخر؟</td>
+        <td><span class="std">Dublin Core / ISO 15836</span><br><span class="std">MODS</span> · <span class="std">METS + ALTO</span><br><span class="std">TEI P5</span> (وصف المخطوط)</td>
+      </tr>
+      <tr>
+        <td>النمذجة الدلالية</td>
+        <td>كيف تُمثَّل العلاقات بين الأشخاص والأماكن والأحداث؟</td>
+        <td><span class="std">CIDOC CRM / ISO 21127:2023</span><br><span class="std">schema.org + JSON-LD</span></td>
+      </tr>
+      <tr>
+        <td>الحفظ والإتاحة البينية</td>
+        <td>كيف يبقى المحفوظ مقروءاً ومتبادَلاً بعد عقود؟</td>
+        <td><span class="std">OAIS / ISO 14721:2025</span><br><span class="std">ISO 16363</span> (تدقيق الموثوقية)<br><span class="std">PREMIS 3.0</span> · <span class="std">OAI-PMH 2.0</span> · <span class="std">IIIF</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">
+    <b>ملاحظتان على الاختيار.</b>
+    الأولى: أنّ <span class="std">CIDOC CRM</span> هو المعيار المرجعي في النمذجة المتحفية، لكنّ كلفة
+    تبنّيه عالية على المشروعات الصغيرة؛ ولذلك تختار كثيرٌ من المنصّات <span class="std">schema.org</span>
+    بديلاً مرحلياً لأنّه مقروءٌ لمحرّكات الفهرسة والزحف — وهو تفضيلٌ عمليّ لا مفهومي، ولا يُغني عن
+    الترقية لاحقاً.<br>
+    والثانية: أنّ <span class="std">OAIS</span> نموذجٌ مرجعيّ للمسؤوليات، لا برنامجاً يُنصَّب؛ ولا
+    يصحّ لمنصّةٍ أن تدّعي «مطابقة OAIS» ما لم تكن قد أنشأت الوظائف الستّ التي يفرضها ووثّقت سياسة
+    حفظها. وقد صدرت طبعته الثالثة بوصفه <span class="std">ISO 14721:2025</span>، وهو ما يستوجب
+    مراجعة كلّ استشهادٍ سابق بطبعة 2012.
+  </div>
+</section>
+
+<!-- ═══ 5 ═══ -->
+<section id="s5">
+  <h2 class="sec"><span class="num">05</span> التحديات البنيوية</h2>
+  <ul class="clean">
+    <li><b>حجم البيانات.</b> النسخ الرئيسة غير المضغوطة للمخطوطات والنماذج ثلاثية الأبعاد تُنتج
+      أحجاماً هائلة، فتصير كلفة التخزين والنسخ الاحتياطي عائقاً بنيوياً لا تقنياً.</li>
+    <li><b>التلف الرقمي وتقادم الصيغ.</b> الملفّ يتلف بصمتٍ (Bit Rot)، والصيغة الرائجة اليوم قد
+      لا يفتحها برنامجٌ بعد عشرين سنة. والعلاج: صيغٌ مفتوحة، وتحقّقٌ دوري بالبصمات، وخطّة ترحيلٍ
+      معلنة.</li>
+    <li><b>الأطر القانونية والأخلاقية.</b> الملكية الفكرية وحقوق النشر، وخصوصية الأفراد في الوثائق
+      المعاصرة، وحقّ المجتمعات المحلية في تراثها اللامادي — وهي مسائل لا يحلّها الترخيص وحده بل
+      سياسةٌ تحريرية معلنة.</li>
+    <li><b>الاستدامة المالية.</b> الرقمنة مشروعٌ ذو بداية، والحفظ التزامٌ بلا نهاية؛ وأكثر ما يُجهض
+      المبادرات ليس نقص التمويل الأوّلي بل انقطاع تمويل التشغيل.</li>
+    <li><b>الأمن السيبراني.</b> قواعد البيانات الثقافية هدفٌ قائم، وفقدان قاعدة بياناتٍ وصفية بُنيت
+      في سنوات قد يكون أفدح من فقدان الصور نفسها.</li>
+    <li><b>تعارض الروايات.</b> وهو تحدٍّ معرفيّ لا تقنيّ: كيف تُمثَّل مسألةٌ اختلف فيها المؤرّخون
+      في بنيةٍ رقمية تميل بطبيعتها إلى القيمة الواحدة؟ والحلّ ليس الترجيح الصامت، بل عرض الروايات
+      متقابلةً مع توثيق سند كلٍّ منها.</li>
+  </ul>
+</section>
+
+<!-- ═══ 6 ═══ -->
+<section id="s6">
+  <h2 class="sec"><span class="num">06</span> تطبيقات على مدوّنة أوال</h2>
+  <p>
+    ما تقدّم عامٌّ في الحقل كلّه؛ وفيما يلي انعكاسه على المادّة المحدّدة التي تشتغل عليها هذه
+    المنصّة — تراث جزيرة أوال ومملكة البحرين — بأمثلةٍ من مدوّنتها نفسها:
+  </p>
+
+  <div class="cases">
+    <div class="case">
+      <span class="tag">Multispectral · TEI</span>
+      <h4>المخطوط المتضرّر</h4>
+      <p>نسخُ المخطوطات المحلّية — كنسخة «الروض الزاهر» المنسوخة في سماهيج سنة 943هـ/1536م —
+      تجمع بين تلف الحامل وتعدّد طبقات التملّك والسماع على الهوامش. وهي حالةٌ نموذجية يلتقي
+      فيها التصوير متعدّد الأطياف (لاستخراج المطموس) بترميز <span class="std">TEI</span>
+      (لتمثيل التملّكات والحواشي بوصفها كياناتٍ مستقلّة لا زخرفاً على الصورة).</p>
+    </div>
+    <div class="case">
+      <span class="tag">Photogrammetry · 3D</span>
+      <h4>النقش الحجري</h4>
+      <p>النقوش المؤرَّخة — كنقش المنارة (724هـ) ونقش الوقفية (776هـ) — قيمتها في تفاصيلَ
+      سطحيةٍ يخفيها التصوير المستوي: عمق الحفر، تعاقب الأدوات، آثار الترميم. والقياس التصويري
+      يحوّل النقش من صورةٍ إلى نموذجٍ قابل للقياس، فيصير قابلاً للمقارنة مع نقوشٍ أخرى بدلاً من
+      الوصف الإنشائي.</p>
+    </div>
+    <div class="case">
+      <span class="tag">Ontology · Linked Data</span>
+      <h4>الشبكة الأنطولوجية</h4>
+      <p>القيمة المضافة للتوثيق الرقمي لا تظهر في العنصر المفرد بل في التجاور: أن يُظهر النظام أنّ
+      قرية سماهيج موضعُ أقدم مبنى مسيحي مكتشَف في البحرين (القرن الرابع الميلادي)، وموضعُ نسخِ
+      مخطوطٍ في القرن العاشر الهجري، وموضعُ نسبةِ عالمٍ مالكي. البنية تُظهر التجاور وتُتيح السؤال؛
+      ولا تُنتج الجواب.</p>
+    </div>
+    <div class="case">
+      <span class="tag">Contested Records</span>
+      <h4>تعارض الروايات</h4>
+      <p>مسائل مثل تاريخ تأسيس مسجد الخميس تتجاذبها روايةٌ متداولة ومصادر رسمية ونتائج بعثةٍ
+      أثرية (البعثة الفرنسية بقيادة مونيك كيرفران، من 1984). والموقف المنهجي المعتمد هنا: عرض
+      المستند الأثري المؤرَّخ بوصفه شاهداً، والتصريح بمستند الترجيح، وعدم حذف الرواية المرجوحة
+      من السجلّ.</p>
+    </div>
+  </div>
+
+  <p>
+    وينسحب الأمر نفسه على المواقع المسجّلة عالمياً — كتلال مدافن دلمون المدرجة في قائمة التراث
+    العالمي سنة 2019 — حيث تتراكم على الموقع الواحد بعثاتُ تنقيبٍ متعاقبة منذ القرن التاسع عشر،
+    فيصير توثيق <em>تاريخ التنقيب</em> جزءاً لا يتجزّأ من توثيق الموقع.
+  </p>
+</section>
+
+<!-- ═══ 7 ═══ -->
+<section id="s7">
+  <h2 class="sec"><span class="num">07</span> أفضل الممارسات المنهجية</h2>
+  <ul class="clean">
+    <li><b>ابدأ بالأولوية لا بالسهولة.</b> تُقدَّم المادّة الأشدّ عرضةً للاندثار والأعلى قيمةً في
+      المدوّنة، لا الأيسر مسحاً.</li>
+    <li><b>افصل النسخة الرئيسة عن نسخة العرض.</b> واحدةٌ للحفظ بصيغةٍ مفتوحة غير مضغوطة، وأخرى
+      خفيفة للويب؛ ولا يُشتقّ الحفظ من العرض أبداً.</li>
+    <li><b>وثّق أثناء الالتقاط لا بعده.</b> البيانات الوصفية المؤجَّلة بياناتٌ ضائعة؛ وكلفة إدخالها
+      لاحقاً تفوق كلفة المسح نفسه.</li>
+    <li><b>اعتمد المعايير المفتوحة من اليوم الأوّل.</b> التحوّل إليها بعد بناء آلاف السجلّات أشقّ
+      من تبنّيها ابتداءً.</li>
+    <li><b>أعلن حدودك.</b> التصريح بما لم يُنفَّذ بعد أنفع للمصداقية من الادّعاء العريض؛ وهو ما
+      يميّز المنصّة البحثية من المعرض الرقمي.</li>
+    <li><b>خطّط للخروج.</b> لكلّ منصّةٍ عمر؛ فوجود خطّة تصديرٍ مفتوح وإيداعٍ لدى جهةٍ مستقلّة شرطٌ
+      في جدّية المشروع لا ترفٌ فيه.</li>
+    <li><b>ابنِ القدرات والشراكات.</b> الكفاءة المطلوبة هجينة (أرشيفية + تقنية) ونادرة، والشراكة
+      بين الجامعات والمؤسّسات الثقافية والشركات التقنية هي ما يوزّع الكلفة ويُطيل العمر.</li>
+  </ul>
+</section>
+
+<!-- ═══ المراجع ═══ -->
+<section id="refs">
+  <h2 class="sec"><span class="num">08</span> المصادر المعتمدة</h2>
+  <ol class="refs">
+    <li><span class="en">UNESCO, <i>Charter on the Preservation of the Digital Heritage</i>, adopted at the 32nd General Conference, Paris, 15 October 2003.</span></li>
+    <li><span class="en">UNESCO, <i>Convention for the Safeguarding of the Intangible Cultural Heritage</i>, Paris, 2003.</span></li>
+    <li><span class="en">ISO 14721:2025, <i>Space data and information transfer systems — Open Archival Information System (OAIS) — Reference model</i>, 3rd ed. (= CCSDS 650.0-M-3, December 2024).</span></li>
+    <li><span class="en">ISO 16363, <i>Audit and Certification of Trustworthy Digital Repositories</i>.</span></li>
+    <li><span class="en">ISO 21127:2023, <i>Information and documentation — A reference ontology for the interchange of cultural heritage information</i> (CIDOC CRM), superseding ISO 21127:2014.</span></li>
+    <li><span class="en">Library of Congress, <i>PREMIS Data Dictionary for Preservation Metadata</i>, version 3.0, 2015.</span></li>
+    <li><span class="en">DCMI, <i>Dublin Core Metadata Terms</i>; cf. ISO 15836.</span></li>
+    <li><span class="en">Library of Congress, <i>MODS: Metadata Object Description Schema</i>; <i>METS</i>; <i>ALTO</i>.</span></li>
+    <li><span class="en">TEI Consortium, <i>TEI P5: Guidelines for Electronic Text Encoding and Interchange</i> — ch. «Manuscript Description».</span></li>
+    <li><span class="en">IIIF Consortium, <i>Image API 3.0</i> and <i>Presentation API 3.0</i>, 2020.</span></li>
+    <li><span class="en">FADGI, <i>Technical Guidelines for Digitizing Cultural Heritage Materials</i>, 3rd ed., Washington, D.C., May 2023.</span></li>
+    <li><span class="en">National Library of the Netherlands, <i>Metamorfoze Preservation Imaging Guidelines</i>, 2012.</span></li>
+    <li><span class="en">Open Archives Initiative, <i>Protocol for Metadata Harvesting (OAI-PMH) 2.0</i>.</span></li>
+    <li>هيئة البحرين للثقافة والآثار، بيان اكتشاف المبنى المسيحي في سماهيج، 21 يوليو 2024.</li>
+    <li><span class="en">UNESCO World Heritage Centre, <i>Dilmun Burial Mounds</i>, inscribed 2019.</span></li>
+    <li>م. كيرفران، تقارير البعثة الفرنسية للتنقيب في البحرين، ابتداءً من 1984 (منشورة في دوريةٍ متخصّصة محكّمة).</li>
+  </ol>
+
+  <div class="cite-box">
+    <h3>كيف تستشهد بهذه الصفحة</h3>
+    <p>العسيري، أحمد بن عبدالرحمن. «التوثيق الرقمي للتراث: مدخل مفهومي ومعياري». سُطور من أوال، 2026. https://sutoorawwal.com/#about/framework</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="in">
+    <p style="margin:0 0 .5rem">
+      <b>سُطور من أوال</b> — منصّة توثيق التراث المخطوط والأثري في مملكة البحرين.
+    </p>
+    <p style="margin:0">
+      هذه الصفحة جزءٌ من قسم «عن المنصّة». للتوسّع في المنهجية والبنية والتقويم:
+      <a href="/#about">النظرة البحثية</a> ·
+      <a href="/#about/limits">حدود العمل</a> ·
+      <a href="/#cite">صيغ الاستشهاد</a>
+    </p>
+  </div>
+</footer>
+
+<button id="toTop" aria-label="العودة إلى أعلى الصفحة">▲</button>
+
+<script>
+(function(){
+  var btn = document.getElementById('toTop');
+  var onScroll = function(){
+    if (window.scrollY > 600) btn.classList.add('show');
+    else btn.classList.remove('show');
+  };
+  window.addEventListener('scroll', onScroll, {passive:true});
+  btn.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+  });
+  onScroll();
+})();
+</script>
+
+</body>
+</html>
