@@ -1,25 +1,227 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سطور من أُوآل - المنصة التفاعلية للتراث والنسب</title>
-    <!-- قم بإضافة ملفات التنسيق والسكريبتات الخاصة بك هنا -->
-    <link rel="stylesheet" href="assets/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173b32">
+  <meta name="description" content="سُطور من أوال: منصة رقمية بحرينية لاستكشاف التراث، الوثائق، المعالم والأنساب في تجربة بحثية تفاعلية موثّقة.">
+  <meta property="og:title" content="سُطور من أوال — ذاكرة البحرين في فضاء رقمي">
+  <meta property="og:description" content="استكشف الأرشيف الموثّق، معالم البحرين، سُطور الأنساب ومصادر البحث المفتوحة.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/assets/bahrain-flag.jpg">
+  <title>سُطور من أوال — ذاكرة البحرين في فضاء رقمي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="scripts/main.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1>سطور من أُوآل</h1>
-        <p>منصة توثيق وتراجم التراث والأنساب التاريخية</p>
-    </header>
+  <a class="skip-link" href="#main-content">انتقل إلى المحتوى</a>
 
-    <main id="app">
-        <!-- محتوى الصفحة الرئيسية وشجرة الأنساب أو محرك البحث -->
-        <section class="search-section">
-            <input type="text" id="searchInput" placeholder="ابحث في تراجم سطور من أُوآل...">
-        </section>
-    </main>
+  <header class="site-header" data-header>
+    <a class="brand" href="/" aria-label="الصفحة الرئيسية — سُطور من أوال">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" role="img">
+          <path d="M24 5c6.8 5.5 10.2 12 10.2 19.3 0 7.4-3.4 13.6-10.2 18.7-6.8-5.1-10.2-11.3-10.2-18.7C13.8 17 17.2 10.5 24 5Z"/>
+          <path d="M24 12v23M18.5 19.5 24 24l5.5-4.5M17.5 29.5 24 34l6.5-4.5"/>
+        </svg>
+      </span>
+      <span>
+        <strong>سُطور من أوال</strong>
+        <small>ذاكرة البحرين الرقمية</small>
+      </span>
+    </a>
 
-    <script src="scripts/main.js"></script>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" data-menu-toggle>
+      <span class="sr-only">فتح القائمة</span>
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="primary-nav" id="primary-nav" aria-label="التنقل الرئيسي" data-nav>
+      <a href="#explore">استكشف</a>
+      <a href="#collections">المجموعات</a>
+      <a href="ansab/index.html">الأنساب</a>
+      <a href="download-center.html">المصادر</a>
+      <a class="nav-cta" href="sutoor-search/search.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+        اسأل الأرشيف
+      </a>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow reveal">من أوال القديمة إلى البحرين الحديثة</p>
+        <h1 id="hero-title" class="reveal">ذاكرةٌ حيّة،<br><em>تُقرأ وتُستكشف.</em></h1>
+        <p class="hero-lead reveal">منصة بحثية تفاعلية تجمع الوثيقة والمكان والسيرة والنسب، وتقدّم تراث البحرين في سياق واضح ومتاح للباحث والقارئ.</p>
+
+        <form class="archive-search reveal" action="sutoor-search/search.html" method="get" role="search">
+          <label class="sr-only" for="archive-query">ابحث في الأرشيف</label>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+          <input id="archive-query" name="q" type="search" autocomplete="off" placeholder="ابحث عن مكان، شخصية، مخطوط...">
+          <button type="submit">ابدأ البحث</button>
+        </form>
+
+        <div class="hero-notes reveal" aria-label="خصائص المنصة">
+          <span>مصادر موثّقة</span>
+          <span>تجربة عربية أصيلة</span>
+          <span>وصول مفتوح</span>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" aria-label="مشهد بصري من أرشيف البحرين">
+        <div class="hero-image-wrap">
+          <img src="assets/sobha-fort/ruins-and-mosque.webp" alt="أطلال ومشهد تراثي يوثّق ذاكرة المكان في البحرين" width="600" height="317" fetchpriority="high">
+        </div>
+        <div class="hero-caption">
+          <span>01</span>
+          <p>المكان شاهدٌ<br>لا يُغفل.</p>
+        </div>
+        <div class="pearl-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+    </section>
+
+    <section class="marquee" aria-label="مجالات الأرشيف">
+      <div>
+        <span>وثائق ومخطوطات</span><i>◆</i>
+        <span>تاريخ شفهي</span><i>◆</i>
+        <span>معالم وآثار</span><i>◆</i>
+        <span>أنساب وسِيَر</span><i>◆</i>
+        <span>أبحاث مفتوحة</span><i>◆</i>
+        <span aria-hidden="true">وثائق ومخطوطات</span><i aria-hidden="true">◆</i>
+        <span aria-hidden="true">تاريخ شفهي</span><i aria-hidden="true">◆</i>
+      </div>
+    </section>
+
+    <section class="explore section-shell" id="explore" aria-labelledby="explore-title">
+      <div class="section-heading reveal">
+        <p class="eyebrow">بوابات المعرفة</p>
+        <h2 id="explore-title">ابدأ من حيث يقودك فضولك</h2>
+        <p>أربع تجارب مترابطة، لكل منها طريقتها في قراءة الذاكرة البحرينية.</p>
+      </div>
+
+      <div class="portal-grid">
+        <a class="portal portal-search reveal" href="sutoor-search/search.html">
+          <span class="portal-number">01</span>
+          <div class="portal-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+          </div>
+          <div>
+            <p class="portal-kicker">بحث دلالي</p>
+            <h3>اسأل الأرشيف</h3>
+            <p>ابحث داخل المواد الموثّقة، وانتقل من السؤال إلى المصدر والسياق.</p>
+          </div>
+          <span class="portal-arrow" aria-hidden="true">↙</span>
+        </a>
+
+        <a class="portal portal-map reveal" href="interactive-landmarks.html">
+          <span class="portal-number">02</span>
+          <img src="uploads/3d-isometric-map-of-bahrain-isolated-with-shadow-vector.jpg" alt="خريطة مجسمة لمملكة البحرين" width="980" height="980" loading="lazy">
+          <div>
+            <p class="portal-kicker">جغرافيا الذاكرة</p>
+            <h3>المعالم التفاعلية</h3>
+            <p>تجوّل بين المواقع التاريخية واكتشف الحكاية التي يحملها كل مكان.</p>
+          </div>
+          <span class="portal-arrow" aria-hidden="true">↙</span>
+        </a>
+
+        <a class="portal portal-lineage reveal" href="ansab/index.html">
+          <span class="portal-number">03</span>
+          <div class="lineage-art" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <p class="portal-kicker">ذاكرة العائلة</p>
+            <h3>سُطور الأنساب</h3>
+            <p>صمّم مشجّرتك واختر من قوالب تجمع الدقة البحثية بجمال العرض.</p>
+          </div>
+          <span class="portal-arrow" aria-hidden="true">↙</span>
+        </a>
+
+        <a class="portal portal-library reveal" href="download-center.html">
+          <span class="portal-number">04</span>
+          <div class="portal-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H20v17H7.5a3.5 3.5 0 0 0 0 7H20"/><path d="M7.5 19A3.5 3.5 0 0 0 4 22.5V5.5"/></svg>
+          </div>
+          <div>
+            <p class="portal-kicker">معرفة قابلة للاستخدام</p>
+            <h3>مركز المصادر</h3>
+            <p>أدلة وبيانات وأوراق بحثية جاهزة للقراءة والتنزيل.</p>
+          </div>
+          <span class="portal-arrow" aria-hidden="true">↙</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="featured" id="collections" aria-labelledby="featured-title">
+      <div class="featured-image reveal">
+        <img src="assets/sobha-fort/al-binali-manuscript.webp" alt="صفحة من مخطوط تاريخي ضمن مواد الأرشيف" width="600" height="397" loading="lazy">
+        <span class="image-stamp">من الأرشيف</span>
+      </div>
+      <div class="featured-copy reveal">
+        <p class="eyebrow">ملف مختار</p>
+        <h2 id="featured-title">حين تتجاور الوثيقة مع أثر المكان</h2>
+        <p>تتبع مواد قلعة صبحا وما حولها عبر روايات تاريخية وصور للموقع وإشارات من المخطوطات. يقدّم الملف نموذجًا لطريقة المنصة في وصل الشاهد المكتوب بالمشهد الباقي.</p>
+        <dl>
+          <div><dt>المادة</dt><dd>وثائق وصور</dd></div>
+          <div><dt>المجال</dt><dd>تاريخ المكان</dd></div>
+          <div><dt>القراءة</dt><dd>سياقية مترابطة</dd></div>
+        </dl>
+        <a class="text-link" href="assets/docs/digital-heritage-documentation.html">اقرأ منهج التوثيق <span aria-hidden="true">↙</span></a>
+      </div>
+    </section>
+
+    <section class="research section-shell" aria-labelledby="research-title">
+      <div class="research-intro reveal">
+        <p class="eyebrow">للقارئ والباحث</p>
+        <h2 id="research-title">المصدر أولًا، دائمًا.</h2>
+        <p>لا نعرض المعلومة بمعزل عن أصلها. صُممت التجربة لتوضّح نوع المادة ومسارها وسياقها، وتفتح الطريق نحو قراءة أعمق.</p>
+      </div>
+      <div class="research-links reveal">
+        <a href="digital-heritage-documentation.html">
+          <span>منهج التوثيق الرقمي</span>
+          <small>مفاهيم ومعايير العمل</small>
+          <b aria-hidden="true">↙</b>
+        </a>
+        <a href="Burial-Mounds-of-Bahrain-Illustrated-Summary.html">
+          <span>مدافن البحرين</span>
+          <small>خلاصة مصوّرة ثنائية اللغة</small>
+          <b aria-hidden="true">↙</b>
+        </a>
+        <a href="download-center.html">
+          <span>البيانات والمنشورات</span>
+          <small>مواد مفتوحة للتنزيل</small>
+          <b aria-hidden="true">↙</b>
+        </a>
+      </div>
+    </section>
+
+    <section class="closing-cta" aria-labelledby="closing-title">
+      <div class="closing-pattern" aria-hidden="true"></div>
+      <div class="closing-content reveal">
+        <p class="eyebrow">كل سؤال بداية لسطر جديد</p>
+        <h2 id="closing-title">ما الذي تبحث عنه<br>في ذاكرة أوال؟</h2>
+        <a href="sutoor-search/search.html">ادخل إلى الأرشيف <span aria-hidden="true">↙</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M24 5c6.8 5.5 10.2 12 10.2 19.3 0 7.4-3.4 13.6-10.2 18.7-6.8-5.1-10.2-11.3-10.2-18.7C13.8 17 17.2 10.5 24 5Z"/><path d="M24 12v23M18.5 19.5 24 24l5.5-4.5M17.5 29.5 24 34l6.5-4.5"/></svg>
+      </span>
+      <p><strong>سُطور من أوال</strong><br>مشروع رقمي لصون الذاكرة البحرينية وإتاحتها.</p>
+    </div>
+    <div class="footer-links">
+      <a href="sutoor-search/search.html">الأرشيف</a>
+      <a href="interactive-landmarks.html">المعالم</a>
+      <a href="ansab/index.html">الأنساب</a>
+      <a href="download-center.html">التنزيل</a>
+    </div>
+    <p class="copyright">© <span data-year>2026</span> سُطور من أوال</p>
+  </footer>
 </body>
 </html>
