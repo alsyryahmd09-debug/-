@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>استوديو المشجرات — سُطور الأنساب</title>
+<meta name="description" content="مساحة عمل واحدة تجمع قوالب شجرة العائلة الأربعة، وتنقل بيانات النسب بينها بلا إعادة إدخال.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ui-bg:#141C15; --ui-panel:#1D291E; --ui-line:#31432F; --ui-line2:#26361F;
+    --ui-text:#E6E9DF; --ui-dim:#94A48F; --ui-gold:#D7B457; --ui-goldD:#8A6A15;
+    --ui-grn:#79A85B; --ui-deep:#0F150F;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; height:100%; }
+  body{
+    background:var(--ui-deep); color:var(--ui-text);
+    font-family:'IBM Plex Sans Arabic', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+
+  /* ── الشريط الأعلى ───────────────────────────────────────── */
+  .top{
+    flex:none; position:relative; z-index:5;
+    background:var(--ui-panel); border-bottom:1px solid var(--ui-line);
+    box-shadow:0 12px 34px -20px #000;
+  }
+  .top-in{ display:flex; align-items:center; gap:10px; padding:8px 14px; }
+  .seal{ width:26px; height:26px; flex:none; }
+  .idn{ display:flex; align-items:baseline; gap:8px; min-width:0; }
+  .idn .plat{ font-size:12px; color:var(--ui-dim); letter-spacing:.2px; white-space:nowrap; }
+  .idn .sep{ color:var(--ui-line); }
+  .idn .now{
+    font-family:'Aref Ruqaa','Amiri',serif; font-size:15.5px; color:var(--ui-text);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .idn .code{
+    font-size:10.5px; color:var(--ui-dim); border:1px solid var(--ui-line);
+    border-radius:5px; padding:2px 6px; white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .spacer{ margin-inline-start:auto; }
+
+  .fam{
+    display:inline-flex; align-items:center; gap:7px; max-width:32ch;
+    background:#16211700; border:1px solid var(--ui-line); border-radius:8px;
+    padding:5px 10px; font-size:12px; color:var(--ui-dim); white-space:nowrap;
+  }
+  .fam b{ color:var(--ui-text); font-weight:600; font-size:12.5px; }
+  .fam .dot{ width:5px; height:5px; border-radius:50%; background:var(--ui-grn); flex:none; }
+  .fam.idle .dot{ background:var(--ui-line); }
+
+  .carry{
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+    border:1px solid var(--ui-line); background:transparent; color:var(--ui-dim);
+    border-radius:8px; padding:5px 10px; font:inherit; font-size:12px;
+    transition:color .14s ease, border-color .14s ease;
+  }
+  .carry:hover{ color:var(--ui-text); border-color:var(--ui-goldD); }
+  .carry:focus-visible{ outline:2px solid var(--ui-gold); outline-offset:2px; }
+  .sw{ width:26px; height:15px; border-radius:99px; background:var(--ui-line); position:relative; flex:none; transition:background .16s ease; }
+  .sw::after{
+    content:''; position:absolute; inset-inline-end:2px; top:2px; width:11px; height:11px;
+    border-radius:50%; background:#0F150F; transition:inset-inline-end .16s ease;
+  }
+  .carry[aria-pressed="true"]{ color:var(--ui-text); }
+  .carry[aria-pressed="true"] .sw{ background:var(--ui-grn); }
+  .carry[aria-pressed="true"] .sw::after{ inset-inline-end:13px; }
+
+  .fresh{
+    display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+    border:1px solid var(--ui-line); background:transparent; color:var(--ui-dim);
+    border-radius:8px; padding:6px 10px; font:inherit; font-size:12px;
+    transition:color .14s ease, border-color .14s ease;
+  }
+  .fresh:hover{ color:#E9C3C3; border-color:#7A4A4A; }
+  .fresh:focus-visible{ outline:2px solid var(--ui-gold); outline-offset:2px; }
+  .fresh svg{ width:13px; height:13px; flex:none; }
+
+  .exit{
+    display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+    color:var(--ui-gold); border:1px solid var(--ui-line); background:var(--ui-bg);
+    border-radius:8px; padding:6px 11px; font-size:12.5px; font-weight:500;
+    transition:background .14s ease, border-color .14s ease;
+  }
+  .exit:hover{ background:#243021; border-color:var(--ui-gold); }
+  .exit:focus-visible{ outline:2px solid var(--ui-gold); outline-offset:2px; }
+  .exit svg{ width:13px; height:13px; }
+
+  /* خيط تحميل رفيع أسفل الشريط */
+  .load{
+    position:absolute; inset-inline:0; bottom:-1px; height:2px; overflow:hidden; opacity:0;
+    transition:opacity .2s ease;
+  }
+  .load.on{ opacity:1; }
+  .load i{
+    position:absolute; inset-block:0; width:34%;
+    background:linear-gradient(90deg, transparent, var(--ui-gold), transparent);
+    animation:sweep 1.05s linear infinite;
+  }
+  @keyframes sweep{ from{ inset-inline-start:-34%; } to{ inset-inline-start:100%; } }
+
+  /* ── الجسم: مسنَد القوالب + المسرح ───────────────────────── */
+  .body{ flex:1; display:flex; min-height:0; }
+
+  .rail{
+    flex:none; width:84px; background:var(--ui-bg);
+    border-inline-end:1px solid var(--ui-line);
+    display:flex; flex-direction:column; gap:4px; padding:10px 8px;
+    overflow-y:auto; overscroll-behavior:contain;
+  }
+  .rail .rl{
+    font-size:9.5px; color:var(--ui-dim); letter-spacing:.6px;
+    text-align:center; padding:2px 0 6px; opacity:.75;
+  }
+  .tpl{
+    appearance:none; width:100%; border:1px solid transparent; background:transparent;
+    color:var(--ui-dim); border-radius:10px; padding:8px 4px 7px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    font:inherit; font-size:10.5px; line-height:1.45; text-align:center;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .tpl svg{ width:38px; height:38px; }
+  .tpl:hover{ background:var(--ui-panel); color:var(--ui-text); }
+  .tpl:focus-visible{ outline:2px solid var(--ui-gold); outline-offset:2px; }
+  .tpl[aria-current="true"]{
+    background:var(--ui-panel); color:var(--ui-text);
+    border-color:var(--ui-line); box-shadow:inset 2px 0 0 0 var(--ui-gold);
+  }
+  .tpl .em-ring{ opacity:.5; }
+  .tpl[aria-current="true"] .em-ring{ opacity:1; }
+
+  .stage{ flex:1; min-width:0; position:relative; background:var(--ui-deep); }
+  .stage iframe{ width:100%; height:100%; border:0; display:block; }
+
+  /* ── التنبيه ─────────────────────────────────────────────── */
+  .toast{
+    position:fixed; inset-inline-start:18px; bottom:18px; z-index:40;
+    background:var(--ui-panel); border:1px solid var(--ui-line); border-radius:10px;
+    padding:10px 14px; font-size:12.5px; color:var(--ui-text);
+    box-shadow:0 18px 40px -20px #000;
+    opacity:0; transform:translateY(8px); pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    max-width:min(78vw, 380px); line-height:1.7;
+  }
+  .toast.on{ opacity:1; transform:none; }
+  .toast b{ color:var(--ui-gold); font-weight:600; }
+
+  /* على الشاشات الضيّقة ينتقل مسنَد القوالب إلى الأسفل ليتّسع المسرح */
+  @media (max-width:560px){
+    .body{ flex-direction:column; }
+    .stage{ order:1; flex:1; min-height:0; }
+    .rail{
+      order:2; width:auto; flex-direction:row; gap:2px; padding:6px;
+      border-inline-end:0; border-top:1px solid var(--ui-line);
+      overflow-x:auto; overflow-y:hidden;
+    }
+    .rail .rl{ display:none; }
+    .tpl{ flex:1 0 auto; min-width:66px; padding:6px 3px; }
+    .tpl svg{ width:26px; height:26px; }
+    .tpl[aria-current="true"]{ box-shadow:inset 0 2px 0 0 var(--ui-gold); }
+  }
+
+  @media (max-width:720px){
+    .idn .code, .fam{ display:none; }
+    .rail{ width:68px; padding:8px 5px; }
+    .tpl svg{ width:32px; height:32px; }
+    .tpl{ font-size:9.5px; }
+    .carry span.lbl{ display:none; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ الشريط الأعلى ═══ -->
+<header class="top">
+  <div class="top-in">
+    <svg class="seal" viewBox="-20 -20 40 40" aria-hidden="true">
+      <circle r="18.5" fill="none" stroke="#D7B457" stroke-width="1.6"/>
+      <rect x="-9.5" y="-9.5" width="19" height="19" fill="none" stroke="#79A85B" stroke-width="1.3"/>
+      <rect x="-9.5" y="-9.5" width="19" height="19" fill="none" stroke="#5F8FB0" stroke-width="1.3" transform="rotate(45)"/>
+      <circle r="3" fill="#D7B457"/>
+    </svg>
+
+    <div class="idn">
+      <span class="plat">سُطور الأنساب</span>
+      <span class="sep">/</span>
+      <span class="now" id="now">استوديو المشجرات</span>
+      <span class="code" id="code">—</span>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="fam idle" id="fam" title="اسم العائلة وعدد الأفراد في الشجرة الحالية">
+      <span class="dot"></span><span id="famtxt">لا توجد شجرة بعد</span>
+    </div>
+
+    <button class="carry" id="carry" aria-pressed="true"
+            title="عند التبديل بين القوالب تُنقل الأسماء كما هي">
+      <span class="sw" aria-hidden="true"></span><span class="lbl">نقل البيانات</span>
+    </button>
+
+    <button class="fresh" id="fresh" type="button" title="تفريغ كل القوالب من الأسماء والبدء من صفحة بيضاء">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 13h10l1-13"/></svg>
+      <span class="lbl">شجرة جديدة</span>
+    </button>
+
+    <a class="exit" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      الواجهة
+    </a>
+  </div>
+  <div class="load" id="load" aria-hidden="true"><i></i></div>
+</header>
+
+<!-- ═══ الجسم ═══ -->
+<div class="body">
+
+  <nav class="rail" id="rail" aria-label="قوالب شجرة العائلة">
+    <div class="rl">القوالب</div>
+  </nav>
+
+  <main class="stage">
+    <iframe id="frame" title="مساحة تحرير القالب" src="about:blank"></iframe>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   استوديو المشجرات — قشرةٌ رقيقة فوق أربعة قوالب مستقلة.
+   لا تلمس محرّك أيّ قالب؛ تخاطبه ببروتوكول ftt عبر postMessage.
+   ═══════════════════════════════════════════════════════════════ */
+
+const TPLS = [
+  { key:'tribe',      file:'tribe.html',      name:'شجرة القبيلة',      rail:'القبيلة', code:'ornate-fan-v1 · A4 عمودي' },
+  { key:'mashjara',   file:'mashjara.html',   name:'مشجرة العائلة',     rail:'المشجرة', code:'ornate-classic-v1 · A4 عمودي' },
+  { key:'horizontal', file:'horizontal.html', name:'الشجرة الأفقية',    rail:'الأفقية', code:'ornate-chart-h-v1 · A4 أفقي' },
+  { key:'vertical',   file:'vertical.html',   name:'الشجرة العامودية',  rail:'العامودية', code:'ornate-chart-v-v1 · A4 أفقي' }
+];
+
+const STORE_KEY = 'sutoor:tree:v1';     // آخر شجرة عمل عليها المستخدم
+const LAST_KEY  = 'sutoor:studio:last'; // آخر قالب مفتوح
+const CARRY_KEY = 'sutoor:studio:carry';
+
+const $ = s => document.querySelector(s);
+const frame = $('#frame');
+
+let CUR = null;      // مفتاح القالب المعروض
+let CARRY = null;    // نسخة البيانات المنتظرة للإرسال بعد جاهزية القالب
+let CARRY_ON = true; // هل تُنقل البيانات بين القوالب؟
+
+/* ── أختام القوالب في المسنَد ─────────────────────────────── */
+const EMBLEM = {
+  tribe: `<circle class="em-ring" cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <g stroke="currentColor" stroke-width="2" fill="none" opacity=".55"><circle cx="60" cy="60" r="34"/><circle cx="60" cy="60" r="22"/></g>
+    <g id="sp-tribe" stroke="#79A85B" stroke-width="2.4" stroke-linecap="round"></g>
+    <circle cx="60" cy="60" r="9" fill="#D7B457"/>`,
+  mashjara: `<circle class="em-ring" cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <g stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round">
+      <path d="M60,40 V50"/><path d="M40,58 H80"/><path d="M40,50 V58"/><path d="M80,50 V58"/><path d="M60,50 H40 M60,50 H80"/>
+      <path d="M40,68 V78"/><path d="M60,68 V78"/><path d="M80,68 V78"/></g>
+    <g fill="none" stroke="#D7B457" stroke-width="2.2"><circle cx="60" cy="34" r="8"/></g>
+    <g fill="#79A85B"><circle cx="40" cy="63" r="5"/><circle cx="80" cy="63" r="5"/></g>
+    <g fill="currentColor"><circle cx="40" cy="82" r="4"/><circle cx="60" cy="82" r="4"/><circle cx="80" cy="82" r="4"/></g>`,
+  horizontal: `<circle class="em-ring" cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <g stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round">
+      <path d="M84,60 H66"/><path d="M66,36 V84"/><path d="M66,36 H54"/><path d="M66,60 H54"/><path d="M66,84 H54"/></g>
+    <rect x="82" y="52" width="16" height="16" rx="4" fill="#D7B457"/>
+    <g fill="none" stroke="#79A85B" stroke-width="2.2">
+      <rect x="26" y="29" width="28" height="14" rx="4"/><rect x="26" y="53" width="28" height="14" rx="4"/><rect x="26" y="77" width="28" height="14" rx="4"/></g>`,
+  vertical: `<circle class="em-ring" cx="60" cy="60" r="50" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <g stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round">
+      <path d="M60,42 V54"/><path d="M34,54 H86"/><path d="M34,54 V64"/><path d="M60,54 V64"/><path d="M86,54 V64"/></g>
+    <rect x="48" y="26" width="24" height="16" rx="4" fill="#D7B457"/>
+    <g fill="none" stroke="#79A85B" stroke-width="2.2">
+      <rect x="23" y="64" width="22" height="15" rx="4"/><rect x="49" y="64" width="22" height="15" rx="4"/><rect x="75" y="64" width="22" height="15" rx="4"/></g>`
+};
+
+(function buildRail(){
+  const rail = $('#rail');
+  TPLS.forEach((t, i) => {
+    const b = document.createElement('button');
+    b.className = 'tpl'; b.type = 'button'; b.dataset.key = t.key;
+    b.setAttribute('aria-current', 'false');
+    b.title = t.name + '  (Alt+' + (i+1) + ')';
+    b.innerHTML = '<svg viewBox="0 0 120 120" aria-hidden="true">' + EMBLEM[t.key] + '</svg><span>' + t.rail + '</span>';
+    b.onclick = () => open(t.key);
+    rail.appendChild(b);
+  });
+  /* أشعّة مروحة القبيلة تُرسم برمجيًّا فتبقى منتظمة */
+  const sp = document.getElementById('sp-tribe');
+  if (sp) for (let i = 0; i < 10; i++){
+    const a = (i * 36 - 90) * Math.PI / 180;
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', `M${(60+Math.cos(a)*13).toFixed(1)},${(60+Math.sin(a)*13).toFixed(1)} L${(60+Math.cos(a)*32).toFixed(1)},${(60+Math.sin(a)*32).toFixed(1)}`);
+    sp.appendChild(p);
+  }
+})();
+
+/* ── أدوات ─────────────────────────────────────────────────── */
+const AR = '٠١٢٣٤٥٦٧٨٩';
+const arNum = n => String(n).replace(/\d/g, d => AR[+d]);
+
+function countPeople(d){
+  if (!d) return 0;
+  let n = 0;
+  (d.lineage || []).forEach(v => { if (String(v || '').trim()) n++; });
+  (function walk(node){
+    if (!node) return;
+    if (String(node.name || '').trim()) n++;
+    (node.children || []).forEach(walk);
+  })(d.root);
+  return n;
+}
+
+function readStore(){
+  try { const r = localStorage.getItem(STORE_KEY); return r ? JSON.parse(r) : null; } catch(e){ return null; }
+}
+function writeStore(data, tpl){
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      data, tpl, count: countPeople(data), savedAt: Date.now()
+    }));
+  } catch(e){}
+}
+
+let toastT;
+function toast(html){
+  const el = $('#toast');
+  el.innerHTML = html; el.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 3600);
+}
+
+function paintFam(data){
+  const el = $('#fam'), tx = $('#famtxt');
+  const n = countPeople(data);
+  const name = (data && data.meta && String(data.meta.family || '').trim()) || '';
+  if (!n){ el.classList.add('idle'); tx.textContent = 'لا توجد شجرة بعد'; return; }
+  el.classList.remove('idle');
+  tx.innerHTML = (name ? '<b>' + name.replace(/[<>&]/g, '') + '</b> · ' : '') + arNum(n) + ' فردًا';
+}
+
+/* ── مخاطبة القالب المعروض ─────────────────────────────────── */
+function pull(cb){
+  const w = frame.contentWindow;
+  if (!CUR || !w){ cb(null); return; }
+  let done = false;
+  const h = e => {
+    const m = e.data;
+    if (!m || m.type !== 'ftt:data') return;
+    done = true; removeEventListener('message', h); cb(m.payload);
+  };
+  addEventListener('message', h);
+  try { w.postMessage({ type:'ftt:get' }, '*'); } catch(e){}
+  setTimeout(() => { if (!done){ removeEventListener('message', h); cb(null); } }, 900);
+}
+
+/* ── فتح قالب ──────────────────────────────────────────────── */
+function open(key, opts){
+  opts = opts || {};
+  const t = TPLS.find(x => x.key === key) || TPLS[0];
+  if (CUR === t.key && !opts.force) return;
+
+  const go = () => {
+    CUR = t.key;
+    $('#now').textContent = t.name;
+    $('#code').textContent = t.code;
+    document.title = t.name + ' — استوديو سُطور الأنساب';
+    document.querySelectorAll('.tpl').forEach(b =>
+      b.setAttribute('aria-current', String(b.dataset.key === t.key)));
+    try { localStorage.setItem(LAST_KEY, t.key); } catch(e){}
+    if (location.hash.slice(1) !== t.key) history.replaceState(null, '', '#' + t.key);
+    $('#load').classList.add('on');
+    frame.src = t.file;
+  };
+
+  /* اسحب ما في القالب الحالي قبل مغادرته، ليصحب المستخدمَ إلى التالي */
+  if (CUR && CARRY_ON){
+    pull(data => {
+      if (data){ CARRY = data; writeStore(data, CUR); paintFam(data); }
+      go();
+    });
+  } else {
+    if (!CUR && CARRY_ON){                 // أول فتح: التقط ما حُفظ سابقًا
+      const s = readStore();
+      if (s && s.data && countPeople(s.data)) CARRY = s.data;
+    }
+    go();
+  }
+}
+
+/* ── استقبال إشارات القوالب ────────────────────────────────── */
+addEventListener('message', e => {
+  const m = e.data;
+  if (!m || typeof m !== 'object') return;
+
+  if (m.type === 'ftt:ready'){
+    $('#load').classList.remove('on');
+    if (CARRY_ON && CARRY && countPeople(CARRY)){
+      try { frame.contentWindow.postMessage({ type:'ftt:render', payload: CARRY }, '*'); } catch(err){}
+      const t = TPLS.find(x => x.key === CUR);
+      paintFam(CARRY);
+      toast('انتقلت شجرتك إلى <b>' + (t ? t.name : 'القالب') + '</b> — ' + arNum(countPeople(CARRY)) + ' فردًا، بلا إعادة إدخال.');
+    }
+  }
+
+  if (m.type === 'ftt:data' && m.payload){   // أيّ ردّ بيانات يُحدّث الشريط
+    paintFam(m.payload);
+  }
+});
+
+/* حفظ دوري لما في القالب، ليجده المستخدم في الواجهة وعند العودة */
+setInterval(() => {
+  if (!CUR) return;
+  pull(data => { if (data){ CARRY = CARRY_ON ? data : CARRY; writeStore(data, CUR); paintFam(data); } });
+}, 20000);
+addEventListener('beforeunload', () => { /* آخر لقطة سريعة */ pull(d => { if (d) writeStore(d, CUR); }); });
+
+/* ── مفتاح نقل البيانات ────────────────────────────────────── */
+(function carryToggle(){
+  const b = $('#carry');
+  try { CARRY_ON = localStorage.getItem(CARRY_KEY) !== '0'; } catch(e){}
+  const paint = () => b.setAttribute('aria-pressed', String(CARRY_ON));
+  paint();
+  b.onclick = () => {
+    CARRY_ON = !CARRY_ON; paint();
+    try { localStorage.setItem(CARRY_KEY, CARRY_ON ? '1' : '0'); } catch(e){}
+    toast(CARRY_ON
+      ? 'نقل البيانات <b>مفعّل</b> — الأسماء تصحبك عند تبديل القالب.'
+      : 'نقل البيانات <b>موقوف</b> — لكل قالب بياناته المحفوظة وحده.');
+  };
+})();
+
+/* ── تفريغ كلّ القوالب والبدء من صفحة بيضاء ─────────────────── */
+(function freshStart(){
+  const IDS = ['ornate-fan-v1', 'ornate-classic-v1', 'ornate-chart-h-v1', 'ornate-chart-v-v1'];
+  $('#fresh').onclick = () => {
+    if (!confirm('ستُفرَّغ القوالب الأربعة من كلّ الأسماء المكتوبة وتعود صفحاتٍ بيضاء جاهزة. أتريد المتابعة؟')) return;
+    try {
+      localStorage.removeItem(STORE_KEY);
+      IDS.forEach(id => localStorage.removeItem('ftt:' + id));
+    } catch(e){}
+    CARRY = null;
+    paintFam(null);
+    const t = TPLS.find(x => x.key === CUR) || TPLS[0];
+    $('#load').classList.add('on');
+    frame.src = t.file + '?fresh=' + Date.now();
+    toast('فُرِّغت القوالب الأربعة — <b>الصفحة بيضاء</b> وجاهزة لأسمائك.');
+  };
+})();
+
+/* ── الاختصارات ────────────────────────────────────────────── */
+addEventListener('keydown', e => {
+  if (!e.altKey || e.ctrlKey || e.metaKey) return;
+  const i = ['1','2','3','4'].indexOf(e.key);
+  if (i > -1){ e.preventDefault(); open(TPLS[i].key); }
+});
+
+/* ── الإقلاع ───────────────────────────────────────────────── */
+frame.addEventListener('load', () => {
+  $('#load').classList.remove('on');
+  try { frame.contentWindow.postMessage({ type:'ftt:hello' }, '*'); } catch(e){}
+});
+
+(function boot(){
+  const s = readStore();
+  if (s && s.data) paintFam(s.data);
+  let key = (location.hash || '').replace('#','');
+  if (!TPLS.some(t => t.key === key)){
+    try { key = localStorage.getItem(LAST_KEY) || ''; } catch(e){ key = ''; }
+  }
+  if (!TPLS.some(t => t.key === key)) key = (s && s.tpl) || 'tribe';
+  open(key);
+})();
+
+addEventListener('hashchange', () => {
+  const k = (location.hash || '').replace('#','');
+  if (TPLS.some(t => t.key === k)) open(k);
+});
+</script>
+</body>
+</html>
