@@ -1,0 +1,12 @@
+{
+  "name": "سُطور من أوال 2.0",
+  "short_name": "سُطور من أوال",
+  "description": "منصة بحثية رقمية لتوثيق تراث البحرين.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/Sutoor-MinAwal-Demo.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#b45309"
+}

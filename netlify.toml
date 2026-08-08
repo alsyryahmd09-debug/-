@@ -46,6 +46,12 @@
     Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json; charset=utf-8"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
   for = "/سوتور-البحث/search-worker.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
@@ -90,3 +96,8 @@
   to = "/sutoor-search/:splat"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/shajarat-alnasab/*"
+  to = "/ansab/:splat"
+  status = 301
