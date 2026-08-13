@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>أعلام عبد القيس في التراث الإسلامي — سُطور من أوال</title>
+<meta name="description" content="سجل توثيقي متعدد الأبعاد لأعلام عبد القيس في النسب والرواية والفقه والقضاء والتاريخ — معاينة تصميم، امتداد لمنصة سُطور من أوال.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --parchment:#f2ecdc;
+  --parchment-deep:#e8dfc4;
+  --parchment-panel:#faf7ee;
+  --ink:#2b2417;
+  --ink-soft:#5a4f3a;
+  --ink-faint:#8a7d61;
+  --olive:#4f5d33;
+  --olive-deep:#38431f;
+  --brass:#b08d57;
+  --brass-deep:#8f6f3f;
+  --rule:#d8cca3;
+  --rule-soft:#e6dcbc;
+
+  --type-N:#5b7a4f;
+  --type-W:#3f6a7a;
+  --type-C:#b8923f;
+  --type-D:#a8562f;
+  --type-U:#7a7267;
+
+  --radius:12px;
+  --shadow:0 1px 2px rgba(43,36,23,.06), 0 6px 18px -8px rgba(43,36,23,.18);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--parchment);
+  color:var(--ink);
+  font-family:'Noto Kufi Arabic', sans-serif;
+  line-height:1.65;
+}
+::selection{background:var(--brass); color:var(--parchment-panel);}
+
+a{color:inherit;}
+
+.serif{font-family:'Amiri', serif;}
+
+/* ================= زخرفة الإطار العلوي ================= */
+.top-bar{
+  background:var(--olive);
+  color:var(--parchment);
+  padding:.6rem 1.5rem;
+  font-size:.78rem;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1rem; flex-wrap:wrap;
+}
+.top-bar .brand{font-weight:600; letter-spacing:.02em;}
+.top-bar .brand b{color:var(--parchment); font-family:'Amiri',serif; font-weight:700; font-size:.95rem;}
+.top-bar .tag{color:var(--brass); opacity:.9;}
+
+/* ================= الترويسة / صفحة العنوان ================= */
+.hero{
+  position:relative;
+  padding:3.2rem 1.5rem 2.4rem;
+  background:
+    radial-gradient(ellipse at top left, rgba(176,141,87,.10), transparent 55%),
+    var(--parchment-deep);
+  border-bottom:1px solid var(--rule);
+  overflow:hidden;
+}
+.hero::before, .hero::after{
+  content:"";
+  position:absolute; width:64px; height:64px;
+  border:2px solid var(--brass);
+  opacity:.55;
+}
+.hero::before{ top:18px; inset-inline-start:18px; border-inline-end:none; border-block-end:none; }
+.hero::after{ bottom:18px; inset-inline-end:18px; border-inline-start:none; border-block-start:none; }
+
+.hero-inner{ max-width:920px; margin:0 auto; position:relative; z-index:1; }
+.eyebrow{
+  font-size:.78rem; color:var(--brass-deep); letter-spacing:.12em;
+  display:flex; align-items:center; gap:.6rem; margin-bottom:.9rem;
+}
+.eyebrow .line{flex:1; height:1px; background:linear-gradient(to left, var(--rule), transparent);}
+
+h1.title{
+  font-size:clamp(2.1rem, 4.6vw, 3.1rem);
+  margin:0 0 .35rem;
+  font-weight:700;
+  color:var(--ink);
+}
+p.subtitle{
+  font-family:'Amiri', serif; font-style:italic;
+  color:var(--ink-soft); font-size:1.15rem; margin:0 0 1.5rem;
+}
+
+blockquote.epigraph{
+  margin:0 0 1.8rem; padding:0 1.3rem;
+  border-inline-start:3px solid var(--brass);
+  color:var(--ink-soft); font-size:.94rem; line-height:1.85;
+}
+
+.stats-strip{
+  display:flex; flex-wrap:wrap; gap:0;
+  border:1px solid var(--rule); border-radius:var(--radius);
+  overflow:hidden; background:var(--parchment-panel);
+}
+.stat{
+  flex:1 1 110px; padding:.85rem 1rem; text-align:center;
+  border-inline-start:1px solid var(--rule-soft);
+}
+.stat:first-child{border-inline-start:none;}
+.stat .n{font-family:'Amiri',serif; font-weight:700; font-size:1.5rem; color:var(--olive-deep); display:block;}
+.stat .l{font-size:.72rem; color:var(--ink-faint);}
+
+/* ================= شريط الفلاتر ================= */
+.toolbar{
+  position:sticky; top:0; z-index:20;
+  background:rgba(242,236,220,.94); backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--rule);
+  padding:.85rem 1.5rem;
+}
+.toolbar-inner{max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; gap:.6rem; align-items:center;}
+
+.search-box{
+  flex:1 1 220px; position:relative;
+}
+.search-box input{
+  width:100%; padding:.55rem .9rem;
+  border:1px solid var(--rule); border-radius:999px;
+  background:var(--parchment-panel); color:var(--ink);
+  font-family:inherit; font-size:.85rem;
+}
+.search-box input:focus{outline:2px solid var(--brass); outline-offset:1px;}
+
+select, .chip-group{font-family:inherit;}
+select{
+  padding:.5rem .8rem; border:1px solid var(--rule); border-radius:999px;
+  background:var(--parchment-panel); color:var(--ink-soft); font-size:.8rem;
+}
+
+.chip-group{display:flex; gap:.35rem; flex-wrap:wrap;}
+.chip{
+  border:1px solid var(--rule); background:var(--parchment-panel);
+  color:var(--ink-soft); padding:.42rem .85rem; border-radius:999px;
+  font-size:.78rem; cursor:pointer; transition:.15s;
+  display:inline-flex; align-items:center; gap:.35rem;
+}
+.chip:hover{border-color:var(--brass);}
+.chip[aria-pressed="true"]{
+  background:var(--olive); color:var(--parchment); border-color:var(--olive);
+}
+.chip .dot{width:.55rem; height:.55rem; border-radius:50%; display:inline-block;}
+
+.count-pill{
+  margin-inline-start:auto; font-size:.78rem; color:var(--ink-faint);
+  white-space:nowrap;
+}
+.reset-btn{
+  background:none; border:none; color:var(--brass-deep); font-size:.78rem;
+  text-decoration:underline; cursor:pointer; font-family:inherit;
+}
+
+/* ================= شبكة البطاقات ================= */
+main{max-width:1200px; margin:0 auto; padding:1.6rem 1.5rem 3rem;}
+#empty-state{
+  display:none; text-align:center; padding:3rem 1rem; color:var(--ink-faint);
+}
+#grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(268px, 1fr));
+  gap:1.1rem;
+}
+
+.card{
+  background:var(--parchment-panel);
+  border:1px solid var(--rule);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:1.05rem 1.1rem 1rem;
+  display:flex; flex-direction:column; gap:.6rem;
+  transition:transform .15s, box-shadow .15s;
+}
+.card:hover{ transform:translateY(-2px); box-shadow:0 4px 8px rgba(43,36,23,.08), 0 14px 28px -14px rgba(43,36,23,.3); }
+
+.card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:.6rem;}
+.idx{font-family:'Amiri',serif; color:var(--ink-faint); font-size:.75rem; opacity:.7; margin-top:.2rem;}
+
+/* الختم الدائري: يمثل نوع الصلة (الحرف) ودرجة الثقة (نسبة التعبئة) */
+.seal{ position:relative; width:52px; height:52px; flex:none; }
+.seal-ring{
+  position:absolute; inset:0; border-radius:50%;
+  background:conic-gradient(var(--seal-color) var(--pct), rgba(43,36,23,.12) 0);
+}
+.seal-core{
+  position:absolute; inset:5px; border-radius:50%;
+  background:var(--parchment-panel);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Amiri',serif; font-weight:700; font-size:1.15rem;
+  color:var(--seal-color);
+  border:1px solid var(--rule-soft);
+}
+
+.name{ font-family:'Amiri',serif; font-weight:700; font-size:1.12rem; line-height:1.4; margin:0; }
+.kunya{ font-family:'Amiri',serif; font-style:italic; color:var(--ink-soft); font-size:.86rem; margin:-.3rem 0 0; }
+.meta-line{ font-size:.76rem; color:var(--ink-faint); display:flex; gap:.4rem; flex-wrap:wrap; }
+.meta-line .nisba{color:var(--ink-soft);}
+
+.badge-row{ display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; }
+.badge{
+  font-size:.68rem; padding:.22rem .55rem; border-radius:999px;
+  background:color-mix(in srgb, var(--b) 14%, var(--parchment-panel));
+  color:var(--b); border:1px solid color-mix(in srgb, var(--b) 35%, transparent);
+  font-weight:600; white-space:nowrap;
+}
+.domains{ display:flex; flex-wrap:wrap; gap:.3rem; font-size:.75rem; color:var(--ink-soft); }
+.domains span{
+  background:var(--parchment-deep); border:1px solid var(--rule-soft);
+  padding:.18rem .5rem; border-radius:6px;
+}
+
+details{ margin-top:.15rem; border-top:1px dashed var(--rule); padding-top:.55rem; }
+summary{
+  cursor:pointer; font-size:.8rem; color:var(--brass-deep); font-weight:600;
+  list-style:none; display:flex; align-items:center; gap:.4rem;
+}
+summary::-webkit-details-marker{display:none;}
+summary::before{
+  content:"◂"; display:inline-block; transition:transform .15s; font-size:.7rem;
+}
+details[open] summary::before{ transform:rotate(-90deg); }
+
+.detail-grid{ font-size:.78rem; margin-top:.6rem; display:grid; gap:.4rem; }
+.detail-row{ display:flex; gap:.4rem; }
+.detail-row .k{ color:var(--ink-faint); flex:none; min-width:6.2em; }
+.detail-row .v{ color:var(--ink); }
+.dispute-note{
+  background:color-mix(in srgb, var(--type-D) 10%, var(--parchment-panel));
+  border:1px solid color-mix(in srgb, var(--type-D) 30%, transparent);
+  color:var(--type-D); padding:.4rem .55rem; border-radius:8px; font-size:.75rem;
+}
+.source-note{
+  background:color-mix(in srgb, var(--olive) 8%, var(--parchment-panel));
+  border:1px solid var(--rule); color:var(--ink-soft);
+  padding:.4rem .55rem; border-radius:8px; font-size:.73rem;
+}
+.no-source{ color:var(--ink-faint); font-size:.73rem; font-style:italic; }
+
+/* ================= تذييل ================= */
+footer{
+  border-top:1px solid var(--rule); background:var(--parchment-deep);
+  padding:1.6rem 1.5rem 2.2rem; margin-top:1rem;
+}
+.footer-inner{max-width:1200px; margin:0 auto;}
+.legend{ display:flex; flex-wrap:wrap; gap:1rem; font-size:.76rem; color:var(--ink-soft); margin-bottom:1rem; }
+.legend .item{display:flex; align-items:center; gap:.4rem;}
+.legend .dot{width:.7rem; height:.7rem; border-radius:50%;}
+.note{ font-size:.78rem; color:var(--ink-faint); line-height:1.8; max-width:70ch; }
+.note b{color:var(--ink-soft);}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  .card, summary::before{transition:none;}
+}
+
+@media (max-width:560px){
+  .hero{padding:2.2rem 1.1rem 1.8rem;}
+  .toolbar{padding:.7rem 1.1rem;}
+  main{padding:1.2rem 1.1rem 2.4rem;}
+}
+
+:focus-visible{ outline:2px solid var(--brass); outline-offset:2px; }
+
+/* ================= مركز التحميل (glassmorphism) ================= */
+.dl-section{
+  padding:1.6rem 1.5rem 2rem;
+  background:
+    linear-gradient(160deg, rgba(79,93,51,.94), rgba(56,67,31,.97));
+  position:relative; overflow:hidden;
+}
+.dl-section::before{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(242,236,220,.10), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(176,141,87,.18), transparent 45%);
+  pointer-events:none;
+}
+.dl-inner{max-width:1200px; margin:0 auto; position:relative; z-index:1;}
+.dl-head{display:flex; align-items:baseline; gap:.6rem; margin-bottom:1rem; flex-wrap:wrap;}
+.dl-head h2{font-family:'Amiri',serif; color:var(--parchment); font-size:1.35rem; margin:0;}
+.dl-head span{color:rgba(242,236,220,.7); font-size:.78rem;}
+
+.dl-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:.9rem;}
+.dl-card{
+  background:rgba(242,236,220,.08);
+  border:1px solid rgba(242,236,220,.18);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-radius:14px; padding:1.1rem 1.15rem;
+  display:flex; flex-direction:column; gap:.55rem;
+  transition:.15s;
+}
+.dl-card:hover{ background:rgba(242,236,220,.13); border-color:rgba(176,141,87,.55); transform:translateY(-2px); }
+.dl-icon{
+  width:38px; height:38px; border-radius:9px;
+  background:rgba(176,141,87,.22); border:1px solid rgba(176,141,87,.45);
+  display:flex; align-items:center; justify-content:center; font-size:1.05rem;
+}
+.dl-name{ color:var(--parchment); font-weight:600; font-size:.92rem; font-family:'Amiri',serif; }
+.dl-desc{ color:rgba(242,236,220,.68); font-size:.76rem; line-height:1.6; flex:1; }
+.dl-meta{ color:rgba(242,236,220,.5); font-size:.68rem; }
+.dl-btn{
+  margin-top:.3rem; align-self:flex-start;
+  background:var(--brass); color:#2b2417; border:none;
+  padding:.5rem 1.1rem; border-radius:999px; font-size:.78rem; font-weight:700;
+  cursor:pointer; font-family:inherit; transition:.15s;
+  display:inline-flex; align-items:center; gap:.4rem;
+}
+.dl-btn:hover{ background:#c39c63; }
+.dl-btn:active{ transform:scale(.97); }
+.dl-btn.done{ background:var(--olive); color:var(--parchment); }
+.dl-note{
+  margin-top:1.1rem; font-size:.72rem; color:rgba(242,236,220,.55); line-height:1.8; max-width:75ch;
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="brand"><b>سُطور من أوال</b> · النظام الأنطولوجي</span>
+  <span class="tag">معاينة وتحميل — سجل «أعلام عبد القيس»</span>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow"><span>سجل توثيقي مصفوفي</span><span class="line"></span><span>٣٥ بطاقة</span></div>
+    <h1 class="title serif">أعلام عبد القيس في التراث الإسلامي</h1>
+    <p class="subtitle">سجل توثيقي متعدد الأبعاد في النسب والرواية والفقه والقضاء والتاريخ</p>
+    <blockquote class="epigraph serif">تضم هذه القاعدة التوثيقية الأولية بطاقات لشخصيات ارتبطت بعبد القيس بالنسب القبلي المباشر، أو بالولاء، أو بالنسبة العبديّة، أو بصلات نسبية وقع فيها خلاف بين المصادر. ولا تُعامل هذه الشخصيات على درجة واحدة من ثبوت الصلة بعبد القيس أو المكانة العلمية أو التوثيق الحديثي. وتفصل كل بطاقة بين طبيعة الصلة القبلية، ونوع الدليل الذي يثبتها، ودرجة الثقة في النتيجة، والمجال العلمي أو التاريخي للشخصية، والتقييم الحديثي عند كونها من الرواة، والمذهب الفقهي عند ثبوته بمصدر معتبر.</blockquote>
+    <div class="stats-strip" id="stats-strip"></div>
+  </div>
+</header>
+
+
+<section class="dl-section" aria-labelledby="dl-title">
+  <div class="dl-inner">
+    <div class="dl-head">
+      <h2 id="dl-title" class="serif">مركز التحميل</h2>
+      <span>ثلاثة ملفات — تنزيل مباشر من داخل هذه الصفحة، بلا خادم وبلا اتصال إضافي</span>
+    </div>
+    <div class="dl-grid">
+
+      <div class="dl-card">
+        <div class="dl-icon">🗄️</div>
+        <div class="dl-name">abd_alqays_schema_and_data.sql</div>
+        <div class="dl-desc">مخطط قاعدة البيانات الكامل (PostgreSQL) + بيانات البطاقات الـ٣٥ جاهزة كـINSERT، مُختبَر من الصفر بلا أخطاء.</div>
+        <div class="dl-meta">SQL نصي · 30 كيلوبايت</div>
+        <button class="dl-btn" data-file="sql" onclick="downloadEmbedded('sql', this)">⬇ تنزيل</button>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-icon">🐍</div>
+        <div class="dl-name">aq_extract_pipeline.zip</div>
+        <div class="dl-desc">حزمة بروتوكول AQ-Extract بايثون (بحث، حل كيانات، قواعد حتمية، بوابة قرار) — مُختبَرة تكاملياً ضد القاعدة الفعلية.</div>
+        <div class="dl-meta">ZIP · 7 ملفات · 19 كيلوبايت</div>
+        <button class="dl-btn" data-file="zip" onclick="downloadEmbedded('zip', this)">⬇ تنزيل</button>
+      </div>
+
+      <div class="dl-card">
+        <div class="dl-icon">📄</div>
+        <div class="dl-name">هذه الصفحة (معاينة وتحميل)</div>
+        <div class="dl-desc">نسخة مستقلة كاملة من هذه الصفحة نفسها — تُفتح بأي متصفح بلا إنترنت بعد التنزيل.</div>
+        <div class="dl-meta">HTML مكتفٍ بذاته</div>
+        <button class="dl-btn" onclick="downloadSelf(this)">⬇ تنزيل</button>
+      </div>
+
+    </div>
+    <p class="dl-note">
+      الملفان الأول والثاني (SQL وZIP) مُضمَّنان داخل هذه الصفحة نفسها بترميز base64 — الزر يُحوّلهما إلى ملف فعلي
+      عبر المتصفح مباشرة دون أي طلب شبكي. الصيغتان نصيّتان (SQL) وأرشيف قياسي (ZIP) — لا تحتاجان برنامجاً
+      متخصصاً غير محرر نصوص أو أداة فك ضغط عادية.
+    </p>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search-box">
+      <input type="search" id="search" placeholder="ابحث بالاسم أو الكنية أو النسبة…" aria-label="البحث في الأعلام">
+    </div>
+    <div class="chip-group" id="type-chips" role="group" aria-label="نوع الصلة"></div>
+    <select id="domain-select" aria-label="المجال"><option value="">كل المجالات</option></select>
+    <select id="region-select" aria-label="النطاق الجغرافي"><option value="">كل المواطن</option></select>
+    <select id="min-confidence" aria-label="أدنى درجة ثقة">
+      <option value="1">كل درجات الثقة</option>
+      <option value="2">٢/٥ فأعلى</option>
+      <option value="3">٣/٥ فأعلى</option>
+      <option value="4">٤/٥ فأعلى</option>
+      <option value="5">٥/٥ فقط</option>
+    </select>
+    <button class="reset-btn" id="reset-btn">إعادة ضبط</button>
+    <span class="count-pill" id="count-pill"></span>
+  </div>
+</div>
+
+<main>
+  <div id="grid"></div>
+  <div id="empty-state">لا توجد بطاقات مطابقة لهذا التصفية. جرّب إعادة الضبط.</div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="legend" id="legend"></div>
+    <p class="note">
+      <b>ملاحظة منهجية:</b> هذه معاينة تصميم لسجل قاعدة البيانات، لا نسخة نهائية للنشر.
+      حقلا «التقييم الحديثي» و«المذهب الفقهي» ودرجات الثقة مبنية على المصفوفة الأولية للمشروع؛
+      وحقل «التوثيق المصدري» (النص المقتبس وأرقام الأجزاء والصفحات) لا يزال قيد التفريغ من الطبعات
+      المعتمدة لكل بطاقة على حدة، ولذلك لا يظهر إلا لبطاقة واحدة أُشير فيها صراحةً إلى مصدرها في وثيقة
+      المشروع الأصلية. امتداد لمنصة <b>سُطور من أوال</b>.
+    </p>
+  </div>
+</footer>
+
+<script>
+const RECORDS = [{"id": 1, "name": "المنذر بن عائذ العصري العبدي", "kunya": "أبو سعيد / الأشج", "nisba": "العصري العبدي", "geo": "البحرين القديمة / أوال", "regions": ["البحرين القديمة", "أوال"], "notes": "سيد وفد عبد القيس وأشجها", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "صحابي (عدل)", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "صحبة/تابعية", "icon": "🕌"}, {"name": "سياسة وقيادة", "icon": "👑"}, {"name": "لغة وخطابة", "icon": "🗣️"}], "sourced": 0, "sourceNote": null}, {"id": 2, "name": "الجارود بن المعلى العبدي", "kunya": "أبو غياث", "nisba": "العبدي", "geo": "البحرين / البصرة", "regions": ["البحرين", "البصرة"], "notes": "سيد عبد القيس ورئيسها بالبصرة", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "صحابي (عدل)", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "صحبة/تابعية", "icon": "🕌"}, {"name": "سياسة وقيادة", "icon": "👑"}], "sourced": 0, "sourceNote": null}, {"id": 3, "name": "قيس بن النعمان العبدي", "kunya": "أبو النعمان", "nisba": "العبدي", "geo": "البحرين", "regions": ["البحرين"], "notes": "من صحابة الوفد", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "صحابي (عدل)", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "صحبة/تابعية", "icon": "🕌"}, {"name": "رواية", "icon": "📚"}], "sourced": 0, "sourceNote": null}, {"id": 4, "name": "زيد بن صوحان العبدي", "kunya": "أبو سلمان", "nisba": "العبدي اللكيزي", "geo": "البحرين / الكوفة", "regions": ["البحرين", "الكوفة"], "notes": "تابعي جليل وعالم وفارس", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "ثقة", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "حديث", "icon": "📖"}, {"name": "فقه", "icon": "⚖️"}, {"name": "لغة وخطابة", "icon": "🗣️"}], "sourced": 0, "sourceNote": null}, {"id": 5, "name": "صعصعة بن صوحان العبدي", "kunya": "أبو طلحة", "nisba": "العبدي", "geo": "الكوفة / البحرين", "regions": ["الكوفة", "البحرين"], "notes": "من ألسنة العرب وخطبائها", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "مقبول / محدث", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "لغة وخطابة", "icon": "🗣️"}, {"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 6, "name": "سيحان بن صوحان العبدي", "kunya": "أبو خطّاب", "nisba": "العبدي", "geo": "الكوفة", "regions": ["الكوفة"], "notes": "خطيب وقائد عسكري يوم الجمل", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "لا ينطبق", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "سياسة وقيادة", "icon": "👑"}, {"name": "لغة وخطابة", "icon": "🗣️"}], "sourced": 0, "sourceNote": null}, {"id": 7, "name": "عبد الله بن الجارود العبدي", "kunya": "طير العناق", "nisba": "العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "رأس عبد القيس ووجيهها بالبصرة", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N2", "evidenceLabel": "سلسلة نسب موثقة (متوارثة بالطبقات)", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "لا ينطبق", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "سياسة وقيادة", "icon": "👑"}], "sourced": 0, "sourceNote": null}, {"id": 8, "name": "المنذر بن الجارود العبدي", "kunya": "أبو الأشعث", "nisba": "العبدي الجارودي", "geo": "البصرة / إصطخر", "regions": ["البصرة", "إصطخر"], "notes": "والٍ وقائد وتابعي", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "مقبول", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "قضاء", "icon": "🏛️"}, {"name": "سياسة وقيادة", "icon": "👑"}, {"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 9, "name": "الحكم بن المنذر بن الجارود العبدي", "kunya": "أبو غيلان", "nisba": "العبدي الجارودي", "geo": "البصرة", "regions": ["البصرة"], "notes": "سيد عبد القيس ورأسها بالبصرة", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N2", "evidenceLabel": "سلسلة نسب موثقة (متوارثة بالطبقات)", "confidence": 4, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "لا ينطبق", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "سياسة وقيادة", "icon": "👑"}], "sourced": 0, "sourceNote": null}, {"id": 10, "name": "المنذر بن الوليد الجارودي العبدي", "kunya": "أبو العباس", "nisba": "العبدي الجارودي", "geo": "البصرة", "regions": ["البصرة"], "notes": "محدث ثقة من بيت الجارود", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N2", "evidenceLabel": "سلسلة نسب موثقة (متوارثة بالطبقات)", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "ثقة", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "حديث", "icon": "📖"}, {"name": "رواية", "icon": "📚"}], "sourced": 0, "sourceNote": null}, {"id": 11, "name": "المنذر بن مالك العوقي العبدي", "kunya": "أبو نضرة", "nisba": "العوقي العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "إمام بصري جليل وفكيه التابعين", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "ثقة ثبت", "fiqhSchool": "قبل استقرار المذاهب (فقه بصري)", "domains": [{"name": "فقه", "icon": "⚖️"}, {"name": "حديث", "icon": "📖"}, {"name": "تفسير", "icon": "📜"}], "sourced": 0, "sourceNote": null}, {"id": 12, "name": "عبد الملك بن المنذر العوقي العبدي", "kunya": "أبو مجاهز", "nisba": "العوقي العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "محدث بصري تابعي", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N2", "evidenceLabel": "سلسلة نسب موثقة (متوارثة بالطبقات)", "confidence": 4, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "صدوق", "fiqhSchool": "قبل استقرار المذاهب (فقه بصري)", "domains": [{"name": "حديث", "icon": "📖"}, {"name": "رواية", "icon": "📚"}], "sourced": 0, "sourceNote": null}, {"id": 13, "name": "شهاب بن عباد العصري العبدي", "kunya": "أبو عباد", "nisba": "العصري العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "محدث بصري روى له البخاري في الأدب المفرد", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 4, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "مختلف فيه (مقبول)", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}, {"name": "رواية", "icon": "📚"}], "sourced": 0, "sourceNote": null}, {"id": 14, "name": "يحيى بن عبد الرحمن العصري العبدي", "kunya": "أبو بكر", "nisba": "العصري العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "محدث ثقة بصري", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N1", "evidenceLabel": "نص نسبي أصلي", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "ثقة", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 15, "name": "هود بن شهاب العصري العبدي", "kunya": "أبو شهاب", "nisba": "العصري العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "محدث بصري من البيت العصري", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N2", "evidenceLabel": "سلسلة نسب موثقة (متوارثة بالطبقات)", "confidence": 3, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "مقبول", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 16, "name": "أبان بن أبي عياش العبدي", "kunya": "أبو إسماعيل", "nisba": "العبدي (مولاهم)", "geo": "البصرة", "regions": ["البصرة"], "notes": "ثابت الولاء لكن حديثه ضعيف متروك", "type": "W", "typeLabel": "ولاء", "evidenceCode": "W1", "evidenceLabel": "نص ولاء صريح", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "ضعيف / متروك", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}, {"name": "رواية", "icon": "📚"}], "sourced": 0, "sourceNote": null}, {"id": 17, "name": "يونس بن عبيد بن دينار العبدي", "kunya": "أبو عبد الله", "nisba": "العبدي (مولاهم)", "geo": "البصرة", "regions": ["البصرة"], "notes": "إمام البصرة وحافظها وفقيهها ومرجعها", "type": "W", "typeLabel": "ولاء", "evidenceCode": "W1", "evidenceLabel": "نص ولاء صريح", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "ثقة ثبت إمام", "fiqhSchool": "قبل استقرار المذاهب (فقه بصري)", "domains": [{"name": "فقه", "icon": "⚖️"}, {"name": "حديث", "icon": "📖"}], "sourced": 1, "sourceNote": "تهذيب الكمال للمزي — الجزء والصفحة والنص الحرفي بانتظار التفريغ من الطبعة المعتمدة"}, {"id": 18, "name": "علي بن الحسن بن شقيق العبدي", "kunya": "أبو عبد الرحمن", "nisba": "العبدي (مولى آل الجارود)", "geo": "مرو / خراسان", "regions": ["مرو", "خراسان"], "notes": "حافظ ومحدث من أصحاب ابن المبارك", "type": "W", "typeLabel": "ولاء", "evidenceCode": "W1", "evidenceLabel": "نص ولاء صريح", "confidence": 4, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "حافظ ثقة", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 19, "name": "يعقوب بن إبراهيم الدورقي العبدي", "kunya": "أبو يوسف", "nisba": "العبدي القيسي (مولاهم)", "geo": "بغداد", "regions": ["بغداد"], "notes": "صاحب المسند ومن كبار أئمة الحفاظ", "type": "W", "typeLabel": "ولاء", "evidenceCode": "W1", "evidenceLabel": "نص ولاء صريح", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "حافظ ثقة", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 20, "name": "أحمد بن إبراهيم الدورقي العبدي", "kunya": "أبو عبد الله", "nisba": "العبدي القيسي (مولاهم)", "geo": "بغداد", "regions": ["بغداد"], "notes": "حافظ ومحدث بغدادي أخو يعقوب", "type": "W", "typeLabel": "ولاء", "evidenceCode": "W1", "evidenceLabel": "نص ولاء صريح", "confidence": 5, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "حافظ ثقة", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 21, "name": "علي بن مجاهد الكابلي العبدي", "kunya": "أبو مجاهد", "nisba": "العبدي (مولى حكيم بن جبلة)", "geo": "الري", "regions": ["الري"], "notes": "قاضي الري ومحدث ضعيف الحديث", "type": "W", "typeLabel": "ولاء", "evidenceCode": "W1", "evidenceLabel": "نص ولاء صريح", "confidence": 4, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "ضعيف الحديث", "fiqhSchool": "غير محدد", "domains": [{"name": "قضاء", "icon": "🏛️"}, {"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 22, "name": "مسلم بن مخراق العبدي", "kunya": "أبو الأسود", "nisba": "العبدي (مولى بني قرة)", "geo": "البصرة", "regions": ["البصرة"], "notes": "محدث بصري تابعي", "type": "W", "typeLabel": "ولاء", "evidenceCode": "W1", "evidenceLabel": "نص ولاء صريح", "confidence": 3, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "مقبول", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 23, "name": "بشر بن الحكم العبدي النيسابوري", "kunya": "أبو عبد الرحمن", "nisba": "العبدي النيسابوري", "geo": "نيسابور / مكة", "regions": ["نيسابور", "مكة"], "notes": "من كبار المحدثين وصحبة الشافعي", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "R1", "evidenceLabel": "نسبة عبدية مجردة (قيد المطابقة)", "confidence": 4, "status": "Pending Matching", "statusLabel": "قيد المطابقة", "disputeNotes": null, "hadithRating": "ثقة ثبت", "fiqhSchool": "من أصحاب الشافعي ورواته", "domains": [{"name": "فقه", "icon": "⚖️"}, {"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 24, "name": "أحمد بن محمد بن حسن العبدي", "kunya": "أبو يعلى (ابن الصواف)", "nisba": "العبدي البصري", "geo": "البصرة", "regions": ["البصرة"], "notes": "إمام المالكية بالبصرة ومدار فتواهم", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "R1", "evidenceLabel": "نسبة عبدية مجردة (قيد المطابقة)", "confidence": 4, "status": "Pending Matching", "statusLabel": "قيد المطابقة", "disputeNotes": null, "hadithRating": "لا ينطبق (فقيه جامع)", "fiqhSchool": "مالكي (شيخ مالكية البصرة)", "domains": [{"name": "فقه", "icon": "⚖️"}], "sourced": 0, "sourceNote": null}, {"id": 25, "name": "مهدي بن حرب الهجري العبدي", "kunya": "أبو مهدي", "nisba": "الهجري العبدي", "geo": "الكوفة / هجر", "regions": ["الكوفة", "هجر"], "notes": "راوٍ مرتبط بهجر موطن عبد القيس", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "R1", "evidenceLabel": "نسبة عبدية مجردة (قيد المطابقة)", "confidence": 3, "status": "Pending Matching", "statusLabel": "قيد المطابقة", "disputeNotes": null, "hadithRating": "قيد التحقق", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 26, "name": "إبراهيم بن أحمد العبدي المكي", "kunya": "أبو إسحاق", "nisba": "العبدي المكي", "geo": "مكة", "regions": ["مكة"], "notes": "من فقهاء المالكية بالحرم المكي", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "U1", "evidenceLabel": "دليل غير كافٍ", "confidence": 2, "status": "Needs primary source", "statusLabel": "يحتاج مصدراً أصلياً", "disputeNotes": null, "hadithRating": "قيد التحقق", "fiqhSchool": "مالكي", "domains": [{"name": "فقه", "icon": "⚖️"}], "sourced": 0, "sourceNote": null}, {"id": 27, "name": "داود بن علي العبدي", "kunya": "أبو سليمان", "nisba": "العبدي البصري", "geo": "البصرة / بغداد", "regions": ["البصرة", "بغداد"], "notes": "فقيه ومحدث بصري بغدادي", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "U1", "evidenceLabel": "دليل غير كافٍ", "confidence": 2, "status": "Needs primary source", "statusLabel": "يحتاج مصدراً أصلياً", "disputeNotes": null, "hadithRating": "قيد التحقق", "fiqhSchool": "طبقات الشافعية", "domains": [{"name": "فقه", "icon": "⚖️"}, {"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 28, "name": "عبد الله بن أحمد العبقسي العبدي", "kunya": "أبو القاسم", "nisba": "العبقسي العبدي", "geo": "بغداد", "regions": ["بغداد"], "notes": "فقيه شافعي ومحدث بغدادي عببقسي", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "R1", "evidenceLabel": "نسبة عبدية مجردة (قيد المطابقة)", "confidence": 3, "status": "Pending Matching", "statusLabel": "قيد المطابقة", "disputeNotes": null, "hadithRating": "قيد التحقق", "fiqhSchool": "شافعي", "domains": [{"name": "فقه", "icon": "⚖️"}, {"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 29, "name": "محمد بن يحيى بن مهدي العبدي", "kunya": "أبو عبد الله", "nisba": "العبدي البصري", "geo": "البصرة / بغداد", "regions": ["البصرة", "بغداد"], "notes": "قاضٍ من فقهاء الحنفية بالبصرة", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "R1", "evidenceLabel": "نسبة عبدية مجردة (قيد المطابقة)", "confidence": 3, "status": "Pending Matching", "statusLabel": "قيد المطابقة", "disputeNotes": null, "hadithRating": "قيد التحقق", "fiqhSchool": "حنفي", "domains": [{"name": "قضاء", "icon": "🏛️"}, {"name": "فقه", "icon": "⚖️"}], "sourced": 0, "sourceNote": null}, {"id": 30, "name": "عمر بن محمد بن يوسف العبدي", "kunya": "أبو حفص", "nisba": "العبدي البصري", "geo": "البصرة", "regions": ["البصرة"], "notes": "فقيه حنفي بصري وراوية آثار", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "R1", "evidenceLabel": "نسبة عبدية مجردة (قيد المطابقة)", "confidence": 3, "status": "Pending Matching", "statusLabel": "قيد المطابقة", "disputeNotes": null, "hadithRating": "قيد التحقق", "fiqhSchool": "حنفي", "domains": [{"name": "فقه", "icon": "⚖️"}], "sourced": 0, "sourceNote": null}, {"id": 31, "name": "أحمد بن حميد العبدي", "kunya": "أبو طالب", "nisba": "العبدي", "geo": "بغداد", "regions": ["بغداد"], "notes": "من كبار فقهاء الحنابلة وناقلي المسائل", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "R1", "evidenceLabel": "نسبة عبدية مجردة (قيد المطابقة)", "confidence": 4, "status": "Pending Matching", "statusLabel": "قيد المطابقة", "disputeNotes": null, "hadithRating": "ثقة", "fiqhSchool": "حنبلي (من كبار ناقلي المسائل)", "domains": [{"name": "فقه", "icon": "⚖️"}], "sourced": 0, "sourceNote": null}, {"id": 32, "name": "العباس بن محمد العبدي", "kunya": "أبو الفضل", "nisba": "العبدي", "geo": "بغداد", "regions": ["بغداد"], "notes": "محدث حنبلي وراوٍ لمسائل الإمام أحمد", "type": "C", "typeLabel": "نسبة قيد التحقق", "evidenceCode": "U1", "evidenceLabel": "دليل غير كافٍ", "confidence": 2, "status": "Needs primary source", "statusLabel": "يحتاج مصدراً أصلياً", "disputeNotes": null, "hadithRating": "قيد التحقق", "fiqhSchool": "حنبلي", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 33, "name": "نصر بن عمران الضبعي", "kunya": "أبو جمرة", "nisba": "الضبعي العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "تابعي وثقة ثبت ينسب لعبد القيس أو ضبيعة", "type": "D", "typeLabel": "نسب مختلف فيه", "evidenceCode": "D1", "evidenceLabel": "خلاف نسبي بين المصادر", "confidence": 3, "status": "Disputed Lineage", "statusLabel": "نسب مختلف فيه", "disputeNotes": "مختلف فيه بين عبد القيس وضبيعة (ربيعة)", "hadithRating": "ثقة ثبت", "fiqhSchool": "قبل استقرار المذاهب", "domains": [{"name": "تفسير", "icon": "📜"}, {"name": "حديث", "icon": "📖"}, {"name": "فقه", "icon": "⚖️"}], "sourced": 0, "sourceNote": null}, {"id": 34, "name": "عمرو بن مالك النكري", "kunya": "أبو مالك", "nisba": "النكري العبدي", "geo": "البصرة", "regions": ["البصرة"], "notes": "محدث بصري اختلف في نسبه مع النمر", "type": "D", "typeLabel": "نسب مختلف فيه", "evidenceCode": "D1", "evidenceLabel": "خلاف نسبي بين المصادر", "confidence": 2, "status": "Disputed Lineage", "statusLabel": "نسب مختلف فيه", "disputeNotes": "مختلف فيه بين عبد القيس والنمر بن قاسط", "hadithRating": "صدوق / يكتب حديثه", "fiqhSchool": "غير محدد", "domains": [{"name": "حديث", "icon": "📖"}], "sourced": 0, "sourceNote": null}, {"id": 35, "name": "العوام بن محمد الزجاج العبدي", "kunya": "أبو البهلول", "nisba": "الزجاج العبدي", "geo": "أوال (البحرين)", "regions": ["أوال (البحرين)"], "notes": "قائد سياسي وزعيم أوال وقاهر القرامطة", "type": "N", "typeLabel": "نسب مباشر", "evidenceCode": "N2", "evidenceLabel": "سلسلة نسب موثقة (متوارثة بالطبقات)", "confidence": 4, "status": "Verified", "statusLabel": "موثّق", "disputeNotes": null, "hadithRating": "لا ينطبق", "fiqhSchool": "حنفي (آل الزجاج)", "domains": [{"name": "سياسة وقيادة", "icon": "👑"}, {"name": "تاريخ", "icon": "🏺"}], "sourced": 1, "sourceNote": "خلاصة كتاب الوزان «بلاد البحرين في فترة الإمارتين» على المنصة (ف٧، ص٢٨٤-٢٨٥): «المذهب الحنفي مع آل الزجاج» — وفق ما ذكره المستخدم، أبو البهلول وأخوه على مذهب أبي حنيفة النعمان؛ إعادة صياغة موثقة بالصفحة لا نص حرفي عن طبعة دار المرقاب 2019."}];
+const FACETS = {"regions": ["أوال", "إصطخر", "البحرين", "البحرين القديمة", "البصرة", "الري", "الكوفة", "بغداد", "خراسان", "مرو", "مكة", "نيسابور", "هجر"], "domains": [{"name": "صحبة/تابعية", "icon": "🕌"}, {"name": "سياسة وقيادة", "icon": "👑"}, {"name": "لغة وخطابة", "icon": "🗣️"}, {"name": "رواية", "icon": "📚"}, {"name": "حديث", "icon": "📖"}, {"name": "فقه", "icon": "⚖️"}, {"name": "قضاء", "icon": "🏛️"}, {"name": "تفسير", "icon": "📜"}, {"name": "تاريخ", "icon": "🏺"}]};
+
+const TYPE_META = {
+  N: {label:'نسب مباشر',        color:'var(--type-N)'},
+  W: {label:'ولاء',              color:'var(--type-W)'},
+  C: {label:'نسبة قيد التحقق',   color:'var(--type-C)'},
+  D: {label:'نسب مختلف فيه',     color:'var(--type-D)'},
+  U: {label:'غير محسوم',         color:'var(--type-U)'},
+};
+
+const arDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+function toAr(n){ return String(n).split('').map(c => /[0-9]/.test(c) ? arDigits[+c] : c).join(''); }
+function pad2(n){ return n < 10 ? '٠'+toAr(n) : toAr(n); }
+
+function normalize(s){
+  if(!s) return '';
+  return s
+    .replace(/[أإآا]/g,'ا')
+    .replace(/ة/g,'ه')
+    .replace(/[يى]/g,'ي')
+    .replace(/[ً-ٰٟ]/g,'')
+    .toLowerCase();
+}
+
+// ------- الترويسة: شريط الإحصاء -------
+function renderStats(){
+  const total = RECORDS.length;
+  const byType = {};
+  RECORDS.forEach(r => byType[r.type] = (byType[r.type]||0)+1);
+  const domainCount = FACETS.domains.length;
+  const items = [
+    [total, 'بطاقة شخصية'],
+    [Object.keys(byType).length, 'فئات الصلة'],
+    [domainCount, 'مجالاً معرفياً'],
+    [RECORDS.filter(r=>r.sourced).length, 'دعوى مسندة بمصدر مسمّى'],
+  ];
+  document.getElementById('stats-strip').innerHTML = items.map(([n,l]) =>
+    `<div class="stat"><span class="n">${toAr(n)}</span><span class="l">${l}</span></div>`).join('');
+}
+
+// ------- شريط الفلاتر -------
+let state = { type:null, domain:'', region:'', minConfidence:1, query:'' };
+
+function renderTypeChips(){
+  const el = document.getElementById('type-chips');
+  const all = ['N','W','C','D','U'];
+  el.innerHTML = all.map(t => {
+    const m = TYPE_META[t];
+    return `<button class="chip" data-type="${t}" aria-pressed="false" style="--b:${m.color}">
+              <span class="dot" style="background:${m.color}"></span>${m.label}
+            </button>`;
+  }).join('');
+  el.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.type;
+      state.type = (state.type === t) ? null : t;
+      syncChips(); render();
+    });
+  });
+}
+function syncChips(){
+  document.querySelectorAll('#type-chips .chip').forEach(btn=>{
+    btn.setAttribute('aria-pressed', String(btn.dataset.type === state.type));
+  });
+}
+
+function renderSelects(){
+  const domSel = document.getElementById('domain-select');
+  FACETS.domains.forEach(d => {
+    const o = document.createElement('option');
+    o.value = d.name; o.textContent = `${d.icon} ${d.name}`;
+    domSel.appendChild(o);
+  });
+  const regSel = document.getElementById('region-select');
+  FACETS.regions.forEach(r => {
+    const o = document.createElement('option');
+    o.value = r; o.textContent = r;
+    regSel.appendChild(o);
+  });
+}
+
+// ------- بطاقة واحدة -------
+function cardHTML(r, i){
+  const m = TYPE_META[r.type];
+  const pct = Math.round((r.confidence/5)*100) + '%';
+  const domainsHTML = r.domains.map(d => `<span>${d.icon} ${d.name}</span>`).join('');
+  const disputeHTML = r.disputeNotes
+    ? `<div class="dispute-note">⚠ ${r.disputeNotes}</div>` : '';
+  const sourceHTML = r.sourced
+    ? `<div class="source-note">📎 ${r.sourceNote}</div>`
+    : `<div class="no-source">لا استشهاد مصدري مُفرَّغ بعد لهذه البطاقة.</div>`;
+
+  return `
+  <article class="card" data-id="${r.id}">
+    <div class="card-top">
+      <div class="seal" style="--pct:${pct}; --seal-color:${m.color}" title="الثقة: ${toAr(r.confidence)}/٥ · ${r.evidenceCode}">
+        <div class="seal-ring"></div>
+        <div class="seal-core">${r.type}</div>
+      </div>
+      <span class="idx">بطاقة ${pad2(i+1)}</span>
+    </div>
+
+    <div>
+      <h3 class="name">${r.name}</h3>
+      ${r.kunya ? `<p class="kunya">${r.kunya}</p>` : ''}
+    </div>
+
+    <div class="meta-line">
+      <span class="nisba">${r.nisba || ''}</span>
+      <span>·</span>
+      <span>${r.geo || ''}</span>
+    </div>
+
+    <div class="badge-row">
+      <span class="badge" style="--b:${m.color}">${m.label}</span>
+      <span class="badge" style="--b:var(--ink-faint)">${r.evidenceCode}</span>
+      <span class="badge" style="--b:var(--brass-deep)">${r.statusLabel}</span>
+    </div>
+
+    <div class="domains">${domainsHTML}</div>
+
+    <details>
+      <summary>التفاصيل الكاملة</summary>
+      <div class="detail-grid">
+        <div class="detail-row"><span class="k">نوع الدليل</span><span class="v">${r.evidenceCode} — ${r.evidenceLabel}</span></div>
+        <div class="detail-row"><span class="k">درجة الثقة</span><span class="v">${toAr(r.confidence)}/٥</span></div>
+        <div class="detail-row"><span class="k">التقييم الحديثي</span><span class="v">${r.hadithRating}</span></div>
+        <div class="detail-row"><span class="k">المذهب الفقهي</span><span class="v">${r.fiqhSchool}</span></div>
+        ${r.notes ? `<div class="detail-row"><span class="k">ملاحظة</span><span class="v">${r.notes}</span></div>` : ''}
+        ${disputeHTML}
+        ${sourceHTML}
+      </div>
+    </details>
+  </article>`;
+}
+
+function matches(r){
+  if(state.type && r.type !== state.type) return false;
+  if(state.domain && !r.domains.some(d => d.name === state.domain)) return false;
+  if(state.region && !r.regions.some(reg => reg.indexOf(state.region) !== -1)) return false;
+  if(r.confidence < state.minConfidence) return false;
+  if(state.query){
+    const q = normalize(state.query);
+    const hay = normalize([r.name, r.kunya, r.nisba].join(' '));
+    if(hay.indexOf(q) === -1) return false;
+  }
+  return true;
+}
+
+function render(){
+  const filtered = RECORDS.filter(matches);
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty-state');
+  grid.innerHTML = filtered.map((r,i) => cardHTML(r,i)).join('');
+  empty.style.display = filtered.length ? 'none' : 'block';
+  document.getElementById('count-pill').textContent = `عرض ${toAr(filtered.length)} من ${toAr(RECORDS.length)}`;
+}
+
+function renderLegend(){
+  const el = document.getElementById('legend');
+  el.innerHTML = Object.entries(TYPE_META).map(([t,m]) =>
+    `<span class="item"><span class="dot" style="background:${m.color}"></span>${t} — ${m.label}</span>`
+  ).join('') + `<span class="item">◐ الختم الدائري = درجة الثقة (١–٥)</span>`;
+}
+
+document.getElementById('search').addEventListener('input', e => { state.query = e.target.value; render(); });
+document.getElementById('domain-select').addEventListener('change', e => { state.domain = e.target.value; render(); });
+document.getElementById('region-select').addEventListener('change', e => { state.region = e.target.value; render(); });
+document.getElementById('min-confidence').addEventListener('change', e => { state.minConfidence = +e.target.value; render(); });
+document.getElementById('reset-btn').addEventListener('click', () => {
+  state = { type:null, domain:'', region:'', minConfidence:1, query:'' };
+  document.getElementById('search').value = '';
+  document.getElementById('domain-select').value = '';
+  document.getElementById('region-select').value = '';
+  document.getElementById('min-confidence').value = '1';
+  syncChips(); render();
+});
+
+renderStats();
+renderTypeChips();
+renderSelects();
+renderLegend();
+render();
+
+// ============== مركز التحميل ==============
+const EMBEDDED_FILES = {
+  sql: { b64: "LS0gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tINmF2YbYtdmR2Kkg2LPZj9i32YjYsSDZhdmGINij2YjYp9mEIOKAlCDYs9is2YQgwqvYo9i52YTYp9mFINi52KjYryDYp9mE2YLZitizINmB2Yog2KfZhNiq2LHYp9irINin2YTYpdiz2YTYp9mF2YrCuwotLSBQcm9zb3BvZ3JhcGhpY2FsIE11bHRpLURpbWVuc2lvbmFsIERhdGFiYXNlICB8ICBQb3N0Z3JlU1FMIDE2KwotLSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KLS0g2YXYrdiq2YjZitin2Kog2YfYsNinINin2YTZhdmE2YEg2KjYp9mE2KrYsdiq2YrYqDoKLS0gICDZoSkgRERMIOKAlCDYpdmG2LTYp9ihINin2YTYrNiv2KfZiNmEINin2YTYs9iq2KkgKyDYp9mE2YHZh9in2LHYsyArINi52LHYtiAoVklFVykg2KfZhNio2LfYp9mC2KkKLS0gICDZoikgRE1MIOKAlCDYqti52KjYptipINin2YTYrNiv2KfZiNmEINin2YTYo9ix2KjYudipINin2YTYo9i12YTZitipINio2KfZhNio2LfYp9mC2KfYqiDYp9mE2YAzNSDZg9in2YXZhNipCi0tICAg2aMpIERNTCDigJQg2KzYr9mI2YTYpyBTT1VSQ0Ug2YhFVklERU5DRSAo2KfZhNiq2YjYq9mK2YIg2KfZhNmF2LXYr9ix2YopCi0tCi0tINiq2LTYutmK2YQg2KfZhNmF2YTZgToKLS0gICBjcmVhdGVkYiBzdXRvb3JfYWJkYWxxYXlzCi0tICAgcHNxbCAtZCBzdXRvb3JfYWJkYWxxYXlzIC1mIGFiZF9hbHFheXNfc2NoZW1hX2FuZF9kYXRhLnNxbAotLQotLSDYrNmP2LHZkNmR2Kgg2YfYsNinINin2YTZhdmE2YEg2YHYudmE2YrYp9mLINi52YTZiSBQb3N0Z3JlU1FMIDE2INmC2KjZhCDYp9mE2KrYs9mE2YrZhSAo2KXZhti02KfYoSDYp9mE2KzYr9in2YjZhNiMCi0tINil2K/Yrtin2YQg2KzZhdmK2Lkg2KfZhNio2LfYp9mC2KfYqiDYp9mE2YAzNSDYudio2LEg2KfZhNis2K/Yp9mI2YQg2KfZhNiz2KrYjCDYp9iu2KrYqNin2LEg2KfZhNio2K3YqyDYp9mE2YHZiNix2YoKLS0gcGdfdHJnbS90c3ZlY3RvctiMINmI2KfYs9iq2LnZhNin2YUgcGVyc29uX2NhcmRfdmlldykg4oCUINmI2YbYrNitINiv2YjZhiDYo9iu2LfYp9ihLgotLSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KCi0tID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQotLSDYs9mP2LfZiNixINmF2YYg2KPZiNin2YQg4oCUINmC2KfYudiv2Kkg2KjZitin2YbYp9iqIMKr2KPYudmE2KfZhSDYudio2K8g2KfZhNmC2YrYsyDZgdmKINin2YTYqtix2KfYqyDYp9mE2KXYs9mE2KfZhdmKwrsKLS0gUHJvc29wb2dyYXBoaWNhbCBNdWx0aS1EaW1lbnNpb25hbCBEYXRhYmFzZSBTY2hlbWEKLS0gUG9zdGdyZVNRTCAxNisKLS0gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tINmK2LfYqNmR2YIg2YfYsNinINin2YTZhdiu2LfYtyDYp9mE2KPYqNi52KfYryDYp9mE2KvZhdin2YbZitipINmE2YTZhdi12YHZiNmB2Kkg2KfZhNij2LHYtNmK2YHZitipINmD2YXYpyDZiNix2K/YqiDZgdmKCi0tINmI2KvZitmC2Kkg2KfZhNiq2LXZhdmK2YXYjCDZhdi5INiq2YjYs9mK2Lkg2KfZhNis2K/Yp9mI2YQg2KfZhNij2LHYqNi52Kkg2KfZhNij2LXZhNmK2KkgKHBlcnNvbiwgYWZmaWxpYXRpb24sCi0tIHBlcnNvbl9kb21haW4sIHNjaG9sYXJseV9wcm9maWxlKSDZiNil2LbYp9mB2Kkg2KzYr9mI2YTZiiBzb3VyY2Ug2YhldmlkZW5jZQotLSDZhNin2LPYqtmK2LnYp9ioINin2YTYqtmI2KvZitmCINin2YTZhdi12K/YsdmKINin2YTZg9in2YXZhCAo2KfZhNio2Y/YudivINin2YTYq9in2YXZhikuCi0tID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQoKQkVHSU47CgpDUkVBVEUgRVhURU5TSU9OIElGIE5PVCBFWElTVFMgcGdfdHJnbTsgICAtLSDYqNit2Ksg2KrZgtix2YrYqNmKL9iq2LTYp9io2YfZiiDYudmE2Ykg2KfZhNmG2LXZiNi1INin2YTYudix2KjZitipCkNSRUFURSBFWFRFTlNJT04gSUYgTk9UIEVYSVNUUyB1bmFjY2VudDsgIC0tINiq2KjYs9mK2Lcg2KfYrtiq2YrYp9ix2Yog2YTYp9it2YLYp9mLINi52YbYryDYp9mE2K3Yp9is2KkKCi0tIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQotLSAxKSBQRVJTT04g4oCUINin2YTYqNmP2LnYryDZoTog2KfZhNmH2YjZitipINmI2KfZhNiq2LnYsdmK2YEKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkNSRUFURSBUQUJMRSBwZXJzb24gKAogICAgcGVyc29uX2lkICAgICAgICAgICBTRVJJQUwgUFJJTUFSWSBLRVksCiAgICBjYW5vbmljYWxfbmFtZSAgICAgICBWQVJDSEFSKDI1NSkgTk9UIE5VTEwsCiAgICBrdW55YSAgICAgICAgICAgICAgICBWQVJDSEFSKDEwMCksCiAgICBuaXNiYSAgICAgICAgICAgICAgICBWQVJDSEFSKDI1NSksCiAgICBkZWF0aF95ZWFyICAgICAgICAgICBWQVJDSEFSKDUwKSwgICAgICAgICAgLS0g2YbYtSDYrdixICjZhdir2KfZhDogIjM22YfZgCIp2Iwg2YrZj9iq2LHZgyBOVUxMINit2KrZiSDZitir2KjYqiDYqNmF2LXYr9ixINmF2LPZhtmO2K8KICAgIGdlb2dyYXBoaWNhbF9zY29wZSAgIFZBUkNIQVIoMjU1KSwKICAgIG5vdGVzICAgICAgICAgICAgICAgIFRFWFQsCiAgICBjcmVhdGVkX2F0ICAgICAgICAgICBUSU1FU1RBTVBUWiBOT1QgTlVMTCBERUZBVUxUIG5vdygpLAogICAgdXBkYXRlZF9hdCAgICAgICAgICAgVElNRVNUQU1QVFogTk9UIE5VTEwgREVGQVVMVCBub3coKQopOwoKQ09NTUVOVCBPTiBUQUJMRSAgcGVyc29uIElTICfYp9mE2YfZiNmK2Kkg2KfZhNij2LPYp9iz2YrYqSDZhNmD2YQg2LTYrti12YrYqSDZgdmKINiz2KzZhCDYo9i52YTYp9mFINi52KjYryDYp9mE2YLZitizJzsKQ09NTUVOVCBPTiBDT0xVTU4gcGVyc29uLmRlYXRoX3llYXIgSVMgJ9mK2Y/ZhdmE2KMg2YHZgti3INio2LnYryDYp9mE2KrYq9io2Kog2YXZhiDZhdi12K/YsSDZhdmP2LPZhtmO2K8g2KjYp9mE2KzYstihINmI2KfZhNi12YHYrdip2Jsg2YTYpyDYqtmP2K/YrtmEINiq2YjYp9ix2YrYriDYp9is2KrZh9in2K/ZitipINio2YTYpyDYp9iz2KrZhtin2K8nOwoKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0tIDIpIEFGRklMSUFUSU9OIOKAlCDYp9mE2KPYqNi52KfYryDZoivZoyvZpDog2YbZiNi5INin2YTYtdmE2KkgLyDZhtmI2Lkg2KfZhNiv2YTZitmEIC8g2K/Ysdis2Kkg2KfZhNir2YLYqQotLSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQ1JFQVRFIFRBQkxFIGFmZmlsaWF0aW9uICgKICAgIGFmZmlsaWF0aW9uX2lkICAgICAgIFNFUklBTCBQUklNQVJZIEtFWSwKICAgIHBlcnNvbl9pZCAgICAgICAgICAgIElOVCBOT1QgTlVMTCBSRUZFUkVOQ0VTIHBlcnNvbihwZXJzb25faWQpIE9OIERFTEVURSBDQVNDQURFLAogICAgYWZmaWxpYXRpb25fdHlwZSAgICAgQ0hBUigxKSBOT1QgTlVMTAogICAgICAgICAgICAgICAgICAgICAgICAgIENIRUNLIChhZmZpbGlhdGlvbl90eXBlIElOICgnTicsJ1cnLCdDJywnRCcsJ1UnKSksCiAgICBldmlkZW5jZV9jb2RlICAgICAgICBWQVJDSEFSKDIpIE5PVCBOVUxMCiAgICAgICAgICAgICAgICAgICAgICAgICAgQ0hFQ0sgKGV2aWRlbmNlX2NvZGUgSU4gKCdOMScsJ04yJywnVzEnLCdSMScsJ0QxJywnSDEnLCdVMScpKSwKICAgIGNvbmZpZGVuY2Vfc2NvcmUgICAgIFNNQUxMSU5UIE5PVCBOVUxMIENIRUNLIChjb25maWRlbmNlX3Njb3JlIEJFVFdFRU4gMSBBTkQgNSksCiAgICB2ZXJpZmljYXRpb25fc3RhdHVzICBWQVJDSEFSKDUwKSBOT1QgTlVMTCBERUZBVUxUICdQZW5kaW5nIE1hdGNoaW5nJywKICAgIGRpc3B1dGVfbm90ZXMgICAgICAgIFRFWFQgICAtLSDYqtmB2LXZitmEINin2YTYrtmE2KfZgSDYudmG2K8gRNiMINmF2KvZhDogIti52KjYryDYp9mE2YLZitizINij2Ygg2LbYqNmK2LnYqSIKKTsKCkNSRUFURSBJTkRFWCBpZHhfYWZmaWxpYXRpb25fcGVyc29uIE9OIGFmZmlsaWF0aW9uKHBlcnNvbl9pZCk7CgpDT01NRU5UIE9OIFRBQkxFIGFmZmlsaWF0aW9uIElTCiAgJ0492YbYs9ioINi12LHZititIHwgVz3ZiNmE2KfYoSB8IEM92YbYs9io2Kkg2YLZitivINin2YTYqtit2YLZgiB8IEQ92YXYrtiq2YTZgSDZgdmK2YcgfCBVPdi62YrYsSDZhdit2LPZiNmFLiAnCiAgJ9i12Y/ZhdmF2Kog2YPYudmE2KfZgtipINmI2KfYrdivLdmE2LnYr9ipINi52YXYr9in2YsgKNmE2KcgVU5JUVVFINi52YTZiSBwZXJzb25faWQpINmE2KrYrdiq2YXZhCDZhdiz2KrZgtio2YTYp9mLINij2YPYq9ixINmF2YYg2K/YudmI2Ykg2LXZhNipINi52YTZiSDZhtmB2LMg2KfZhNi02K7YtSDZhdmGINmF2LXYp9iv2LEg2YXYqti52KfYsdi22KnYmyAnCiAgJ9in2YTYp9iz2KrYrtiv2KfZhSDYp9mE2K3Yp9mE2Yog2YTZhNio2LfYp9mC2KfYqiDYp9mE2YAzNSDZh9mIINiz2KzZhCDZiNin2K3YryDZhNmD2YQg2LTYrti1Lic7CgotLSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KLS0gMykgRE9NQUlOICjYrNiv2YjZhCDZhdix2KzYudmKKSArIFBFUlNPTl9ET01BSU4g4oCUINin2YTYqNmP2LnYryDZpTog2KfZhNmF2KzYp9mEINmI2KfZhNmG2LTYp9i3Ci0tIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpDUkVBVEUgVEFCTEUgZG9tYWluICgKICAgIGRvbWFpbl9pZCAgICBTRVJJQUwgUFJJTUFSWSBLRVksCiAgICBuYW1lX2FyICAgICAgVkFSQ0hBUigxMDApIE5PVCBOVUxMIFVOSVFVRSwKICAgIGljb24gICAgICAgICBWQVJDSEFSKDEwKQopOwoKQ1JFQVRFIFRBQkxFIHBlcnNvbl9kb21haW4gKAogICAgcGVyc29uX2lkICAgIElOVCBOT1QgTlVMTCBSRUZFUkVOQ0VTIHBlcnNvbihwZXJzb25faWQpIE9OIERFTEVURSBDQVNDQURFLAogICAgZG9tYWluX2lkICAgIElOVCBOT1QgTlVMTCBSRUZFUkVOQ0VTIGRvbWFpbihkb21haW5faWQpIE9OIERFTEVURSBDQVNDQURFLAogICAgUFJJTUFSWSBLRVkgKHBlcnNvbl9pZCwgZG9tYWluX2lkKQopOwoKQ09NTUVOVCBPTiBUQUJMRSBkb21haW4gSVMgJ9is2K/ZiNmEINmF2LHYrNi52Yog2YXZj9i32KjZjtmR2Lkg2YTZhNmF2KzYp9mE2KfYqiDZhNi22YXYp9mGINiq2YbYp9iz2YIg2KfZhNij2LPZhdin2KEg2YjYqtmF2YPZitmGINmB2YTYp9iq2LEg2KfZhNmI2KfYrNmH2KkgKNin2YTZgtiz2YUgMy4yINmF2YYg2YjYq9mK2YLYqSDYp9mE2KrYtdmF2YrZhSknOwoKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0tIDQpIFNDSE9MQVJMWV9QUk9GSUxFIOKAlCDYp9mE2KPYqNi52KfYryDZpivZpzog2KfZhNiq2YLZitmK2YUg2KfZhNit2K/Zitir2Yog2YjYp9mE2YXYsNmH2Kgg2KfZhNmB2YLZh9mKCi0tIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpDUkVBVEUgVEFCTEUgc2Nob2xhcmx5X3Byb2ZpbGUgKAogICAgcHJvZmlsZV9pZCAgICAgIFNFUklBTCBQUklNQVJZIEtFWSwKICAgIHBlcnNvbl9pZCAgICAgICBJTlQgTk9UIE5VTEwgVU5JUVVFIFJFRkVSRU5DRVMgcGVyc29uKHBlcnNvbl9pZCkgT04gREVMRVRFIENBU0NBREUsCiAgICBoYWRpdGhfcmF0aW5nICAgVkFSQ0hBUigxMDApLAogICAgZmlxaF9zY2hvb2wgICAgIFZBUkNIQVIoMTAwKQopOwoKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0tIDUpIFNPVVJDRSDigJQg2KfZhNio2Y/YudivINmoICjYtNmCINij2YjZhCk6INmB2YfYsdizINin2YTZhdi12KfYr9ixINmI2KfZhNmF2LHYp9is2LkKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCkNSRUFURSBUQUJMRSBzb3VyY2UgKAogICAgc291cmNlX2lkICAgICAgICAgU0VSSUFMIFBSSU1BUlkgS0VZLAogICAgdGl0bGUgICAgICAgICAgICAgVkFSQ0hBUigyNTUpIE5PVCBOVUxMLAogICAgYXV0aG9yICAgICAgICAgICAgVkFSQ0hBUigyNTUpLAogICAgcHVibGlzaGVyX2VkaXRvciAgVkFSQ0hBUigyNTUpLAogICAgZWRpdGlvbiAgICAgICAgICAgVkFSQ0hBUig1MCksCiAgICB2b2x1bWUgICAgICAgICAgICBWQVJDSEFSKDUwKSwKICAgIHBhZ2UgICAgICAgICAgICAgIFZBUkNIQVIoNTApLAogICAgZW50cnlfbnVtYmVyICAgICAgVkFSQ0hBUig1MCksCiAgICBVTklRVUUgKHRpdGxlLCBhdXRob3IsIGVkaXRpb24sIHZvbHVtZSwgcGFnZSwgZW50cnlfbnVtYmVyKQopOwoKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0tIDYpIEVWSURFTkNFIOKAlCDYp9mE2KjZj9i52K8g2aggKNi02YIg2KvYp9mG2Y0pOiDYsdio2Lcg2YPZhCDYr9i52YjZiSDYqNmF2LXYr9ix2YfYpyDZiNmG2LXZh9inINin2YTZhdmC2KrYqNizCi0tIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpDUkVBVEUgVEFCTEUgZXZpZGVuY2UgKAogICAgZXZpZGVuY2VfaWQgICBTRVJJQUwgUFJJTUFSWSBLRVksCiAgICBwZXJzb25faWQgICAgIElOVCBOT1QgTlVMTCBSRUZFUkVOQ0VTIHBlcnNvbihwZXJzb25faWQpIE9OIERFTEVURSBDQVNDQURFLAogICAgc291cmNlX2lkICAgICBJTlQgTk9UIE5VTEwgUkVGRVJFTkNFUyBzb3VyY2Uoc291cmNlX2lkKSBPTiBERUxFVEUgQ0FTQ0FERSwKICAgIGNsYWltX3R5cGUgICAgVkFSQ0hBUig1MCkgTk9UIE5VTEwKICAgICAgICAgICAgICAgICAgQ0hFQ0sgKGNsYWltX3R5cGUgSU4KICAgICAgICAgICAgICAgICAgICAoJ0xpbmVhZ2UnLCdIYWRpdGggU3RhdHVzJywnRmlxaCBTY2hvb2wnLCdSb2xlL0RvbWFpbicsJ0Jpb2dyYXBoeScsJ0RlYXRoIFllYXInKSksCiAgICBxdW90YXRpb24gICAgIFRFWFQsICAgICAtLSDYp9mE2YbYtSDYp9mE2YXZgtiq2KjYsyDYrdix2YHZitin2Ysg2YXZhiDYp9mE2YXYtdiv2LEgKNmK2Y/ZhdmE2KMg2KjYudivINin2YTYqtmB2LHZiti6INin2YTZhdi12K/YsdmKKQogICAgY29uZmlkZW5jZSAgICBTTUFMTElOVCBDSEVDSyAoY29uZmlkZW5jZSBCRVRXRUVOIDEgQU5EIDUpLAogICAgbm90ZXMgICAgICAgICBURVhUCik7CgpDUkVBVEUgSU5ERVggaWR4X2V2aWRlbmNlX3BlcnNvbiBPTiBldmlkZW5jZShwZXJzb25faWQpOwpDUkVBVEUgSU5ERVggaWR4X2V2aWRlbmNlX3NvdXJjZSBPTiBldmlkZW5jZShzb3VyY2VfaWQpOwoKQ09NTUVOVCBPTiBUQUJMRSBldmlkZW5jZSBJUwogICfZg9mEINi12YEgPSDYr9i52YjZiSDZiNin2K3Yr9ipICjZhtiz2Kgv2KrZgtmK2YrZhSDYrdiv2YrYq9mKL9mF2LDZh9ioL9iv2YjYsS/Ys9mK2LHYqSkg2YXYs9mG2K/YqSDYpdmE2Ykg2YXYtdiv2LEg2YXYrdiv2K8g2KjZhti12Ycg2KfZhNmF2YLYqtio2LMuICcKICAn2YTYpyDYqtmP2K/YrtmEINio2YrYp9mG2KfYqiDZh9mG2Kcg2KXZhNinINio2LnYryDYp9mE2LHYrNmI2Lkg2KfZhNmB2LnZhNmKINmE2YTYt9io2LnYqSDYp9mE2YXYudiq2YXYr9ipINmI2YXYt9in2KjZgtipINin2YTYtdmB2K3YqSDZiNix2YLZhSDYp9mE2KrYsdis2YXYqS4nOwoKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0tIDcpINin2YTZgdmH2LHYs9ipINmI2KfZhNio2K3YqyDYp9mE2YHZiNix2Yog2KvZhtin2KbZiiDYp9mE2YTYutipICjYp9mE2YLYs9mFIDUuMiDZhdmGINmI2KvZitmC2Kkg2KfZhNiq2LXZhdmK2YUpCi0tIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpBTFRFUiBUQUJMRSBwZXJzb24gQUREIENPTFVNTiBzZWFyY2hfdmVjdG9yIHRzdmVjdG9yCiAgR0VORVJBVEVEIEFMV0FZUyBBUyAoCiAgICB0b190c3ZlY3Rvcignc2ltcGxlJywKICAgICAgY29hbGVzY2UoY2Fub25pY2FsX25hbWUsJycpIHx8ICcgJyB8fAogICAgICBjb2FsZXNjZShrdW55YSwnJykgICAgICAgICAgfHwgJyAnIHx8CiAgICAgIGNvYWxlc2NlKG5pc2JhLCcnKSAgICAgICAgICB8fCAnICcgfHwKICAgICAgY29hbGVzY2UoZ2VvZ3JhcGhpY2FsX3Njb3BlLCcnKSB8fCAnICcgfHwKICAgICAgY29hbGVzY2Uobm90ZXMsJycpCiAgICApCiAgKSBTVE9SRUQ7CgpDUkVBVEUgSU5ERVggaWR4X3BlcnNvbl9zZWFyY2ggICAgICBPTiBwZXJzb24gVVNJTkcgR0lOIChzZWFyY2hfdmVjdG9yKTsKQ1JFQVRFIElOREVYIGlkeF9wZXJzb25fdHJnbV9uYW1lICAgT04gcGVyc29uIFVTSU5HIEdJTiAoY2Fub25pY2FsX25hbWUgZ2luX3RyZ21fb3BzKTsKQ1JFQVRFIElOREVYIGlkeF9wZXJzb25fdHJnbV9uaXNiYSAgT04gcGVyc29uIFVTSU5HIEdJTiAobmlzYmEgZ2luX3RyZ21fb3BzKTsKCkNPTU1FTlQgT04gQ09MVU1OIHBlcnNvbi5zZWFyY2hfdmVjdG9yIElTCiAgJ9mK2LPYqtiu2K/ZhSDYpdi52K/Yp9ivIHNpbXBsZSAo2KjZhNinINiq2KzYsNmK2Lkg2YTYutmI2YopINmE2KPZhiBQb3N0Z3JlU1FMINmE2Kcg2YrZhdmE2YMg2YLYp9mF2YjYsyDYqtis2LDZiti5INi52LHYqNmKINis2KfZh9iy2KfZiy4gJwogICfZh9iw2Kcg2YrZg9mB2Yog2YTZhNio2K3YqyDYqNin2YTZg9mE2YXYqSDYp9mE2YPYp9mF2YTYqdibINmB2YfYp9ix2LMgcGdfdHJnbSDYp9mE2YXYsdin2YHZgtipINiq2LrYt9mKINin2YTYqNit2Ksg2KfZhNis2LLYptmKL9in2YTYqtmC2LHZitio2YogKNio2KfYr9im2Kkg2KfZhNmD2YTZhdip2Iwg2KfZhNij2K7Yt9in2KEg2KfZhNil2YXZhNin2KbZitipINin2YTYqNiz2YrYt9ipKS4gJwogICfZhNiq2KzYsNmK2Lkg2LnYsdio2Yog2K3ZgtmK2YLZiiAo2K3YsNmBICLYp9mEItiMINiq2YjYrdmK2K8g2KfZhNmH2YXYstin2Kog2KLZhNmK2KfZiykg2YrZhNiy2YUg2YTYp9it2YLYp9mLINmC2KfZhdmI2LMgaXNwZWxsINi52LHYqNmKINmF2K7Ytdi1INij2Ygg2YXYudin2YTYrNipINi52YTZiSDZhdiz2KrZiNmJINin2YTYqti32KjZitmCINmC2KjZhCDYp9mE2KXYr9iu2KfZhC4nOwoKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0tIDgpIFZJRVcg2KrYrNmF2YrYudmKINis2KfZh9iyINmE2YjYp9is2YfYqSDYp9mE2KjYt9in2YLYqSAo2KfZhNmC2LPZhSA1LjEg2YXZhiDZiNir2YrZgtipINin2YTYqti12YXZitmFKQotLSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KQ1JFQVRFIFZJRVcgcGVyc29uX2NhcmRfdmlldyBBUwpTRUxFQ1QKICAgIHAucGVyc29uX2lkLAogICAgcC5jYW5vbmljYWxfbmFtZSwKICAgIHAua3VueWEsCiAgICBwLm5pc2JhLAogICAgcC5nZW9ncmFwaGljYWxfc2NvcGUsCiAgICBwLmRlYXRoX3llYXIsCiAgICBhLmFmZmlsaWF0aW9uX3R5cGUsCiAgICBDQVNFIGEuYWZmaWxpYXRpb25fdHlwZQogICAgICAgIFdIRU4gJ04nIFRIRU4gJ9ij2K7YttixJwogICAgICAgIFdIRU4gJ1cnIFRIRU4gJ9ij2LLYsdmCJwogICAgICAgIFdIRU4gJ0MnIFRIRU4gJ9ij2LXZgdixJwogICAgICAgIFdIRU4gJ0QnIFRIRU4gJ9io2LHYqtmC2KfZhNmKJwogICAgICAgIFdIRU4gJ1UnIFRIRU4gJ9ix2YXYp9iv2YonCiAgICBFTkQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEFTIGJhZGdlX2NvbG9yLAogICAgYS5ldmlkZW5jZV9jb2RlLAogICAgYS5jb25maWRlbmNlX3Njb3JlLAogICAgcmVwZWF0KCfimIUnLCBhLmNvbmZpZGVuY2Vfc2NvcmUpIHx8CiAgICByZXBlYXQoJ+KYhicsIDUgLSBhLmNvbmZpZGVuY2Vfc2NvcmUpICAgICAgICAgICAgICAgICAgQVMgY29uZmlkZW5jZV9zdGFycywKICAgIGEudmVyaWZpY2F0aW9uX3N0YXR1cywKICAgIGEuZGlzcHV0ZV9ub3RlcywKICAgIHNwLmhhZGl0aF9yYXRpbmcsCiAgICBzcC5maXFoX3NjaG9vbCwKICAgIChTRUxFQ1Qgc3RyaW5nX2FnZyhkLmljb24gfHwgJyAnIHx8IGQubmFtZV9hciwgJ9iMICcgT1JERVIgQlkgZC5uYW1lX2FyKQogICAgICAgRlJPTSBwZXJzb25fZG9tYWluIHBkIEpPSU4gZG9tYWluIGQgT04gZC5kb21haW5faWQgPSBwZC5kb21haW5faWQKICAgICAgV0hFUkUgcGQucGVyc29uX2lkID0gcC5wZXJzb25faWQpICAgICAgICAgICAgICAgICAgQVMgZG9tYWlucywKICAgIChTRUxFQ1QgY291bnQoKikgRlJPTSBldmlkZW5jZSBlIFdIRVJFIGUucGVyc29uX2lkID0gcC5wZXJzb25faWQpIEFTIHNvdXJjZWRfY2xhaW1zX2NvdW50CkZST00gcGVyc29uIHAKTEVGVCBKT0lOIGFmZmlsaWF0aW9uIGEgICAgICAgT04gYS5wZXJzb25faWQgPSBwLnBlcnNvbl9pZApMRUZUIEpPSU4gc2Nob2xhcmx5X3Byb2ZpbGUgc3AgT04gc3AucGVyc29uX2lkID0gcC5wZXJzb25faWQ7CgpDT01NRU5UIE9OIFZJRVcgcGVyc29uX2NhcmRfdmlldyBJUwogICfYp9iz2KrYudmE2KfZhSDZiNin2K3YryDZiti52YrYryDZg9mEINmF2Kcg2KrYrdiq2KfYrNmHINio2LfYp9mC2Kkg2KfZhNmI2KfYrNmH2KkgKNin2YTZiNiz2YUg2KfZhNmF2YTZiNmR2YbYjCDYtNix2YrYtyDYp9mE2KvZgtipINmD2YbYrNmI2YXYjCDYp9mE2YXYrNin2YTYp9iqINio2KPZitmC2YjZhtin2KrZh9inKSDYr9mI2YYg2YXZhti32YIg2KXYttin2YHZiiDZgdmKINin2YTZiNin2KzZh9ipINin2YTYo9mF2KfZhdmK2KkuJzsKCkNPTU1JVDsKLS0gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tINiz2Y/Yt9mI2LEg2YXZhiDYo9mI2KfZhCDigJQg2KjZitin2YbYp9iqINin2YTYpdiv2K7Yp9mEINmE2LPYrNmEIMKr2KPYudmE2KfZhSDYudio2K8g2KfZhNmC2YrYsyDZgdmKINin2YTYqtix2KfYqyDYp9mE2KXYs9mE2KfZhdmKwrsKLS0gMzUg2KjYt9in2YLYqdiMINmF2KjZhtmK2Kkg2YXZhiDYqNmK2KfZhtin2Kog2KfZhNmF2LTYsdmI2Lkg2KfZhNij2LXZhNmK2Kkg2YjZhdmI2LLZkdi52Kkg2LnZhNmJINin2YTZhdiu2LfYtyDYp9mE2YXZiNiz2ZHYuQotLSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KCkJFR0lOOwoKLS0gMSkgUEVSU09OIOKAlCBkZWF0aF95ZWFyINmF2KrYsdmI2YMgTlVMTCDYudmF2K/Yp9mLINio2KfZhtiq2LjYp9ixINiq2KvYqNmK2Kog2YXYs9mG2K8g2YTZg9mEINit2KfZhNipCklOU0VSVCBJTlRPIHBlcnNvbiAocGVyc29uX2lkLCBjYW5vbmljYWxfbmFtZSwga3VueWEsIG5pc2JhLCBkZWF0aF95ZWFyLCBnZW9ncmFwaGljYWxfc2NvcGUsIG5vdGVzKSBWQUxVRVMKKDEsICfYp9mE2YXZhtiw2LEg2KjZhiDYudin2KbYsCDYp9mE2LnYtdix2Yog2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYs9i52YrYryAvINin2YTYo9i02KwnLCAn2KfZhNi52LXYsdmKINin2YTYudio2K/ZiicsIE5VTEwsICfYp9mE2KjYrdix2YrZhiDYp9mE2YLYr9mK2YXYqSAvINij2YjYp9mEJywgJ9iz2YrYryDZiNmB2K8g2LnYqNivINin2YTZgtmK2LMg2YjYo9i02KzZh9inJyksCigyLCAn2KfZhNis2KfYsdmI2K8g2KjZhiDYp9mE2YXYudmE2Ykg2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYutmK2KfYqycsICfYp9mE2LnYqNiv2YonLCBOVUxMLCAn2KfZhNio2K3YsdmK2YYgLyDYp9mE2KjYtdix2KknLCAn2LPZitivINi52KjYryDYp9mE2YLZitizINmI2LHYptmK2LPZh9inINio2KfZhNio2LXYsdipJyksCigzLCAn2YLZitizINio2YYg2KfZhNmG2LnZhdin2YYg2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYp9mE2YbYudmF2KfZhicsICfYp9mE2LnYqNiv2YonLCBOVUxMLCAn2KfZhNio2K3YsdmK2YYnLCAn2YXZhiDYtdit2KfYqNipINin2YTZiNmB2K8nKSwKKDQsICfYstmK2K8g2KjZhiDYtdmI2K3Yp9mGINin2YTYudio2K/ZiicsICfYo9io2Ygg2LPZhNmF2KfZhicsICfYp9mE2LnYqNiv2Yog2KfZhNmE2YPZitiy2YonLCBOVUxMLCAn2KfZhNio2K3YsdmK2YYgLyDYp9mE2YPZiNmB2KknLCAn2KrYp9io2LnZiiDYrNmE2YrZhCDZiNi52KfZhNmFINmI2YHYp9ix2LMnKSwKKDUsICfYtdi52LXYudipINio2YYg2LXZiNit2KfZhiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINi32YTYrdipJywgJ9in2YTYudio2K/ZiicsIE5VTEwsICfYp9mE2YPZiNmB2KkgLyDYp9mE2KjYrdix2YrZhicsICfZhdmGINij2YTYs9mG2Kkg2KfZhNi52LHYqCDZiNiu2LfYqNin2KbZh9inJyksCig2LCAn2LPZitit2KfZhiDYqNmGINi12YjYrdin2YYg2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYrti32ZHYp9ioJywgJ9in2YTYudio2K/ZiicsIE5VTEwsICfYp9mE2YPZiNmB2KknLCAn2K7Yt9mK2Kgg2YjZgtin2KbYryDYudiz2YPYsdmKINmK2YjZhSDYp9mE2KzZhdmEJyksCig3LCAn2LnYqNivINin2YTZhNmHINio2YYg2KfZhNis2KfYsdmI2K8g2KfZhNi52KjYr9mKJywgJ9i32YrYsSDYp9mE2LnZhtin2YInLCAn2KfZhNi52KjYr9mKJywgTlVMTCwgJ9in2YTYqNi12LHYqScsICfYsdij2LMg2LnYqNivINin2YTZgtmK2LMg2YjZiNis2YrZh9mH2Kcg2KjYp9mE2KjYtdix2KknKSwKKDgsICfYp9mE2YXZhtiw2LEg2KjZhiDYp9mE2KzYp9ix2YjYryDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINin2YTYo9i02LnYqycsICfYp9mE2LnYqNiv2Yog2KfZhNis2KfYsdmI2K/ZiicsIE5VTEwsICfYp9mE2KjYtdix2KkgLyDYpdi12LfYrtixJywgJ9mI2KfZhNmNINmI2YLYp9im2K8g2YjYqtin2KjYudmKJyksCig5LCAn2KfZhNit2YPZhSDYqNmGINin2YTZhdmG2LDYsSDYqNmGINin2YTYrNin2LHZiNivINin2YTYudio2K/ZiicsICfYo9io2Ygg2LrZitmE2KfZhicsICfYp9mE2LnYqNiv2Yog2KfZhNis2KfYsdmI2K/ZiicsIE5VTEwsICfYp9mE2KjYtdix2KknLCAn2LPZitivINi52KjYryDYp9mE2YLZitizINmI2LHYo9iz2YfYpyDYqNin2YTYqNi12LHYqScpLAooMTAsICfYp9mE2YXZhtiw2LEg2KjZhiDYp9mE2YjZhNmK2K8g2KfZhNis2KfYsdmI2K/ZiiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINin2YTYudio2KfYsycsICfYp9mE2LnYqNiv2Yog2KfZhNis2KfYsdmI2K/ZiicsIE5VTEwsICfYp9mE2KjYtdix2KknLCAn2YXYrdiv2Ksg2KvZgtipINmF2YYg2KjZitiqINin2YTYrNin2LHZiNivJyksCigxMSwgJ9in2YTZhdmG2LDYsSDYqNmGINmF2KfZhNmDINin2YTYudmI2YLZiiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINmG2LbYsdipJywgJ9in2YTYudmI2YLZiiDYp9mE2LnYqNiv2YonLCBOVUxMLCAn2KfZhNio2LXYsdipJywgJ9il2YXYp9mFINio2LXYsdmKINis2YTZitmEINmI2YHZg9mK2Ycg2KfZhNiq2KfYqNi52YrZhicpLAooMTIsICfYudio2K8g2KfZhNmF2YTZgyDYqNmGINin2YTZhdmG2LDYsSDYp9mE2LnZiNmC2Yog2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDZhdis2KfZh9iyJywgJ9in2YTYudmI2YLZiiDYp9mE2LnYqNiv2YonLCBOVUxMLCAn2KfZhNio2LXYsdipJywgJ9mF2K3Yr9irINio2LXYsdmKINiq2KfYqNi52YonKSwKKDEzLCAn2LTZh9in2Kgg2KjZhiDYudio2KfYryDYp9mE2LnYtdix2Yog2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYudio2KfYrycsICfYp9mE2LnYtdix2Yog2KfZhNi52KjYr9mKJywgTlVMTCwgJ9in2YTYqNi12LHYqScsICfZhdit2K/YqyDYqNi12LHZiiDYsdmI2Ykg2YTZhyDYp9mE2KjYrtin2LHZiiDZgdmKINin2YTYo9iv2Kgg2KfZhNmF2YHYsdivJyksCigxNCwgJ9mK2K3ZitmJINio2YYg2LnYqNivINin2YTYsdit2YXZhiDYp9mE2LnYtdix2Yog2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYqNmD2LEnLCAn2KfZhNi52LXYsdmKINin2YTYudio2K/ZiicsIE5VTEwsICfYp9mE2KjYtdix2KknLCAn2YXYrdiv2Ksg2KvZgtipINio2LXYsdmKJyksCigxNSwgJ9mH2YjYryDYqNmGINi02YfYp9ioINin2YTYudi12LHZiiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINi02YfYp9ioJywgJ9in2YTYudi12LHZiiDYp9mE2LnYqNiv2YonLCBOVUxMLCAn2KfZhNio2LXYsdipJywgJ9mF2K3Yr9irINio2LXYsdmKINmF2YYg2KfZhNio2YrYqiDYp9mE2LnYtdix2YonKSwKKDE2LCAn2KPYqNin2YYg2KjZhiDYo9io2Yog2LnZitin2LQg2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYpdiz2YXYp9i52YrZhCcsICfYp9mE2LnYqNiv2YogKNmF2YjZhNin2YfZhSknLCBOVUxMLCAn2KfZhNio2LXYsdipJywgJ9ir2KfYqNiqINin2YTZiNmE2KfYoSDZhNmD2YYg2K3Yr9mK2KvZhyDYtti52YrZgSDZhdiq2LHZiNmDJyksCigxNywgJ9mK2YjZhtizINio2YYg2LnYqNmK2K8g2KjZhiDYr9mK2YbYp9ixINin2YTYudio2K/ZiicsICfYo9io2Ygg2LnYqNivINin2YTZhNmHJywgJ9in2YTYudio2K/ZiiAo2YXZiNmE2KfZh9mFKScsIE5VTEwsICfYp9mE2KjYtdix2KknLCAn2KXZhdin2YUg2KfZhNio2LXYsdipINmI2K3Yp9mB2LjZh9inINmI2YHZgtmK2YfZh9inINmI2YXYsdis2LnZh9inJyksCigxOCwgJ9i52YTZiiDYqNmGINin2YTYrdiz2YYg2KjZhiDYtNmC2YrZgiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINi52KjYryDYp9mE2LHYrdmF2YYnLCAn2KfZhNi52KjYr9mKICjZhdmI2YTZiSDYotmEINin2YTYrNin2LHZiNivKScsIE5VTEwsICfZhdix2YggLyDYrtix2KfYs9in2YYnLCAn2K3Yp9mB2Lgg2YjZhdit2K/YqyDZhdmGINij2LXYrdin2Kgg2KfYqNmGINin2YTZhdio2KfYsdmDJyksCigxOSwgJ9mK2LnZgtmI2Kgg2KjZhiDYpdio2LHYp9mH2YrZhSDYp9mE2K/ZiNix2YLZiiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINmK2YjYs9mBJywgJ9in2YTYudio2K/ZiiDYp9mE2YLZitiz2YogKNmF2YjZhNin2YfZhSknLCBOVUxMLCAn2KjYutiv2KfYrycsICfYtdin2K3YqCDYp9mE2YXYs9mG2K8g2YjZhdmGINmD2KjYp9ixINij2KbZhdipINin2YTYrdmB2KfYuCcpLAooMjAsICfYo9it2YXYryDYqNmGINil2KjYsdin2YfZitmFINin2YTYr9mI2LHZgtmKINin2YTYudio2K/ZiicsICfYo9io2Ygg2LnYqNivINin2YTZhNmHJywgJ9in2YTYudio2K/ZiiDYp9mE2YLZitiz2YogKNmF2YjZhNin2YfZhSknLCBOVUxMLCAn2KjYutiv2KfYrycsICfYrdin2YHYuCDZiNmF2K3Yr9irINio2LrYr9in2K/ZiiDYo9iu2Ygg2YrYudmC2YjYqCcpLAooMjEsICfYudmE2Yog2KjZhiDZhdis2KfZh9ivINin2YTZg9in2KjZhNmKINin2YTYudio2K/ZiicsICfYo9io2Ygg2YXYrNin2YfYrycsICfYp9mE2LnYqNiv2YogKNmF2YjZhNmJINit2YPZitmFINio2YYg2KzYqNmE2KkpJywgTlVMTCwgJ9in2YTYsdmKJywgJ9mC2KfYttmKINin2YTYsdmKINmI2YXYrdiv2Ksg2LbYudmK2YEg2KfZhNit2K/ZitirJyksCigyMiwgJ9mF2LPZhNmFINio2YYg2YXYrtix2KfZgiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINin2YTYo9iz2YjYrycsICfYp9mE2LnYqNiv2YogKNmF2YjZhNmJINio2YbZiiDZgtix2KkpJywgTlVMTCwgJ9in2YTYqNi12LHYqScsICfZhdit2K/YqyDYqNi12LHZiiDYqtin2KjYudmKJyksCigyMywgJ9io2LTYsSDYqNmGINin2YTYrdmD2YUg2KfZhNi52KjYr9mKINin2YTZhtmK2LPYp9io2YjYsdmKJywgJ9ij2KjZiCDYudio2K8g2KfZhNix2K3ZhdmGJywgJ9in2YTYudio2K/ZiiDYp9mE2YbZitiz2KfYqNmI2LHZiicsIE5VTEwsICfZhtmK2LPYp9io2YjYsSAvINmF2YPYqScsICfZhdmGINmD2KjYp9ixINin2YTZhdit2K/Yq9mK2YYg2YjYtdit2KjYqSDYp9mE2LTYp9mB2LnZiicpLAooMjQsICfYo9it2YXYryDYqNmGINmF2K3ZhdivINio2YYg2K3Ys9mGINin2YTYudio2K/ZiicsICfYo9io2Ygg2YrYudmE2YkgKNin2KjZhiDYp9mE2LXZiNin2YEpJywgJ9in2YTYudio2K/ZiiDYp9mE2KjYtdix2YonLCBOVUxMLCAn2KfZhNio2LXYsdipJywgJ9il2YXYp9mFINin2YTZhdin2YTZg9mK2Kkg2KjYp9mE2KjYtdix2Kkg2YjZhdiv2KfYsSDZgdiq2YjYp9mH2YUnKSwKKDI1LCAn2YXZh9iv2Yog2KjZhiDYrdix2Kgg2KfZhNmH2KzYsdmKINin2YTYudio2K/ZiicsICfYo9io2Ygg2YXZh9iv2YonLCAn2KfZhNmH2KzYsdmKINin2YTYudio2K/ZiicsIE5VTEwsICfYp9mE2YPZiNmB2KkgLyDZh9is2LEnLCAn2LHYp9mI2Y0g2YXYsdiq2KjYtyDYqNmH2KzYsSDZhdmI2LfZhiDYudio2K8g2KfZhNmC2YrYsycpLAooMjYsICfYpdio2LHYp9mH2YrZhSDYqNmGINij2K3ZhdivINin2YTYudio2K/ZiiDYp9mE2YXZg9mKJywgJ9ij2KjZiCDYpdiz2K3Yp9mCJywgJ9in2YTYudio2K/ZiiDYp9mE2YXZg9mKJywgTlVMTCwgJ9mF2YPYqScsICfZhdmGINmB2YLZh9in2KEg2KfZhNmF2KfZhNmD2YrYqSDYqNin2YTYrdix2YUg2KfZhNmF2YPZiicpLAooMjcsICfYr9in2YjYryDYqNmGINi52YTZiiDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINiz2YTZitmF2KfZhicsICfYp9mE2LnYqNiv2Yog2KfZhNio2LXYsdmKJywgTlVMTCwgJ9in2YTYqNi12LHYqSAvINio2LrYr9in2K8nLCAn2YHZgtmK2Ycg2YjZhdit2K/YqyDYqNi12LHZiiDYqNi62K/Yp9iv2YonKSwKKDI4LCAn2LnYqNivINin2YTZhNmHINio2YYg2KPYrdmF2K8g2KfZhNi52KjZgtiz2Yog2KfZhNi52KjYr9mKJywgJ9ij2KjZiCDYp9mE2YLYp9iz2YUnLCAn2KfZhNi52KjZgtiz2Yog2KfZhNi52KjYr9mKJywgTlVMTCwgJ9io2LrYr9in2K8nLCAn2YHZgtmK2Ycg2LTYp9mB2LnZiiDZiNmF2K3Yr9irINio2LrYr9in2K/ZiiDYudio2KjZgtiz2YonKSwKKDI5LCAn2YXYrdmF2K8g2KjZhiDZitit2YrZiSDYqNmGINmF2YfYr9mKINin2YTYudio2K/ZiicsICfYo9io2Ygg2LnYqNivINin2YTZhNmHJywgJ9in2YTYudio2K/ZiiDYp9mE2KjYtdix2YonLCBOVUxMLCAn2KfZhNio2LXYsdipIC8g2KjYutiv2KfYrycsICfZgtin2LbZjSDZhdmGINmB2YLZh9in2KEg2KfZhNit2YbZgdmK2Kkg2KjYp9mE2KjYtdix2KknKSwKKDMwLCAn2LnZhdixINio2YYg2YXYrdmF2K8g2KjZhiDZitmI2LPZgSDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINit2YHYtScsICfYp9mE2LnYqNiv2Yog2KfZhNio2LXYsdmKJywgTlVMTCwgJ9in2YTYqNi12LHYqScsICfZgdmC2YrZhyDYrdmG2YHZiiDYqNi12LHZiiDZiNix2KfZiNmK2Kkg2KLYq9in2LEnKSwKKDMxLCAn2KPYrdmF2K8g2KjZhiDYrdmF2YrYryDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINi32KfZhNioJywgJ9in2YTYudio2K/ZiicsIE5VTEwsICfYqNi62K/Yp9ivJywgJ9mF2YYg2YPYqNin2LEg2YHZgtmH2KfYoSDYp9mE2K3Zhtin2KjZhNipINmI2YbYp9mC2YTZiiDYp9mE2YXYs9in2KbZhCcpLAooMzIsICfYp9mE2LnYqNin2LMg2KjZhiDZhdit2YXYryDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINin2YTZgdi22YQnLCAn2KfZhNi52KjYr9mKJywgTlVMTCwgJ9io2LrYr9in2K8nLCAn2YXYrdiv2Ksg2K3Zhtio2YTZiiDZiNix2KfZiNmNINmE2YXYs9in2KbZhCDYp9mE2KXZhdin2YUg2KPYrdmF2K8nKSwKKDMzLCAn2YbYtdixINio2YYg2LnZhdix2KfZhiDYp9mE2LbYqNi52YonLCAn2KPYqNmIINis2YXYsdipJywgJ9in2YTYttio2LnZiiDYp9mE2LnYqNiv2YonLCBOVUxMLCAn2KfZhNio2LXYsdipJywgJ9iq2KfYqNi52Yog2YjYq9mC2Kkg2KvYqNiqINmK2YbYs9ioINmE2LnYqNivINin2YTZgtmK2LMg2KPZiCDYttio2YrYudipJyksCigzNCwgJ9i52YXYsdmIINio2YYg2YXYp9mE2YMg2KfZhNmG2YPYsdmKJywgJ9ij2KjZiCDZhdin2YTZgycsICfYp9mE2YbZg9ix2Yog2KfZhNi52KjYr9mKJywgTlVMTCwgJ9in2YTYqNi12LHYqScsICfZhdit2K/YqyDYqNi12LHZiiDYp9iu2KrZhNmBINmB2Yog2YbYs9io2Ycg2YXYuSDYp9mE2YbZhdixJyksCigzNSwgJ9in2YTYudmI2KfZhSDYqNmGINmF2K3ZhdivINin2YTYstis2KfYrCDYp9mE2LnYqNiv2YonLCAn2KPYqNmIINin2YTYqNmH2YTZiNmEJywgJ9in2YTYstis2KfYrCDYp9mE2LnYqNiv2YonLCBOVUxMLCAn2KPZiNin2YQgKNin2YTYqNit2LHZitmGKScsICfZgtin2KbYryDYs9mK2KfYs9mKINmI2LLYudmK2YUg2KPZiNin2YQg2YjZgtin2YfYsSDYp9mE2YLYsdin2YXYt9ipJyk7ClNFTEVDVCBzZXR2YWwoJ3BlcnNvbl9wZXJzb25faWRfc2VxJywgKFNFTEVDVCBtYXgocGVyc29uX2lkKSBGUk9NIHBlcnNvbikpOwoKLS0gMikgQUZGSUxJQVRJT04KSU5TRVJUIElOVE8gYWZmaWxpYXRpb24gKHBlcnNvbl9pZCwgYWZmaWxpYXRpb25fdHlwZSwgZXZpZGVuY2VfY29kZSwgY29uZmlkZW5jZV9zY29yZSwgdmVyaWZpY2F0aW9uX3N0YXR1cywgZGlzcHV0ZV9ub3RlcykgVkFMVUVTCigxLCAnTicsICdOMScsIDUsICdWZXJpZmllZCcsIE5VTEwpLAooMiwgJ04nLCAnTjEnLCA1LCAnVmVyaWZpZWQnLCBOVUxMKSwKKDMsICdOJywgJ04xJywgNSwgJ1ZlcmlmaWVkJywgTlVMTCksCig0LCAnTicsICdOMScsIDUsICdWZXJpZmllZCcsIE5VTEwpLAooNSwgJ04nLCAnTjEnLCA1LCAnVmVyaWZpZWQnLCBOVUxMKSwKKDYsICdOJywgJ04xJywgNSwgJ1ZlcmlmaWVkJywgTlVMTCksCig3LCAnTicsICdOMicsIDUsICdWZXJpZmllZCcsIE5VTEwpLAooOCwgJ04nLCAnTjEnLCA1LCAnVmVyaWZpZWQnLCBOVUxMKSwKKDksICdOJywgJ04yJywgNCwgJ1ZlcmlmaWVkJywgTlVMTCksCigxMCwgJ04nLCAnTjInLCA1LCAnVmVyaWZpZWQnLCBOVUxMKSwKKDExLCAnTicsICdOMScsIDUsICdWZXJpZmllZCcsIE5VTEwpLAooMTIsICdOJywgJ04yJywgNCwgJ1ZlcmlmaWVkJywgTlVMTCksCigxMywgJ04nLCAnTjEnLCA0LCAnVmVyaWZpZWQnLCBOVUxMKSwKKDE0LCAnTicsICdOMScsIDUsICdWZXJpZmllZCcsIE5VTEwpLAooMTUsICdOJywgJ04yJywgMywgJ1ZlcmlmaWVkJywgTlVMTCksCigxNiwgJ1cnLCAnVzEnLCA1LCAnVmVyaWZpZWQnLCBOVUxMKSwKKDE3LCAnVycsICdXMScsIDUsICdWZXJpZmllZCcsIE5VTEwpLAooMTgsICdXJywgJ1cxJywgNCwgJ1ZlcmlmaWVkJywgTlVMTCksCigxOSwgJ1cnLCAnVzEnLCA1LCAnVmVyaWZpZWQnLCBOVUxMKSwKKDIwLCAnVycsICdXMScsIDUsICdWZXJpZmllZCcsIE5VTEwpLAooMjEsICdXJywgJ1cxJywgNCwgJ1ZlcmlmaWVkJywgTlVMTCksCigyMiwgJ1cnLCAnVzEnLCAzLCAnVmVyaWZpZWQnLCBOVUxMKSwKKDIzLCAnQycsICdSMScsIDQsICdQZW5kaW5nIE1hdGNoaW5nJywgTlVMTCksCigyNCwgJ0MnLCAnUjEnLCA0LCAnUGVuZGluZyBNYXRjaGluZycsIE5VTEwpLAooMjUsICdDJywgJ1IxJywgMywgJ1BlbmRpbmcgTWF0Y2hpbmcnLCBOVUxMKSwKKDI2LCAnQycsICdVMScsIDIsICdOZWVkcyBwcmltYXJ5IHNvdXJjZScsIE5VTEwpLAooMjcsICdDJywgJ1UxJywgMiwgJ05lZWRzIHByaW1hcnkgc291cmNlJywgTlVMTCksCigyOCwgJ0MnLCAnUjEnLCAzLCAnUGVuZGluZyBNYXRjaGluZycsIE5VTEwpLAooMjksICdDJywgJ1IxJywgMywgJ1BlbmRpbmcgTWF0Y2hpbmcnLCBOVUxMKSwKKDMwLCAnQycsICdSMScsIDMsICdQZW5kaW5nIE1hdGNoaW5nJywgTlVMTCksCigzMSwgJ0MnLCAnUjEnLCA0LCAnUGVuZGluZyBNYXRjaGluZycsIE5VTEwpLAooMzIsICdDJywgJ1UxJywgMiwgJ05lZWRzIHByaW1hcnkgc291cmNlJywgTlVMTCksCigzMywgJ0QnLCAnRDEnLCAzLCAnRGlzcHV0ZWQgTGluZWFnZScsICfZhdiu2KrZhNmBINmB2YrZhyDYqNmK2YYg2LnYqNivINin2YTZgtmK2LMg2YjYttio2YrYudipICjYsdio2YrYudipKScpLAooMzQsICdEJywgJ0QxJywgMiwgJ0Rpc3B1dGVkIExpbmVhZ2UnLCAn2YXYrtiq2YTZgSDZgdmK2Ycg2KjZitmGINi52KjYryDYp9mE2YLZitizINmI2KfZhNmG2YXYsSDYqNmGINmC2KfYs9i3JyksCigzNSwgJ04nLCAnTjInLCA0LCAnVmVyaWZpZWQnLCBOVUxMKTsKCi0tIDMpIFNDSE9MQVJMWV9QUk9GSUxFCklOU0VSVCBJTlRPIHNjaG9sYXJseV9wcm9maWxlIChwZXJzb25faWQsIGhhZGl0aF9yYXRpbmcsIGZpcWhfc2Nob29sKSBWQUxVRVMKKDEsICfYtdit2KfYqNmKICjYudiv2YQpJywgJ9mC2KjZhCDYp9iz2KrZgtix2KfYsSDYp9mE2YXYsNin2YfYqCcpLAooMiwgJ9i12K3Yp9io2YogKNi52K/ZhCknLCAn2YLYqNmEINin2LPYqtmC2LHYp9ixINin2YTZhdiw2KfZh9ioJyksCigzLCAn2LXYrdin2KjZiiAo2LnYr9mEKScsICfZgtio2YQg2KfYs9iq2YLYsdin2LEg2KfZhNmF2LDYp9mH2KgnKSwKKDQsICfYq9mC2KknLCAn2YLYqNmEINin2LPYqtmC2LHYp9ixINin2YTZhdiw2KfZh9ioJyksCig1LCAn2YXZgtio2YjZhCAvINmF2K3Yr9irJywgJ9mC2KjZhCDYp9iz2KrZgtix2KfYsSDYp9mE2YXYsNin2YfYqCcpLAooNiwgJ9mE2Kcg2YrZhti32KjZgicsICfZgtio2YQg2KfYs9iq2YLYsdin2LEg2KfZhNmF2LDYp9mH2KgnKSwKKDcsICfZhNinINmK2YbYt9io2YInLCAn2YLYqNmEINin2LPYqtmC2LHYp9ixINin2YTZhdiw2KfZh9ioJyksCig4LCAn2YXZgtio2YjZhCcsICfZgtio2YQg2KfYs9iq2YLYsdin2LEg2KfZhNmF2LDYp9mH2KgnKSwKKDksICfZhNinINmK2YbYt9io2YInLCAn2YLYqNmEINin2LPYqtmC2LHYp9ixINin2YTZhdiw2KfZh9ioJyksCigxMCwgJ9ir2YLYqScsICfZgtio2YQg2KfYs9iq2YLYsdin2LEg2KfZhNmF2LDYp9mH2KgnKSwKKDExLCAn2KvZgtipINir2KjYqicsICfZgtio2YQg2KfYs9iq2YLYsdin2LEg2KfZhNmF2LDYp9mH2KggKNmB2YLZhyDYqNi12LHZiiknKSwKKDEyLCAn2LXYr9mI2YInLCAn2YLYqNmEINin2LPYqtmC2LHYp9ixINin2YTZhdiw2KfZh9ioICjZgdmC2Ycg2KjYtdix2YopJyksCigxMywgJ9mF2K7YqtmE2YEg2YHZitmHICjZhdmC2KjZiNmEKScsICfYutmK2LEg2YXYrdiv2K8nKSwKKDE0LCAn2KvZgtipJywgJ9i62YrYsSDZhdit2K/YrycpLAooMTUsICfZhdmC2KjZiNmEJywgJ9i62YrYsSDZhdit2K/YrycpLAooMTYsICfYtti52YrZgSAvINmF2KrYsdmI2YMnLCAn2LrZitixINmF2K3Yr9ivJyksCigxNywgJ9ir2YLYqSDYq9io2Kog2KXZhdin2YUnLCAn2YLYqNmEINin2LPYqtmC2LHYp9ixINin2YTZhdiw2KfZh9ioICjZgdmC2Ycg2KjYtdix2YopJyksCigxOCwgJ9it2KfZgdi4INir2YLYqScsICfYutmK2LEg2YXYrdiv2K8nKSwKKDE5LCAn2K3Yp9mB2Lgg2KvZgtipJywgJ9i62YrYsSDZhdit2K/YrycpLAooMjAsICfYrdin2YHYuCDYq9mC2KknLCAn2LrZitixINmF2K3Yr9ivJyksCigyMSwgJ9i22LnZitmBINin2YTYrdiv2YrYqycsICfYutmK2LEg2YXYrdiv2K8nKSwKKDIyLCAn2YXZgtio2YjZhCcsICfYutmK2LEg2YXYrdiv2K8nKSwKKDIzLCAn2KvZgtipINir2KjYqicsICfZhdmGINij2LXYrdin2Kgg2KfZhNi02KfZgdi52Yog2YjYsdmI2KfYqtmHJyksCigyNCwgJ9mE2Kcg2YrZhti32KjZgiAo2YHZgtmK2Ycg2KzYp9mF2LkpJywgJ9mF2KfZhNmD2YogKNi02YrYriDZhdin2YTZg9mK2Kkg2KfZhNio2LXYsdipKScpLAooMjUsICfZgtmK2K8g2KfZhNiq2K3ZgtmCJywgJ9i62YrYsSDZhdit2K/YrycpLAooMjYsICfZgtmK2K8g2KfZhNiq2K3ZgtmCJywgJ9mF2KfZhNmD2YonKSwKKDI3LCAn2YLZitivINin2YTYqtit2YLZgicsICfYt9io2YLYp9iqINin2YTYtNin2YHYudmK2KknKSwKKDI4LCAn2YLZitivINin2YTYqtit2YLZgicsICfYtNin2YHYudmKJyksCigyOSwgJ9mC2YrYryDYp9mE2KrYrdmC2YInLCAn2K3ZhtmB2YonKSwKKDMwLCAn2YLZitivINin2YTYqtit2YLZgicsICfYrdmG2YHZiicpLAooMzEsICfYq9mC2KknLCAn2K3Zhtio2YTZiiAo2YXZhiDZg9io2KfYsSDZhtin2YLZhNmKINin2YTZhdiz2KfYptmEKScpLAooMzIsICfZgtmK2K8g2KfZhNiq2K3ZgtmCJywgJ9it2YbYqNmE2YonKSwKKDMzLCAn2KvZgtipINir2KjYqicsICfZgtio2YQg2KfYs9iq2YLYsdin2LEg2KfZhNmF2LDYp9mH2KgnKSwKKDM0LCAn2LXYr9mI2YIgLyDZitmD2KrYqCDYrdiv2YrYq9mHJywgJ9i62YrYsSDZhdit2K/YrycpLAooMzUsICfZhNinINmK2YbYt9io2YInLCAn2K3ZhtmB2YogKNii2YQg2KfZhNiy2KzYp9isKScpOwoKLS0gNCkgRE9NQUlOICjYp9mE2KzYr9mI2YQg2KfZhNmF2LHYrNi52Yog4oCUIDkg2YXYrNin2YTYp9iqINmB2LHZitiv2KkpCklOU0VSVCBJTlRPIGRvbWFpbiAobmFtZV9hciwgaWNvbikgVkFMVUVTCign2LXYrdio2Kkv2KrYp9io2LnZitipJywgJ/CflYwnKSwKKCfYs9mK2KfYs9ipINmI2YLZitin2K/YqScsICfwn5GRJyksCign2YTYutipINmI2K7Yt9in2KjYqScsICfwn5ej77iPJyksCign2LHZiNin2YrYqScsICfwn5OaJyksCign2K3Yr9mK2KsnLCAn8J+TlicpLAooJ9mB2YLZhycsICfimpbvuI8nKSwKKCfZgti22KfYoScsICfwn4+b77iPJyksCign2KrZgdiz2YrYsScsICfwn5OcJyksCign2KrYp9ix2YrYricsICfwn4+6Jyk7CgotLSA1KSBQRVJTT05fRE9NQUlOIOKAlCDZitmP2KjZhtmJINi52KjYsSDYrNiv2YjZhCDZhdik2YLYqiDZhNi22YXYp9mGINmF2LfYp9io2YLYqSBkb21haW5faWQg2KrZhNmC2KfYptmK2KfZiyDYqNmE2Kcg2KPYrti32KfYoSDZitiv2YjZitipCkNSRUFURSBURU1QIFRBQkxFIF9wZF9zdGFnZSAocGVyc29uX2lkIElOVCwgZG9tYWluX25hbWUgVkFSQ0hBUigxMDApKTsKSU5TRVJUIElOVE8gX3BkX3N0YWdlIChwZXJzb25faWQsIGRvbWFpbl9uYW1lKSBWQUxVRVMKKDEsICfYtdit2KjYqS/Yqtin2KjYudmK2KknKSwKKDEsICfYs9mK2KfYs9ipINmI2YLZitin2K/YqScpLAooMSwgJ9mE2LrYqSDZiNiu2LfYp9io2KknKSwKKDIsICfYtdit2KjYqS/Yqtin2KjYudmK2KknKSwKKDIsICfYs9mK2KfYs9ipINmI2YLZitin2K/YqScpLAooMywgJ9i12K3YqNipL9iq2KfYqNi52YrYqScpLAooMywgJ9ix2YjYp9mK2KknKSwKKDQsICfYrdiv2YrYqycpLAooNCwgJ9mB2YLZhycpLAooNCwgJ9mE2LrYqSDZiNiu2LfYp9io2KknKSwKKDUsICfZhNi62Kkg2YjYrti32KfYqNipJyksCig1LCAn2K3Yr9mK2KsnKSwKKDYsICfYs9mK2KfYs9ipINmI2YLZitin2K/YqScpLAooNiwgJ9mE2LrYqSDZiNiu2LfYp9io2KknKSwKKDcsICfYs9mK2KfYs9ipINmI2YLZitin2K/YqScpLAooOCwgJ9mC2LbYp9ihJyksCig4LCAn2LPZitin2LPYqSDZiNmC2YrYp9iv2KknKSwKKDgsICfYrdiv2YrYqycpLAooOSwgJ9iz2YrYp9iz2Kkg2YjZgtmK2KfYr9ipJyksCigxMCwgJ9it2K/ZitirJyksCigxMCwgJ9ix2YjYp9mK2KknKSwKKDExLCAn2YHZgtmHJyksCigxMSwgJ9it2K/ZitirJyksCigxMSwgJ9iq2YHYs9mK2LEnKSwKKDEyLCAn2K3Yr9mK2KsnKSwKKDEyLCAn2LHZiNin2YrYqScpLAooMTMsICfYrdiv2YrYqycpLAooMTMsICfYsdmI2KfZitipJyksCigxNCwgJ9it2K/ZitirJyksCigxNSwgJ9it2K/ZitirJyksCigxNiwgJ9it2K/ZitirJyksCigxNiwgJ9ix2YjYp9mK2KknKSwKKDE3LCAn2YHZgtmHJyksCigxNywgJ9it2K/ZitirJyksCigxOCwgJ9it2K/ZitirJyksCigxOSwgJ9it2K/ZitirJyksCigyMCwgJ9it2K/ZitirJyksCigyMSwgJ9mC2LbYp9ihJyksCigyMSwgJ9it2K/ZitirJyksCigyMiwgJ9it2K/ZitirJyksCigyMywgJ9mB2YLZhycpLAooMjMsICfYrdiv2YrYqycpLAooMjQsICfZgdmC2YcnKSwKKDI1LCAn2K3Yr9mK2KsnKSwKKDI2LCAn2YHZgtmHJyksCigyNywgJ9mB2YLZhycpLAooMjcsICfYrdiv2YrYqycpLAooMjgsICfZgdmC2YcnKSwKKDI4LCAn2K3Yr9mK2KsnKSwKKDI5LCAn2YLYttin2KEnKSwKKDI5LCAn2YHZgtmHJyksCigzMCwgJ9mB2YLZhycpLAooMzEsICfZgdmC2YcnKSwKKDMyLCAn2K3Yr9mK2KsnKSwKKDMzLCAn2KrZgdiz2YrYsScpLAooMzMsICfYrdiv2YrYqycpLAooMzMsICfZgdmC2YcnKSwKKDM0LCAn2K3Yr9mK2KsnKSwKKDM1LCAn2LPZitin2LPYqSDZiNmC2YrYp9iv2KknKSwKKDM1LCAn2KrYp9ix2YrYricpOwoKSU5TRVJUIElOVE8gcGVyc29uX2RvbWFpbiAocGVyc29uX2lkLCBkb21haW5faWQpClNFTEVDVCBzLnBlcnNvbl9pZCwgZC5kb21haW5faWQKRlJPTSBfcGRfc3RhZ2UgcyBKT0lOIGRvbWFpbiBkIE9OIGQubmFtZV9hciA9IHMuZG9tYWluX25hbWU7CkRST1AgVEFCTEUgX3BkX3N0YWdlOwoKQ09NTUlUOwotLSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KLS0g2LPZj9i32YjYsSDZhdmGINij2YjYp9mEIOKAlCBTT1VSQ0Ug2YggRVZJREVOQ0UgKNin2YTYqNmP2LnYryDYp9mE2KvYp9mF2YY6INin2YTYqtmI2KvZitmCINin2YTZhdi12K/YsdmKINin2YTZg9in2YXZhCkKLS0gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tINiq2YbYqNmK2Ycg2YXZhtmH2KzZiiDZhdmH2YUg4oCUINmK2Y/Ysdis2Ykg2YLYsdin2KHYqtmHINmC2KjZhCDYp9mE2KrYudiv2YrZhDoKLS0KLS0g2YTYpyDZitit2KrZiNmKINmH2LDYpyDYp9mE2YXZhNmBINi52YTZiSDYp9iz2KrZhtio2KfYt9in2Kog2KPZiCDYqtiu2YXZitmG2KfYqiDZhNij2LHZgtin2YUg2LXZgdit2KfYqiDYo9mIINij2KzYstin2KEg2KPZiAotLSDZhti12YjYtSDZhdmC2KrYqNiz2KkuINin2YTZhdi12YHZiNmB2Kkg2KfZhNij2LXZhNmK2Kkg2YbYtdmR2Kog2LXYsdin2K3YqdmLINi52YTZiSDYo9mGINin2YTYqNi32KfZgtin2Kog2KfZhNmAMzUgItmG2YjYp9ipCi0tINio2LHZhdis2YrYqSDYo9mI2YTZiSDYqtiu2LbYuSDZhNmF2LLZitivINmF2YYg2KfZhNiq2YHYsdmK2Log2KfZhNmF2LXYr9ix2Yog2KfZhNiv2YLZitmCItiMINij2Yog2KPZhiDYo9ix2YLYp9mFINin2YTYtdmB2K3Yp9iqCi0tINmI2KfZhNmG2LXZiNi1INin2YTYrdix2YHZitipINmE2YUg2KrZj9iz2KrYrtix2Kwg2KjYudivINmF2YYg2KfZhNi32KjYudin2Kog2KfZhNmF2LnYqtmF2K/YqS4KLS0KLS0g2KXYr9iu2KfZhCDYp9iz2KrYtNmH2KfYr9in2Kog2YjZh9mF2YrYqSAo2LnZhtin2YjZitmGINmD2KrYqNiMINij2LHZgtin2YUg2KPYrNiy2KfYoSDZiNi12YHYrdin2KrYjCDZhti12YjYtSDZhdmC2KrYqNiz2KkpINmH2YbYpwotLSDYs9mK2Y/Zhtiq2Kwg2KrZiNir2YrZgtin2Ysg2YrYqNiv2Ygg2K/ZgtmK2YLYp9mLINio2YrZhtmF2Kcg2YfZiCDYutmK2LEg2YXYs9mG2Y7YryDZgdi52YTZitin2Ysg4oCUINmI2YfYsNinINiu2LfYsSDZhdio2KfYtNixINi52YTZiQotLSDZhdi12K/Yp9mC2YrYqSDYo9ix2LTZitmBINi52YTZhdmKINmF2K3Zg9mO2ZHZhSDZhdir2YQgwqvYs9mP2LfZiNixINmF2YYg2KPZiNin2YTCuy4g2YTYsNmE2YM6Ci0tCi0tICAg4oCiINij2Y/Yr9ix2Kwg2KPYr9mG2KfZhyDYp9mE2YXYtdiv2LEg2KfZhNmI2K3ZitivINin2YTZhdiz2YXZkdmJINi12LHYp9it2KnZiyDZgdmKINmI2KvZitmC2KrZgyDYp9mE2KPYtdmE2YrYqQotLSAgICAgKNiq2YfYsNmK2Kgg2KfZhNmD2YXYp9mE2Iwg2YPYr9mE2YrZhCDYp9mE2YjZhNin2KEg2KfZhNiu2KfYtSDYqNmK2YjZhtizINio2YYg2LnYqNmK2K/YjCDYp9mE2KjYt9in2YLYqSDYsdmC2YUgMTcpCi0tICAgICDYr9mI2YYg2KfYrtiq2YTYp9mCINis2LLYoS/YtdmB2K3YqS/Zhti1INmE2YUg2YrYsdivLgotLSAgIOKAoiDYo9mP2LbZitmBINmE2KfYrdmC2KfZiyDZhdi12K/YsSDYq9in2YbZjSDYstmI2ZHYr9iq2YbYpyDYqNmHINij2YbYqiDZhdio2KfYtNix2KkgKNmD2KrYp9ioINin2YTZiNiy2KfZhtiMINin2YTYqNi32KfZgtipCi0tICAgICDYsdmC2YUgMzUg2KPYqNmIINin2YTYqNmH2YTZiNmEKSDigJQg2KfZhti42LEg2KfZhNmC2LPZhSDYp9mE2KvYp9mG2Yog2KPYr9mG2KfZhy4KLS0gICDigKIg2KjZgtmK2Kkg2KfZhNmAMzMg2KjYt9in2YLYqSDYqtmP2LHZg9iqINiv2YjZhiDYtdmB2YjZgSBldmlkZW5jZSDYudmF2K/Yp9mLIOKAlCDYp9mE2KzYr9mI2YTYp9mGINis2KfZh9iy2KfZhgotLSAgICAg2KjZhtmK2YjZitin2Ysg2YTYp9iz2KrZgtio2KfZhCDYqNmK2KfZhtin2KrZgyDYqNmF2KzYsdivINiq2YHYsdmK2LrZh9inINmF2YYg2KfZhNi32KjYudin2Kog2KfZhNmF2LnYqtmF2K/YqS4KLS0gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CgpCRUdJTjsKCklOU0VSVCBJTlRPIHNvdXJjZSAodGl0bGUsIGF1dGhvciwgcHVibGlzaGVyX2VkaXRvciwgZWRpdGlvbiwgdm9sdW1lLCBwYWdlLCBlbnRyeV9udW1iZXIpIFZBTFVFUwooJ9iq2YfYsNmK2Kgg2KfZhNmD2YXYp9mEINmB2Yog2KPYs9mF2KfYoSDYp9mE2LHYrNin2YQnLCAn2KzZhdin2YQg2KfZhNiv2YrZhiDYo9io2Ygg2KfZhNit2KzYp9isINmK2YjYs9mBINin2YTZhdiy2YogKNmm2aXZpC3Zp9mk2aLZh9mAKScsCiAn2KrYrdmC2YrZgiDYry4g2KjYtNin2LEg2LnZiNin2K8g2YXYudix2YjZgSDigJQg2YXYpNiz2LPYqSDYp9mE2LHYs9in2YTYqdiMINio2YrYsdmI2KonLCAn2KfZhNij2YjZhNmJ2Iwg2aHZpNmg2aAt2aHZpNmh2aPZh9mAID0g2aHZqdmo2aAt2aHZqdmp2aLZhScsICfZo9mlINis2LLYodin2YsgKNmD2KrYp9ioINmD2KfZhdmEKScsIE5VTEwsIE5VTEwpOwoKSU5TRVJUIElOVE8gZXZpZGVuY2UgKHBlcnNvbl9pZCwgc291cmNlX2lkLCBjbGFpbV90eXBlLCBxdW90YXRpb24sIGNvbmZpZGVuY2UsIG5vdGVzKQpTRUxFQ1QgMTcsIHNvdXJjZV9pZCwgJ0xpbmVhZ2UnLCBOVUxMLCAzLAogICAgICAgJ9mI2KvZitmC2Kkg2KfZhNmF2LTYsdmI2Lkg2KfZhNij2LXZhNmK2Kkg2YbYtdmR2Kog2LnZhNmJINij2YYg2YjZhNin2KEg2YrZiNmG2LMg2KjZhiDYudio2YrYryDZhNi52KjYryDYp9mE2YLZitizINmF2YbYtdmI2LUg2LnZhNmK2Ycg2YHZiiDYqtmH2LDZitioINin2YTZg9mF2KfZhCAo2K/ZhNmK2YQgVzEp2JsgJwogICAgICAgJ9io2YrYp9mG2KfYqiDYp9mE2YPYqtin2KggKNin2YTZhdik2YTZgS/Yp9mE2YXYrdmC2YIv2KfZhNmG2KfYtNixL9in2YTYt9io2LnYqS/Yudiv2K8g2KfZhNij2KzYstin2KEpINmF2KTZg9mO2ZHYr9ipINmF2YYg2YHZh9ix2LMg2KfZhNmF2YPYqtio2Kkg2KfZhNi02KfZhdmE2KkgKHNoYW1lbGEud3MvYm9vay8zNzIyKdibICcKICAgICAgICfYp9mE2KzYstihINmI2LHZgtmFINin2YTYqtix2KzZhdipINmI2KfZhNmG2LUg2KfZhNit2LHZgdmKINmE2YXZiNi22Lkg2KrYsdis2YXYqSDZitmI2YbYsyDYqtit2K/Zitiv2KfZiyDZhNmFINmK2Y/Ys9iq2K7Ysdis2Kcg2KjYudivIOKAlCDYo9mP2K/Ysdis2Kog2KfZhNir2YLYqSDZh9mG2Kcg2YPZgDMvNSDYrdiq2Ykg2KrZj9ix2KfYrNmO2Lkg2KfZhNi32KjYudipINin2YTZhdi52KrZhdiv2Kkg2YjYqtmP2LHZgdmO2Lkg2KXZhNmJIDUvNS4nCkZST00gc291cmNlIFdIRVJFIHRpdGxlID0gJ9iq2YfYsNmK2Kgg2KfZhNmD2YXYp9mEINmB2Yog2KPYs9mF2KfYoSDYp9mE2LHYrNin2YQnOwoKLS0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCi0tINiq2K3Yr9mK2Ksg2YTYp9it2YIgKNio2LfYp9mC2KkgMzUg4oCUINij2KjZiCDYp9mE2KjZh9mE2YjZhCDYp9mE2LnZiNin2YUg2KjZhiDZhdit2YXYryDYp9mE2LLYrNin2Kwg2KfZhNi52KjYr9mKKToKLS0g2KfZhNmF2LDZh9ioINin2YTZgdmC2YfZiiDYrdmP2K/ZkNmR2Ksg2YXZhiAi2LrZitixINmF2K3Yr9ivIiDYpdmE2YkgItit2YbZgdmKIiDYqNmG2KfYodmLINi52YTZiSDZhdi12K/YsSDYstmI2ZHYr9mG2KcKLS0g2KjZhyDYp9mE2YXYs9iq2K7Yr9mFICjZhNmC2LfYqSDYtNin2LTYqSDZhdmGINiu2YTYp9i12Kkg2YPYqtin2Kgg2KfZhNmI2LLYp9mGINin2YTZhdmG2LTZiNix2Kkg2LnZhNmJINin2YTZhdmG2LXYqSkuCi0tINin2YTZhdi12K/YsSDZiti02YrYsSDYpdmE2YkgItin2YTZhdiw2YfYqCDYp9mE2K3ZhtmB2Yog2YXYuSDYotmEINin2YTYstis2KfYrCIg2LbZhdmGINij2K/ZhNipINin2YTYrdi22YjYsSDYp9mE2LPZhtmK2IwKLS0g2YjYpdmE2Ykg2KPZhiDYo9io2Kcg2KfZhNio2YfZhNmI2YQg2YjYo9iu2KfZhyDZg9in2YbYpyDYudmE2Ykg2YXYsNmH2Kgg2KPYqNmKINit2YbZitmB2Kkg2KfZhNmG2LnZhdin2YYuCi0tINin2YTZhtmC2LfYqSDZgdmKINiu2YTYp9i12Kkg2KfZhNmF2YbYtdipINil2LnYp9iv2Kkg2LXZitin2LrYqSDZhdmI2KvZgtipINio2KfZhNi12YHYrdipINmE2Kcg2YbZgtmEINit2LHZgdmKINi52YYKLS0g2KfZhNmD2KrYp9ioINin2YTYo9i12YTZiiAo2YPZhdinINmH2Ygg2YXZj9mE2KrYstmO2YUg2YHZiiDZhdmG2YfYrNmK2Kkg2KrZhNmDINin2YTYrtmE2KfYtdipKdiMINmE2LDYpyDYqtmP2LHZgyDYrdmC2YQKLS0gcXVvdGF0aW9uINmB2KfYsdi62KfZiyDZiNin2YTYp9iz2KrZhtin2K8g2YXZiNir2Y7ZkdmCINmB2Yogbm90ZXMuCi0tIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpJTlNFUlQgSU5UTyBzb3VyY2UgKHRpdGxlLCBhdXRob3IsIHB1Ymxpc2hlcl9lZGl0b3IsIGVkaXRpb24sIHZvbHVtZSwgcGFnZSwgZW50cnlfbnVtYmVyKSBWQUxVRVMKKCfYqNmE2KfYryDYp9mE2KjYrdix2YrZhiDZgdmKINmB2KrYsdipINin2YTYpdmF2KfYsdiq2YrZhiDYp9mE2LnZitmI2YbZitipINmI2KfZhNi52YLZitmE2YrYqTog2K/Ysdin2LPYqSDZhNiq2KfYsdmK2K4g2KfZhNiu2YTZitisINin2YTYudix2KjZiiDZgdmKINmF2LHYrdmE2Kkg2YXYpyDYqNi52K8g2KfZhNmC2LHYp9mF2LfYqSA0NDAtODAw2YfZgC8xMDUwLTE0MDDZhScsCiAn2YHZiti12YQg2LnYp9iv2YQg2KfZhNmI2LLYp9mGICjYqtix2KzZhdipINit2YPZhdiqINiv2LHYqNin2LMpJywgJ9iv2KfYsSDYp9mE2YXYsdmC2KfYqCDZhNmE2YbYtNix2Iwg2KfZhNmD2YjZitiqJywgJzIwMTknLCBOVUxMLCAnMjg0LTI4NScsICfZgdmnJyk7CgpJTlNFUlQgSU5UTyBldmlkZW5jZSAocGVyc29uX2lkLCBzb3VyY2VfaWQsIGNsYWltX3R5cGUsIHF1b3RhdGlvbiwgY29uZmlkZW5jZSwgbm90ZXMpClNFTEVDVCAzNSwgc291cmNlX2lkLCAnRmlxaCBTY2hvb2wnLCBOVUxMLCA0LAogICAgICAgJ9iu2YTYp9i12Kkg2KfZhNmD2KrYp9ioINi52YTZiSDZhdmG2LXYqSDYs9mP2LfZiNixICjYqNin2Kgg2ac6INin2YTYt9mI2KfYptmBINin2YTYr9mK2YbZitipKSDYqtiw2YPYsSDYttmF2YYg2KPYr9mE2Kkg2KfZhNit2LbZiNixINin2YTYs9mG2Yog2YHZiiDYqNmE2KfYryDYp9mE2KjYrdix2YrZhjogJwogICAgICAgJyLYp9mE2YXYsNmH2Kgg2KfZhNit2YbZgdmKINmF2Lkg2KLZhCDYp9mE2LLYrNin2KwiIOKAlCDZiNii2YQg2KfZhNiy2KzYp9isINmH2YUg2KPYs9ix2Kkg2KPYqNmKINin2YTYqNmH2YTZiNmEINin2YTYudmI2KfZhSDYqNmGINmF2K3ZhdivINin2YTYstis2KfYrCDYp9mE2LnYqNiv2YogKNmF2KTYs9izICcKICAgICAgICfYpdmF2KfYsdipINii2YQg2KfZhNiy2KzYp9is2Iwg2YHZoiDZhdmGINin2YTZg9iq2KfYqCkuINiw2YPYsSDYp9mE2YXYs9iq2K7Yr9mFINij2YYg2KPYqNinINin2YTYqNmH2YTZiNmEINmI2KPYrtin2Ycg2YPYp9mG2Kcg2LnZhNmJINmF2LDZh9ioINij2KjZiiDYrdmG2YrZgdipINin2YTZhti52YXYp9mGICcKICAgICAgICfYqtit2K/Zitiv2KfZiy4g2KfZhNmG2LUg2KXYudin2K/YqSDYtdmK2KfYutipINmF2YjYq9mC2Kkg2KjYp9mE2LXZgdit2Kkg2YXZhiDYrtmE2KfYtdipINin2YTZhdmG2LXYqSDZhNinINin2YLYqtio2KfYsyDYrdix2YHZiiDYudmGINi32KjYudipINiv2KfYsSDYp9mE2YXYsdmC2KfYqCAyMDE5LicKRlJPTSBzb3VyY2UgV0hFUkUgZW50cnlfbnVtYmVyID0gJ9mB2acnIEFORCBwYWdlID0gJzI4NC0yODUnOwoKQ09NTUlUOwo=", mime: "application/sql", filename: "abd_alqays_schema_and_data.sql" },
+  zip: { b64: "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", mime: "application/zip", filename: "aq_extract_pipeline.zip" },
+};
+
+function base64ToBlob(b64, mime){
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+function triggerDownload(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+function downloadEmbedded(key, btn){
+  const f = EMBEDDED_FILES[key];
+  if(!f) return;
+  const blob = base64ToBlob(f.b64, f.mime);
+  triggerDownload(blob, f.filename);
+  if(btn){ btn.textContent = '✓ نُزِّل'; btn.classList.add('done'); }
+}
+
+function downloadSelf(btn){
+  const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' });
+  triggerDownload(blob, 'abd_alqays_معاينة_وتحميل.html');
+  if(btn){ btn.textContent = '✓ نُزِّل'; btn.classList.add('done'); }
+}
+</script>
+</body>
+</html>
