@@ -551,13 +551,11 @@ button, input { font: inherit; }
 }
 
 .platform-heading {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 90px;
-  align-items: end;
+  position: relative;
+  max-width: 960px;
+  padding-bottom: 46px;
 }
 
-.platform-heading .eyebrow { color: #d8b676; }
 .platform-heading h2,
 .library-section h2,
 .download-feature h2,
@@ -569,17 +567,41 @@ button, input { font: inherit; }
   line-height: 1.2;
 }
 
-.platform-heading > p {
-  margin: 0;
+.platform-heading h2 {
+  color: #dfbd78;
+  font-size: clamp(54px, 6vw, 88px);
+  text-shadow: 0 2px 24px rgba(216, 182, 118, 0.09);
+}
+
+.platform-heading::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: min(180px, 32vw);
+  height: 1px;
+  content: "";
+  background: linear-gradient(to left, #d8b676, rgba(216, 182, 118, 0));
+}
+
+.platform-heading .platform-subtitle {
+  margin: 18px 0 0;
+  color: #f2ecdc;
+  font-family: var(--display);
+  font-size: clamp(28px, 3vw, 43px);
+  line-height: 1.45;
+}
+
+.platform-heading .platform-prompt {
+  margin: 26px 0 0;
   color: #c5d0ca;
-  font-size: 12px;
-  line-height: 2.15;
+  font-size: clamp(13px, 1.25vw, 17px);
+  line-height: 2;
 }
 
 .platform-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin-top: 75px;
+  margin-top: 58px;
   border: 1px solid rgba(216, 182, 118, 0.35);
 }
 
