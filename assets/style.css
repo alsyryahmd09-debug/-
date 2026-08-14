@@ -349,10 +349,7 @@ button, input { font: inherit; }
 .portal-icon { position: absolute; top: 42px; left: 42px; display: grid; width: 95px; height: 95px; place-items: center; border: 1px solid rgba(242, 236, 220, 0.25); border-radius: 50%; }
 .portal-icon svg { width: 37px; fill: none; stroke: currentColor; stroke-width: 1.3; }
 
-.portal-search { color: var(--paper-light); background: var(--ink); }
-.portal-search .portal-kicker { color: #d5ad6e; }
-.portal-search p:last-child { color: #b8c3bc; }
-.portal-map { grid-row: span 2; color: var(--paper-light); background: var(--red); }
+.portal-map { color: var(--paper-light); background: var(--red); }
 .portal-map::after { position: absolute; inset: 0; content: ""; background: linear-gradient(to top, rgba(14,43,37,.88) 0, rgba(14,43,37,.1) 65%); }
 .portal-map img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: sepia(.2) saturate(.65); transition: transform 500ms ease; }
 .portal-map:hover img { transform: scale(1.04); }
@@ -360,7 +357,15 @@ button, input { font: inherit; }
 .portal-map p:last-child { color: #e3dfd4; }
 .portal-map .portal-kicker { color: #e1b874; }
 .portal-lineage { padding-right: 220px; background: #e6ddc8; }
-.portal-library { display: none; }
+.portal-library { background: var(--paper-light); }
+.portal-library .portal-icon { border-color: var(--line); }
+.portal-model { color: var(--paper-light); background: var(--ink-deep); }
+.portal-model::after { position: absolute; inset: 0; content: ""; background: linear-gradient(to top, rgba(8, 31, 27, .96) 0, rgba(8, 31, 27, .68) 48%, rgba(8, 31, 27, .2) 100%); }
+.portal-model img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 31%; filter: saturate(.72) contrast(1.05); transition: transform 500ms ease; }
+.portal-model:hover img { transform: scale(1.04); }
+.portal-model > :not(img) { z-index: 1; }
+.portal-model .portal-kicker { color: #e1b874; }
+.portal-model p:last-child { color: #e3dfd4; }
 
 .lineage-art { position: absolute; top: 25px; right: 35px; width: 145px; height: 190px; }
 .lineage-art span { position: absolute; width: 34px; height: 34px; border: 1px solid var(--gold); border-radius: 50%; background: var(--paper); }
@@ -455,8 +460,6 @@ button, input { font: inherit; }
   .hero-image-wrap { width: calc(100% - 48px); height: 540px; }
   .hero-visual::before { inset: 5% 0 5% 8%; }
   .portal-grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 310px); }
-  .portal-map { grid-row: auto; }
-  .portal-library { display: flex; background: var(--paper-light); }
   .featured { grid-template-columns: 1fr; }
   .featured-copy { order: -1; max-width: 760px; padding: 80px max(24px, calc((100vw - 760px) / 2)); }
   .research { grid-template-columns: 1fr; gap: 55px; }
