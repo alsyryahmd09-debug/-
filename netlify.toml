@@ -77,6 +77,11 @@
   status = 200
 
 [[redirects]]
+  from = "/sutoor-bahrain-awal-critical-reading"
+  to = "/sutoor-bahrain-awal-critical-reading.html"
+  status = 200
+
+[[redirects]]
   from = "/Burial-Mounds-of-Bahrain-Illustrated-Summary"
   to = "/Burial-Mounds-of-Bahrain-Illustrated-Summary.html"
   status = 200
