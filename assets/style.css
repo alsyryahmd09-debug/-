@@ -977,6 +977,12 @@ h1, h2, h3, p, li, dt, dd, span, strong, small, a, pre { overflow-wrap: break-wo
 
 .platform-entry-cta svg {
   width: 15px;
+  height: auto;
+  /* السهم لا يتمدّد ولا يتقلّص داخل الحاوية المرنة مهما طال النص المجاور.
+     للأشكال الزخرفية الأكبر استخدم الكلاس decorative-svg (48px) من
+     responsive.css. The arrow can neither stretch nor shrink inside the flex
+     container, however long the adjacent label runs. */
+  flex: 0 0 auto;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -994,9 +1000,20 @@ h1, h2, h3, p, li, dt, dd, span, strong, small, a, pre { overflow-wrap: break-wo
   border: 1px solid rgba(216, 182, 118, 0.35);
 }
 
+/* الهوية البصرية هنا شريط واحد مقسوم بحدود ذهبية، لا بطاقات متباعدة؛
+   لذلك تُلغى فجوة .stats-grid العامة وتبقى الحدود هي الفاصل.
+   الخصوصية أعلى من .stats-grid لأنّ responsive.css يُحمّل بعد هذا الملف.
+   This block's identity is one strip divided by gold rules, not spaced cards,
+   so the generic gap is cancelled and the borders stay the divider. Specificity
+   is raised above .stats-grid because responsive.css loads after this file. */
+.platform-section .platform-stats {
+  gap: 0;
+}
+
 .platform-stats .stat {
   display: flex;
   min-height: clamp(9.5rem, 15vw, 13.125rem);
+  min-width: 0;
   flex-direction: column;
   justify-content: flex-end;
   padding: var(--space-card);
@@ -1281,9 +1298,6 @@ h1, h2, h3, p, li, dt, dd, span, strong, small, a, pre { overflow-wrap: break-wo
 
 @media (max-width: 1120px) {
   .citation-section { grid-template-columns: minmax(0, 1fr); gap: 45px; }
-  .platform-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .platform-stats .stat:nth-child(2) { border-left: 0; }
-  .platform-stats .stat:nth-child(-n+2) { border-bottom: 1px solid rgba(216, 182, 118, 0.28); }
   .library-grid a,
   .library-grid a:first-child,
   .library-grid a:nth-child(2) { grid-column: span 6; }
@@ -1312,10 +1326,27 @@ h1, h2, h3, p, li, dt, dd, span, strong, small, a, pre { overflow-wrap: break-wo
   .oral-history-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* شبكة الإحصاءات تتحول إلى عمودين تحت 768px (نفس نقطة تحوّل .stats-grid)،
+   لذلك يجب أن يتبع منطق الحدود عدد الأعمدة الفعلي لا نقطة 1120px القديمة:
+   الخليّة الثانية تلامس الحافة اليسرى للإطار فتفقد حدّها، والخليّتان الأولى
+   والثانية تحملان الفاصل الأفقي بين صفّي المربع 2×2.
+   The stats grid drops to two columns below 768px (matching .stats-grid), so the
+   border logic has to follow the real column count rather than the old 1120px
+   breakpoint: cell 2 sits against the frame's left edge and loses its rule,
+   while cells 1-2 carry the horizontal divider of the 2x2 block. */
+@media (max-width: 767.98px) {
+  .platform-stats .stat:nth-child(2) { border-left: 0; }
+  .platform-stats .stat:nth-child(-n+2) { border-bottom: 1px solid rgba(216, 182, 118, 0.28); }
+}
+
 @media (max-width: 520px) {
-  .platform-stats { grid-template-columns: minmax(0, 1fr); }
-  .platform-stats .stat { min-height: clamp(8rem, 32vw, 10.9375rem); border-left: 0; border-bottom: 1px solid rgba(216, 182, 118, 0.28); }
-  .platform-stats .stat:last-child { border-bottom: 0; }
+  /* عمودان على الهاتف: الأرقام تبقى مقروءة والشريط لا يطول أربع شاشات.
+     Two columns on phones: the numerals stay legible and the strip no longer
+     runs four screens long. Borders come from the 767.98px block above. */
+  .platform-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .platform-stats .stat { min-height: clamp(7.5rem, 30vw, 10.9375rem); padding: clamp(0.875rem, 3.4vw, 1.25rem); }
+  .platform-stats strong { font-size: clamp(2.25rem, 11vw, 3.25rem); }
+  .platform-stats span { margin-top: 10px; }
   .platform-portal { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; }
   .platform-portal-mark { width: clamp(128px, 42vw, 168px); }
   .platform-entry-cta { justify-content: center; }

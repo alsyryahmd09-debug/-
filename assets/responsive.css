@@ -10,13 +10,18 @@
    adapt to phones, tablets, desktops and large displays — without taking
    design control away from each page.
 
-   القاعدة الهندسية: كل ما يخصّ الشكل مكتوب بـ :where() أي بخصوصية صفرية،
-   فتبقى الأولوية لتنسيق الصفحة نفسها، ولا تُستخدم !important إلا لإصلاحات
-   قابلية الاستخدام على شاشات اللمس (تكبير iOS التلقائي، مساحات اللمس).
+   القاعدة الهندسية: حِراسات التخطيط الخاصة بالشكل مكتوبة بـ :where() أي
+   بخصوصية صفرية، فتبقى الأولوية لتنسيق الصفحة نفسها. أما القواعد التي يجب
+   أن تسبق سمات HTML أو التنسيقات القديمة — أبعاد الوسائط وعناصر SVG،
+   والتفاف النصوص، وإزالة تسطير الروابط — فهي بخصوصية عنصر مقصودة، ومعلّمة
+   بتعليق يوضّح السبب. ولا تُستخدم !important إلا في موضعين: إصلاحات
+   قابلية الاستخدام على شاشات اللمس، والكلاس decorative-svg.
 
-   Engineering rule: layout guards use :where() (zero specificity) so page
-   styles always win on aesthetics. !important appears only for touch-device
-   usability fixes that must not be overridden.
+   Engineering rule: aesthetic layout guards use :where() (zero specificity) so
+   page styles always win. Rules that must beat HTML attributes or legacy page
+   CSS — media and SVG sizing, text wrapping, link underline removal — use
+   deliberate element specificity and say why in a comment. !important appears
+   in exactly two places: touch-device usability fixes, and .decorative-svg.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -54,17 +59,36 @@ html {
    2) لا تمرير أفقي أبدًا — Never scroll sideways
    overflow-x: clip بدل hidden، لأن hidden يعطّل position: sticky.
    -------------------------------------------------------------------------- */
-:where(html, body) {
+html,
+body {
   max-width: 100%;
+  margin: 0;
+  overflow-x: hidden;
 }
 
 @supports (overflow: clip) {
-  /* خصوصية عنصر مقصودة: clip أفضل من hidden لأنه لا يُنشئ حاوية تمرير
-     تُعطّل الترويسات اللاصقة. Deliberate element specificity — clip does not
-     create a scroll container, so sticky headers keep working. */
+  /* clip يمنع التمرير الأفقي مثل hidden، لكنه لا يُنشئ حاوية تمرير، فتبقى
+     الترويسات اللاصقة (position: sticky) في كل صفحات المنصة تعمل كما هي.
+     كل ترويسات المنصة sticky وليست fixed، لذا يبقى hidden احتياطيًا فقط.
+     clip stops sideways scrolling exactly like hidden, but does not create a
+     scroll container — so every sticky header on the platform keeps working.
+     hidden above is only the legacy fallback. */
+  html,
   body {
     overflow-x: clip;
   }
+}
+
+/* الروابط بلا تسطير افتراضيًا؛ وتُستعاد بإضافة الكلاس keep-underline.
+   لا يُضاف تسطير عند :hover لأن روابط هذه المنصة تعتمد مؤشرات خاصة بها
+   (خط متحرك في التنقل، تغيّر خلفية البطاقة في المكتبة)، وأي تسطير عام
+   سيتضاعف معها ويسطّر البطاقة بكاملها.
+   Links are undecorated by default; add .keep-underline to opt back in.
+   No :hover underline is added — this platform's links already carry their own
+   affordances (an animated rule in the nav, a background change on library
+   cards), and a blanket underline would double up and underline whole cards. */
+a:not(.keep-underline) {
+  text-decoration: none;
 }
 
 /* --------------------------------------------------------------------------
@@ -80,6 +104,41 @@ html {
   height: auto;
 }
 
+/* قاعدة عامة آمنة للصور والوسائط المباشرة — بخصوصية عنصر حتى تسبق
+   القيم الافتراضية للسمات width/height في HTML.
+   Element-specificity guard so the HTML width/height attributes cannot
+   force a media element wider than its container. */
+img,
+picture,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   3-ب) عناصر SVG: لا تتمدّد أبدًا خارج حاويتها — SVG never outgrows its box
+   العنصر <svg> بلا width/height صريحين قيمته الافتراضية 100% على المحورين،
+   فيخرج عملاقًا داخل أي حاوية مرنة. height: auto يعيده إلى نسبة viewBox.
+   An <svg> with no explicit width/height defaults to 100% on BOTH axes, so it
+   renders giant inside any flexible container. height: auto restores the
+   viewBox aspect ratio instead.
+   -------------------------------------------------------------------------- */
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   3-ج) الأشكال الزخرفية — Decorative marks
+   -------------------------------------------------------------------------- */
+.decorative-svg {
+  width: 48px !important;
+  height: 48px !important;
+  flex: 0 0 48px;
+  min-width: 48px;
+  min-height: 48px;
+}
+
 :where(img) {
   /* النص البديل يبقى مقروءًا إن تعذّر تحميل الصورة */
   font-size: var(--rs-text-2xs);
@@ -91,11 +150,65 @@ html {
 }
 
 /* --------------------------------------------------------------------------
+   3-د) الترويسة والمحتوى: لا تداخل — Header never covers content
+   كل ترويسات هذه المنصة sticky أو داخل السياق العادي، أي أنها تحتلّ مساحتها
+   في التخطيط ولا تركب فوق المحتوى؛ لذلك إضافة padding-top ثابت هنا كانت
+   ستُحدث فراغًا ميتًا أعلى كل صفحة وتكسر الواجهة الرئيسية. الحلّ:
+
+   1) position: relative للحاوية الرئيسية (سياق تمركز واضح للطبقات).
+   2) الهامش الأعلى 112px يُفعَّل فقط عند وجود ترويسة fixed حقيقية،
+      عبر data-fixed-header على body.
+   3) التداخل الفعلي الوحيد يحدث عند القفز إلى مرساة (#id): الوجهة تختفي
+      تحت الترويسة اللاصقة. scroll-padding-top هو الإصلاح الصحيح لذلك.
+
+   Every header here is sticky or in normal flow — it occupies layout space and
+   never overlaps content, so a hard padding-top would only add a dead band and
+   break the homepage hero. Instead: relative positioning, an opt-in offset for
+   genuinely fixed headers, and scroll-padding-top for anchor jumps — which is
+   where the sticky header really did hide content.
+   -------------------------------------------------------------------------- */
+:root {
+  --rs-header-offset: 112px;
+  --rs-anchor-offset: 96px;
+}
+
+main,
+.main-content {
+  position: relative;
+}
+
+body[data-fixed-header] main,
+body[data-fixed-header] .main-content {
+  padding-top: var(--rs-header-offset);
+}
+
+/* :where() حتى تبقى الأولوية للصفحات التي ضبطت مقدارها بنفسها */
+:where(html) {
+  scroll-padding-top: var(--rs-anchor-offset);
+}
+
+@media (max-width: 620px) {
+  :root {
+    --rs-anchor-offset: 84px;
+  }
+}
+
+/* --------------------------------------------------------------------------
    4) الكلمات والسطور: تلتف ولا تدفع التصميم — Text wraps, never pushes
    -------------------------------------------------------------------------- */
 :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, blockquote, figcaption, caption,
        th, td, label, legend, summary, a, span, strong, em, b, i, small, time) {
   overflow-wrap: break-word;
+}
+
+/* النصوص والعناوين لا تخرج من صندوقها مهما طالت الكلمة أو الرابط.
+   بخصوصية عنصر حتى تسبق تنسيقات الصفحات التي تضبط white-space أو الأطوال.
+   Element specificity so no page style can let a long word or URL push a
+   heading past the edge of the screen. */
+h1, h2, h3, h4, h5, h6,
+p, li, dt, dd, blockquote, figcaption, caption, th, td, label, legend, summary {
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 :where(h1, h2, h3, h4, h5, h6) {
@@ -166,6 +279,32 @@ html {
    -------------------------------------------------------------------------- */
 :where([class*="grid"], [class*="cards"], [class*="row"], [class*="flex"]) > * {
   min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   7-ب) شبكة الإحصائيات — Stats grid
+   عمودان على الهاتف وأربعة على الحاسب. minmax(0, 1fr) مع min-width: 0 هما
+   ما يمنع البطاقة من التمدّد بعرض محتواها واقتطاع بقيّة الأعمدة.
+   Two columns on phones, four from 768px up. minmax(0, 1fr) plus min-width: 0
+   is what stops a card from growing to its content width and clipping the rest.
+   -------------------------------------------------------------------------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.stats-grid > * {
+  min-width: 0;
+  /* يمنع الرقم الكبير من فرض عرض أدنى يكسر الشبكة */
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 /* --------------------------------------------------------------------------
