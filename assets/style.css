@@ -784,7 +784,19 @@ button, input { font: inherit; }
   border: 1px solid rgba(216, 182, 118, 0.35);
   background: rgba(251, 247, 237, 0.03);
   color: inherit;
+  text-decoration: none;
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease, background-color 220ms ease;
 }
+
+.platform-portal:hover,
+.platform-portal:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(216, 182, 118, 0.78);
+  background: rgba(251, 247, 237, 0.065);
+  box-shadow: 0 26px 55px rgba(4, 20, 17, 0.42);
+}
+
+.platform-portal:active { transform: translateY(-1px); }
 
 .platform-portal-mark {
   display: grid;
@@ -796,9 +808,22 @@ button, input { font: inherit; }
   display: block;
   width: 100%;
   height: auto;
+  transition: transform 420ms ease;
 }
 
+.platform-portal:hover .platform-portal-mark img,
+.platform-portal:focus-visible .platform-portal-mark img { transform: scale(1.045) rotate(-1.5deg); }
+
 .platform-portal-copy { display: block; }
+
+.platform-kicker {
+  display: block;
+  margin-bottom: 10px;
+  color: #d7b16d;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
 
 .platform-portal h2,
 .library-section h2,
@@ -817,6 +842,12 @@ button, input { font: inherit; }
   text-shadow: 0 2px 24px rgba(216, 182, 118, 0.09);
 }
 
+.platform-portal h2 em {
+  color: #f2ecdc;
+  font-style: normal;
+  font-size: 0.68em;
+}
+
 .platform-portal .platform-subtitle {
   display: block;
   margin: 14px 0 0;
@@ -833,6 +864,32 @@ button, input { font: inherit; }
   font-size: clamp(13px, 1.25vw, 17px);
   line-height: 2;
 }
+
+.platform-entry-cta {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 12px 22px;
+  color: #14302a;
+  background: #dfbd78;
+  font-size: 10px;
+  font-weight: 700;
+  transition: gap 200ms ease, background-color 200ms ease;
+}
+
+.platform-entry-cta svg {
+  width: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.platform-portal:hover .platform-entry-cta,
+.platform-portal:focus-visible .platform-entry-cta { gap: 18px; background: #f0dcae; }
 
 .platform-stats {
   display: grid;
@@ -876,133 +933,151 @@ button, input { font: inherit; }
 .capabilities h3 { margin: 62px 0 12px; font-family: var(--display); font-size: 28px; font-weight: 400; line-height: 1.25; }
 .capabilities p { margin: 0; color: #9eb0a7; font-size: 9px; line-height: 2; }
 
-.ontology-entry {
+.oral-history-section {
+  position: relative;
+  overflow: hidden;
+  padding: 125px 0;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(143, 41, 38, 0.09), transparent 32%),
+    linear-gradient(135deg, #f5efdf 0%, #ece1c9 100%);
+}
+
+.oral-history-section::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  opacity: 0.28;
+  background-image: repeating-linear-gradient(90deg, transparent 0 46px, rgba(83, 60, 39, 0.08) 47px, transparent 48px);
+}
+
+.oral-history-heading {
   position: relative;
   display: grid;
-  max-width: 960px;
-  align-items: stretch;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  margin-top: 56px;
-  overflow: hidden;
-  color: inherit;
-  background: rgba(251, 247, 237, 0.03);
-  border: 1px solid rgba(216, 182, 118, 0.35);
-  text-decoration: none;
-  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
-}
-
-.ontology-entry:hover,
-.ontology-entry:focus-visible {
-  transform: translateY(-5px);
-  border-color: rgba(216, 182, 118, 0.75);
-  box-shadow: 0 26px 55px rgba(4, 20, 17, 0.42);
-}
-
-.ontology-entry:active { transform: translateY(-1px); }
-
-.ontology-entry-media {
-  position: relative;
-  display: block;
-  min-height: 320px;
-  overflow: hidden;
-  background: #0b201c;
-}
-
-.ontology-entry-media img {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 31%;
-  filter: saturate(0.75) contrast(1.05);
-  transition: transform 600ms ease;
-}
-
-.ontology-entry:hover .ontology-entry-media img { transform: scale(1.05); }
-
-.ontology-entry-media::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background: linear-gradient(to left, rgba(14, 43, 37, 0) 45%, rgba(14, 43, 37, 0.92));
-}
-
-.ontology-entry-badge {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  z-index: 1;
-  padding: 6px 12px;
-  color: #e6d3a6;
-  background: rgba(8, 31, 27, 0.62);
-  border: 1px solid rgba(216, 182, 118, 0.45);
-  font-size: 8px;
-  letter-spacing: 0.12em;
-}
-
-.ontology-entry-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(26px, 3.2vw, 46px);
-}
-
-.ontology-entry-kicker { color: #e1b874; font-size: 10px; font-weight: 700; }
-.ontology-entry-kicker::before { content: "—"; margin-left: 9px; color: var(--gold); }
-
-.ontology-entry-title {
-  margin-top: 12px;
-  color: #dfbd78;
-  font-family: var(--display);
-  font-size: clamp(34px, 3.6vw, 54px);
-  line-height: 1.2;
-}
-
-.ontology-entry-lead {
-  margin-top: 14px;
-  color: #dbe3de;
-  font-size: clamp(13px, 1.2vw, 16px);
-  line-height: 2;
-}
-
-.ontology-entry-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
-
-.ontology-entry-tags span {
-  padding: 7px 14px;
-  color: #c5d0ca;
-  border: 1px solid rgba(216, 182, 118, 0.3);
-  border-radius: 999px;
-  font-size: 10px;
-}
-
-.ontology-entry-cta {
-  display: inline-flex;
-  min-height: 46px;
-  align-self: flex-start;
   align-items: center;
-  gap: 12px;
-  margin-top: 28px;
-  padding: 12px 24px;
-  color: #14302a;
-  background: #dfbd78;
-  font-size: 11px;
-  font-weight: 700;
-  transition: background-color 200ms ease, gap 200ms ease;
+  gap: clamp(24px, 4vw, 58px);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  padding-bottom: 52px;
+  border-bottom: 1px solid rgba(79, 57, 37, 0.24);
 }
 
-.ontology-entry-cta svg {
-  width: 15px;
+.oral-history-icon {
+  display: grid;
+  width: clamp(142px, 17vw, 210px);
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 24px;
+  color: #f7efde;
+  background: #8c302d;
+  border-radius: 50% 50% 48% 52% / 55% 45% 55% 45%;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 20px 48px rgba(73, 30, 28, 0.24);
+  transition: transform 220ms ease, background-color 220ms ease, box-shadow 220ms ease;
+}
+
+.oral-history-icon:hover,
+.oral-history-icon:focus-visible {
+  transform: translateY(-6px) rotate(1deg);
+  background: #762522;
+  box-shadow: 0 28px 58px rgba(73, 30, 28, 0.32);
+}
+
+.oral-history-icon svg {
+  width: 58%;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.ontology-entry:hover .ontology-entry-cta,
-.ontology-entry:focus-visible .ontology-entry-cta { gap: 18px; background: #f0dcae; }
+.oral-history-icon span { margin-top: 8px; font-size: 8px; font-weight: 700; }
+.oral-history-icon:hover .oral-wave { animation: oral-wave 900ms ease-in-out infinite alternate; }
+
+@keyframes oral-wave {
+  to { transform: scaleX(1.12); transform-origin: center; opacity: 0.72; }
+}
+
+.oral-history-title-wrap .eyebrow { color: #8c302d; }
+
+.oral-history-title-wrap h2 {
+  margin: 10px 0 18px;
+  color: #213d35;
+  font-family: var(--display);
+  font-size: clamp(44px, 5.5vw, 78px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.oral-history-title-wrap h2 em { color: #8c302d; font-style: normal; }
+.oral-history-title-wrap > p:last-child { max-width: 690px; margin: 0; color: #655b4b; font-size: 12px; line-height: 2; }
+
+.oral-history-count {
+  display: flex;
+  min-width: 94px;
+  flex-direction: column;
+  align-items: center;
+  color: #8c302d;
+}
+
+.oral-history-count b { font-family: var(--display); font-size: 78px; font-weight: 400; line-height: 0.8; }
+.oral-history-count small { margin-top: 12px; color: #655b4b; font-size: 10px; }
+
+.oral-history-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 52px;
+  border-top: 1px solid rgba(79, 57, 37, 0.22);
+  border-right: 1px solid rgba(79, 57, 37, 0.22);
+}
+
+.oral-resource {
+  position: relative;
+  display: grid;
+  min-height: 260px;
+  align-content: space-between;
+  gap: 30px;
+  padding: clamp(24px, 3vw, 42px);
+  color: #213d35;
+  background: rgba(250, 246, 235, 0.42);
+  border-bottom: 1px solid rgba(79, 57, 37, 0.22);
+  border-left: 1px solid rgba(79, 57, 37, 0.22);
+  text-decoration: none;
+  transition: transform 220ms ease, color 220ms ease, background-color 220ms ease, box-shadow 220ms ease;
+}
+
+.oral-resource:hover,
+.oral-resource:focus-visible {
+  z-index: 1;
+  transform: translateY(-5px);
+  color: #f8efdd;
+  background: #213d35;
+  box-shadow: 0 22px 42px rgba(49, 42, 31, 0.16);
+}
+
+.oral-resource-number { color: #9d6b53; font-size: 9px; letter-spacing: 0.14em; }
+.oral-resource-copy { display: grid; gap: 16px; }
+.oral-resource-copy strong { font-family: var(--display); font-size: clamp(24px, 2.5vw, 34px); font-weight: 400; line-height: 1.35; }
+.oral-resource-copy > span { color: #6c6253; font-size: 10px; line-height: 2; }
+.oral-resource:hover .oral-resource-copy > span,
+.oral-resource:focus-visible .oral-resource-copy > span { color: #c9d3cc; }
+
+.oral-resource-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #8c302d;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.oral-resource-action b { font-size: 18px; transition: transform 200ms ease; }
+.oral-resource:hover .oral-resource-action,
+.oral-resource:focus-visible .oral-resource-action { color: #e4bd78; }
+.oral-resource:hover .oral-resource-action b,
+.oral-resource:focus-visible .oral-resource-action b { transform: translateX(-6px); }
 
 .library-section { padding: 130px 0; }
 
@@ -1117,10 +1192,10 @@ button, input { font: inherit; }
   .library-grid a:first-child,
   .library-grid a:nth-child(2) { grid-column: span 6; }
   .citation-intro { position: static; }
-  .ontology-entry { grid-template-columns: 1fr; margin-top: 48px; }
-  .ontology-entry-media { min-height: 0; aspect-ratio: 16 / 9; }
-  .ontology-entry-media img { object-position: center 28%; }
-  .ontology-entry-media::after { background: linear-gradient(to top, rgba(14, 43, 37, 0.94), rgba(14, 43, 37, 0) 62%); }
+  .oral-history-heading { grid-template-columns: auto minmax(0, 1fr); }
+  .oral-history-count { grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; gap: 10px; }
+  .oral-history-count b { font-size: 54px; }
+  .oral-history-count small { margin-top: 0; }
 }
 
 @media (max-width: 760px) {
@@ -1139,8 +1214,11 @@ button, input { font: inherit; }
   .library-grid a,
   .library-grid a:first-child,
   .library-grid a:nth-child(2) { grid-column: auto; min-height: 225px; }
-  .ontology-entry-media { aspect-ratio: 4 / 3; }
-  .ontology-entry-title { font-size: clamp(32px, 7.6vw, 46px); }
+  .oral-history-heading { grid-template-columns: 1fr; text-align: center; }
+  .oral-history-icon { margin-inline: auto; }
+  .oral-history-title-wrap > p:last-child { margin-inline: auto; }
+  .oral-history-count { grid-column: auto; justify-content: center; }
+  .oral-history-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
@@ -1155,12 +1233,12 @@ button, input { font: inherit; }
   .platform-stats strong { font-size: 64px; }
   .platform-portal { grid-template-columns: 1fr; justify-items: center; text-align: center; }
   .platform-portal-mark { width: clamp(128px, 42vw, 168px); }
+  .platform-entry-cta { justify-content: center; }
   .download-copy { padding-inline: 24px; }
   .download-copy ul { grid-template-columns: 1fr; }
-  .ontology-entry { margin-top: 40px; }
-  .ontology-entry-media { aspect-ratio: 5 / 4; }
-  .ontology-entry-lead { line-height: 1.9; }
-  .ontology-entry-tags { gap: 7px; margin-top: 18px; }
-  .ontology-entry-tags span { padding: 6px 12px; font-size: 9px; }
-  .ontology-entry-cta { align-self: stretch; justify-content: center; margin-top: 24px; }
+  .oral-history-section { padding-block: 90px; }
+  .oral-history-heading { padding-bottom: 38px; }
+  .oral-history-title-wrap h2 { font-size: clamp(38px, 12vw, 54px); }
+  .oral-history-grid { margin-top: 38px; }
+  .oral-resource { min-height: 230px; }
 }
