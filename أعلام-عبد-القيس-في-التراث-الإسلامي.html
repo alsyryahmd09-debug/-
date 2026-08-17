@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>أعلام عبد القيس في التراث الإسلامي — سُطور من أوال</title>
 <meta name="description" content="سجل توثيقي متعدد الأبعاد لأعلام عبد القيس في النسب والرواية والفقه والقضاء والتاريخ — معاينة تصميم، امتداد لمنصة سُطور من أوال.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -172,7 +172,7 @@ main{max-width:1200px; margin:0 auto; padding:1.6rem 1.5rem 3rem;}
 }
 #grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(268px, 1fr));
+  grid-template-columns:repeat(auto-fill, minmax(min(268px, 100%), 1fr));
   gap:1.1rem;
 }
 
@@ -294,7 +294,7 @@ footer{
 .dl-head h2{font-family:'Amiri',serif; color:var(--parchment); font-size:1.35rem; margin:0;}
 .dl-head span{color:rgba(242,236,220,.7); font-size:.78rem;}
 
-.dl-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:.9rem;}
+.dl-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(min(240px, 100%),1fr)); gap:.9rem;}
 .dl-card{
   background:rgba(242,236,220,.08);
   border:1px solid rgba(242,236,220,.18);
@@ -326,6 +326,7 @@ footer{
   margin-top:1.1rem; font-size:.72rem; color:rgba(242,236,220,.55); line-height:1.8; max-width:75ch;
 }
 </style>
+<link rel="stylesheet" href="/assets/responsive.css">
 </head>
 <body>
 

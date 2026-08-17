@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>بلاد البحرين في فترة الإمارتين العيونية والعقيلية — خلاصة تركيبية | سُطور من أوال</title>
 <style>
   :root {
@@ -146,7 +146,66 @@
     border: 1.5px dashed var(--brass); border-radius: 10px; padding: 14px 18px;
     font-size: 13.5px; text-align: center; color: var(--ink-soft);
   }
+
+  /* ==== التوافق مع الأجهزة — device adaptation ==================== */
+
+  /* احترام المنطقة الآمنة في هواتف الشاشات المقتطعة */
+  header.hero {
+    padding: clamp(28px, 7vw, 42px)
+             max(20px, env(safe-area-inset-right, 0px))
+             clamp(24px, 6vw, 34px)
+             max(20px, env(safe-area-inset-left, 0px));
+  }
+
+  nav.toolbar {
+    padding-inline: max(14px, env(safe-area-inset-right, 0px)) max(14px, env(safe-area-inset-left, 0px));
+  }
+
+  main {
+    padding-inline: max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  #backTop {
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    left: calc(22px + env(safe-area-inset-left, 0px));
+  }
+
+  /* مساحات لمس لا تقل عن 44px، ومنع تكبير iOS التلقائي عند التركيز */
+  @media (pointer: coarse) {
+    .nav-btn { min-height: 44px; padding-block: 10px; }
+    .toc-item { min-height: 44px; }
+    #searchBox { min-height: 44px; font-size: max(16px, 1em); }
+  }
+
+  /* لوحي وهاتف كبير */
+  @media (max-width: 720px) {
+    .book-sub { font-size: 14.5px; }
+    .copyright-note { margin-inline: 8px; }
+    .chapter-section { scroll-margin-top: 96px; }
+    .chapter-head { padding-right: 11px; border-right-width: 4px; }
+    .chapter-head h2 { font-size: 19px; }
+    .toc { padding: 15px; }
+  }
+
+  /* هاتف */
+  @media (max-width: 520px) {
+    nav.toolbar { gap: 8px; padding-block: 8px; }
+    #searchBox { flex: 1 1 100%; max-width: none; min-width: 0; }
+    .nav-btn { font-size: 12.5px; padding-inline: 11px; }
+    .badge { font-size: 12px; padding: 5px 11px; }
+    .point-card { padding: 14px; gap: 11px; }
+    .point-title { font-size: 15px; }
+    .point-text { font-size: 14px; text-align: right; } /* المساواة الطرفية تُحدث فجوات على الشاشات الضيقة */
+    #backTop { width: 44px; height: 44px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); left: calc(14px + env(safe-area-inset-left, 0px)); }
+  }
+
+  /* هاتف صغير جدًا: بطاقة النقطة تصبح عمودية */
+  @media (max-width: 380px) {
+    .point-card { flex-direction: column; gap: 9px; }
+    .chapter-head { gap: 8px; }
+  }
 </style>
+<link rel="stylesheet" href="/assets/responsive.css">
 </head>
 <body>
 

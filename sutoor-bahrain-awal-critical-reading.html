@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>إقليم البحرين التاريخي وشواهد أوال — قراءة نقدية في الوثائق والنصوص الوسيطة | سُطور من أوال</title>
 <meta name="description" content="قراءة نقدية في الوثائق والنصوص الوسيطة: قراءة نقدية منهجية في الأدلة التاريخية عن إقليم البحرين وجزيرة أوال، مع ملحق تلخيصي لرسالة ابن تيمية إلى أهل البحرين وملوك العرب.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -217,7 +217,7 @@ footer .src{ max-width:640px; margin:10px auto 0; line-height:1.9; }
 }
 .ms-group-title::after{ content:""; flex:1; height:1px; background:var(--line); }
 .ms-gallery{
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(148px,1fr));
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(min(148px, 100%),1fr));
   gap:14px; margin:0 0 26px;
 }
 .ms-figure{
@@ -257,10 +257,11 @@ footer .src{ max-width:640px; margin:10px auto 0; line-height:1.9; }
   cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1;
 }
 @media (max-width:640px){
-  .ms-gallery{ grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px; }
+  .ms-gallery{ grid-template-columns:repeat(auto-fill, minmax(min(120px, 100%),1fr)); gap:10px; }
 }
 
 </style>
+<link rel="stylesheet" href="/assets/responsive.css">
 </head>
 <body>
 

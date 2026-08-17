@@ -117,7 +117,7 @@ body{
 .assure b{color:var(--verdigris);font-weight:600}
 
 /* ═══ 4) العدّادات ═══ */
-.gauges{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;margin-bottom:1.5rem}
+.gauges{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(190px, 100%),1fr));gap:.9rem;margin-bottom:1.5rem}
 .gauge{
   border:1px solid var(--edge);border-radius:var(--rd-m);padding:1rem 1.1rem;background:var(--card);
   display:flex;align-items:center;gap:.85rem;
@@ -161,7 +161,7 @@ body{
 .switch input:focus-visible + .track{outline:2px solid var(--brass-lit);outline-offset:2px}
 
 /* ═══ 6) بطاقات المواد ═══ */
-.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(345px,1fr));gap:1.15rem}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(345px, 100%),1fr));gap:1.15rem}
 .piece{
   border:1px solid var(--edge);border-radius:var(--rd-l);background:var(--card);
   display:flex;flex-direction:column;overflow:hidden;box-shadow:var(--shadow);
@@ -276,6 +276,7 @@ footer.credits code{font-family:var(--mono);color:var(--fg-dim)}
   body{background:#fff;color:#000}
 }
 </style>
+<link rel="stylesheet" href="/assets/responsive.css">
 </head>
 <body>
 
@@ -684,7 +685,7 @@ export default function SutoorMinAwal(props) {
 
         <p style={{ color: PALETTE.dim, fontSize: 13, marginBottom: 10 }}>النتائج: {results.length}</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(min(260px, 100%),1fr))', gap: 12 }}>
           {results.map(function (n) {
             return (
               <article key={n['@id']} onClick={function () { setOpenId(n['@id']); }}
@@ -1072,7 +1073,7 @@ self.addEventListener('message', function (event) {
       '#q{width:100%;padding:11px 15px;border-radius:10px;border:1px solid var(--edge);background:rgba(0,0,0,.25);color:var(--fg);font-size:1rem;outline:none;margin-bottom:.5rem}',
       '#q:focus{border-color:var(--brass)}',
       '#n{color:var(--dim);font-size:.83rem;margin-bottom:1rem}',
-      '.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}',
+      '.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px, 100%),1fr));gap:14px}',
       '.e{background:var(--card);border:1px solid var(--edge);border-radius:13px;padding:16px}',
       '.cat{font-size:.7rem;letter-spacing:2px;color:var(--brass);margin-bottom:6px}',
       '.e h2{font-family:"Amiri","Traditional Arabic",serif;font-size:1.08rem;margin-bottom:8px;line-height:1.45}',

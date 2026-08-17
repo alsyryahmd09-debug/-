@@ -604,6 +604,10 @@ mark.sutoor-highlight {
     height: 100dvh; max-height: 100dvh;
     border-radius: 0;
     border: 0;
+    /* المنطقة الآمنة: الشريط العلوي والسفلي في هواتف الشاشات المقتطعة */
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-inline: env(safe-area-inset-right, 0px) env(safe-area-inset-left, 0px);
   }
   .sutoor-search-input { font-size: 1.05rem; }
   .sutoor-result-thumb, .sutoor-thumb-placeholder { width: 52px; height: 52px; }

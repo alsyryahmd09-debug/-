@@ -2,15 +2,16 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>سطور من أوال 2.0 - منصة التراث الرقمية</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Cairo', sans-serif; }
-        body { 
+        body {
             background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fcd34d 100%);
             min-height: 100vh;
+            min-height: 100svh; /* يمنع القفزة عند ظهور شريط العنوان في الهاتف */
         }
         .slide-in { animation: slideIn 0.5s ease-out; }
         @keyframes slideIn {
@@ -27,6 +28,27 @@
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: #f3e8ff; }
         ::-webkit-scrollbar-thumb { background: #b45309; border-radius: 5px; }
+
+        /* ============ التوافق مع الأجهزة ============ */
+        /* المنطقة الآمنة في هواتف الشاشات المقتطعة */
+        body {
+            padding-inline: env(safe-area-inset-right, 0px) env(safe-area-inset-left, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        /* أشرطة التبويب تُمرَّر أفقيًا بدل أن تمدّ الصفحة */
+        [role="tablist"] {
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        [role="tablist"]::-webkit-scrollbar { display: none; }
+        [role="tablist"] > * { flex-shrink: 0; }
+
+        @media (pointer: coarse) {
+            button, [role="tab"], a.inline-flex { min-height: 44px; }
+        }
     
         /* ============ أنماط الطباعة الأكاديمية (للمحكمين) ============ */
         @media print {
@@ -95,6 +117,7 @@
       "citation": "Al-Assiri, A. (2026). Sutoor min Awal 2.0: A serverless progressive web platform for the ontological documentation of the Islamic heritage of the Bahrain region. Proceedings of ICSH 2026, University of Bahrain."
     }
     </script>
+<link rel="stylesheet" href="/assets/responsive.css">
 </head>
 <body>
     <div id="root"></div>
