@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="شعار جامع لبوابة سُطور من أوال">
+  <title>شعار جامع لبوابة سُطور من أوال</title>
+  <g fill="none" stroke="#dfbd78" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- الإطار الجامع -->
+    <circle cx="100" cy="100" r="94" stroke-opacity=".55"/>
+    <circle cx="100" cy="100" r="86" stroke-opacity=".22"/>
+
+    <!-- مشجّرة النسب -->
+    <path d="M100 34v9M70 43h60M70 43v8M100 43v8M130 43v8" stroke-opacity=".85"/>
+
+    <!-- القوس المعماري: المعالم الجغرافية -->
+    <path d="M74 140V100c0-22 8.7-33.4 26-40 17.3 6.6 26 18 26 40v40"/>
+
+    <!-- سعفة أوال: هوية المنصة -->
+    <g transform="translate(72.16 78.2) scale(1.16)">
+      <path d="M24 5c6.8 5.5 10.2 12 10.2 19.3 0 7.4-3.4 13.6-10.2 18.7-6.8-5.1-10.2-11.3-10.2-18.7C13.8 17 17.2 10.5 24 5Z"/>
+      <path d="M24 12v23M18.5 19.5 24 24l5.5-4.5M17.5 29.5 24 34l6.5-4.5"/>
+    </g>
+
+    <!-- الخط الزمني -->
+    <path d="M46 144h108" stroke-opacity=".45"/>
+
+    <!-- المخطوط المفتوح -->
+    <path d="M100 152v20"/>
+    <path d="M98 152c-10-5-22-5-36-1v19c14-4 26-4 36 1"/>
+    <path d="M102 152c10-5 22-5 36-1v19c-14-4-26-4-36 1"/>
+  </g>
+
+  <g fill="#dfbd78">
+    <circle cx="100" cy="32" r="3.4"/>
+    <circle cx="70" cy="54" r="2.8"/>
+    <circle cx="100" cy="54" r="2.8"/>
+    <circle cx="130" cy="54" r="2.8"/>
+    <circle cx="52" cy="144" r="2.4" fill-opacity=".75"/>
+    <circle cx="66" cy="144" r="2.4" fill-opacity=".75"/>
+    <circle cx="100" cy="144" r="2.4" fill-opacity=".75"/>
+    <circle cx="134" cy="144" r="2.4" fill-opacity=".75"/>
+    <circle cx="148" cy="144" r="2.4" fill-opacity=".75"/>
+  </g>
+</svg>
