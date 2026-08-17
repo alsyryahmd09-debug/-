@@ -62,6 +62,11 @@
   status = 200
 
 [[redirects]]
+  from = "/ontology-model"
+  to = "/ontology-model.html"
+  status = 200
+
+[[redirects]]
   from = "/download-center"
   to = "/download-center.html"
   status = 200
