@@ -1,14 +1,26 @@
 :root {
-  --ink: #173b32;
-  --ink-deep: #0e2b25;
-  --paper: #f2ecdc;
-  --paper-light: #fbf7ed;
-  --red: #9e2f39;
-  --gold: #b68a45;
-  --muted: #6f7168;
-  --line: rgba(23, 59, 50, 0.18);
-  --display: "Amiri", "Noto Naskh Arabic", "Traditional Arabic", serif;
-  --sans: "Noto Kufi Arabic", "Tahoma", sans-serif;
+  --ink: #262b1f;
+  --ink-soft: #6b6452;
+  --parchment: #f7f1e3;
+  --parchment-deep: #efe4c8;
+  --line: #ddcfa4;
+  --olive: #33402a;
+  --brass: #b6923f;
+  --brass-dark: #8a6a2c;
+  --maroon: #7c2734;
+  --card-dark: #2c3d22;
+  --font-heading: "Amiri", serif;
+  --font-wordmark: "Reem Kufi", sans-serif;
+  --font-body: "IBM Plex Sans Arabic", sans-serif;
+  --font-latin: "EB Garamond", serif;
+  --ink-deep: var(--olive);
+  --paper: var(--parchment);
+  --paper-light: var(--parchment-deep);
+  --red: var(--maroon);
+  --gold: var(--brass);
+  --muted: var(--ink-soft);
+  --display: var(--font-heading);
+  --sans: var(--font-body);
   --shell: min(1180px, calc(100% - 48px));
   color-scheme: light;
 }
@@ -521,6 +533,220 @@ button, input { font: inherit; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; }
+}
+
+.sutoor-unified-shell {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  direction: rtl;
+  color: var(--ink);
+  background: var(--parchment-deep);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-body);
+}
+
+.sutoor-unified-shell__brandbar {
+  display: flex;
+  align-items: center;
+  width: min(1180px, calc(100% - 40px));
+  min-height: 72px;
+  margin-inline: auto;
+  padding-block: 10px;
+}
+
+.sutoor-unified-shell__brand {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.sutoor-unified-shell__seal {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  place-items: center;
+}
+
+.sutoor-unified-shell__seal svg {
+  display: block;
+  width: 36px;
+  height: 36px;
+}
+
+.sutoor-unified-shell__identity {
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.sutoor-unified-shell__wordmark {
+  display: block;
+  overflow: hidden;
+  color: var(--ink);
+  font-family: var(--font-wordmark);
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sutoor-unified-shell__subtitle {
+  display: block;
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--ink-soft);
+  font-family: var(--font-latin);
+  font-size: 0.68rem;
+  font-style: italic;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sutoor-unified-shell__navwrap {
+  border-top: 1px solid rgba(221, 207, 164, 0.72);
+}
+
+.sutoor-unified-shell__nav {
+  display: flex;
+  align-items: center;
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  padding: 8px 20px 9px;
+  gap: 8px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--line) transparent;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sutoor-unified-shell__nav::-webkit-scrollbar {
+  height: 4px;
+}
+
+.sutoor-unified-shell__nav::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 999px;
+}
+
+.sutoor-unified-shell__pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  flex: 0 0 auto;
+  gap: 7px;
+  padding: 6px 11px;
+  color: var(--ink-soft);
+  background: rgba(247, 241, 227, 0.34);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.sutoor-unified-shell__pill:hover {
+  color: var(--ink);
+  background: rgba(247, 241, 227, 0.72);
+  border-color: var(--line);
+  transform: translateY(-1px);
+}
+
+.sutoor-unified-shell__pill[aria-current="page"],
+.sutoor-unified-shell__pill.is-active {
+  color: var(--maroon);
+  background: rgba(124, 39, 52, 0.08);
+  border-color: var(--maroon);
+}
+
+.sutoor-unified-shell__pill:focus-visible,
+.sutoor-unified-shell__brand:focus-visible {
+  outline: 2px solid var(--maroon);
+  outline-offset: 3px;
+}
+
+.sutoor-unified-shell__badge {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.sutoor-unified-shell__badge svg {
+  display: block;
+  width: 9px;
+  height: 9px;
+  fill: none;
+  stroke: #fdf8ec;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sutoor-unified-shell__badge--home { background: #b6923f; }
+.sutoor-unified-shell__badge--landmark { background: #a85c3f; }
+.sutoor-unified-shell__badge--lineage { background: #7c2734; }
+.sutoor-unified-shell__badge--ontology { background: #3f5c7a; }
+.sutoor-unified-shell__badge--archive { background: #9c7a3f; }
+.sutoor-unified-shell__badge--download { background: #6b4a35; }
+
+.sutoor-unified-footer {
+  color: var(--ink);
+  background: var(--parchment-deep);
+  border-top-color: var(--line);
+  font-family: var(--font-body);
+}
+
+.sutoor-unified-footer a {
+  color: inherit;
+  text-decoration-color: var(--brass-dark);
+  text-underline-offset: 0.2em;
+}
+
+.sutoor-unified-footer a:hover,
+.sutoor-unified-footer a:focus-visible {
+  color: var(--maroon);
+}
+
+@media (max-width: 480px) {
+  .sutoor-unified-shell__brandbar {
+    width: calc(100% - 28px);
+    min-height: 66px;
+  }
+
+  .sutoor-unified-shell__wordmark {
+    font-size: 0.98rem;
+  }
+
+  .sutoor-unified-shell__subtitle {
+    font-size: 0.58rem;
+    letter-spacing: 0.11em;
+  }
+
+  .sutoor-unified-shell__nav {
+    padding-inline: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sutoor-unified-shell__pill {
+    transition: none;
+  }
+
+  .sutoor-unified-shell__pill:hover {
+    transform: none;
+  }
 }
 
 .official-bar {
