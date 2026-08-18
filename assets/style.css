@@ -1226,6 +1226,60 @@ h1, h2, h3, p, li, dt, dd, span, strong, small, a, pre { overflow-wrap: break-wo
 .library-grid a:hover p { color: #eeded5; }
 .library-grid b { position: absolute; top: 26px; left: 28px; font-size: var(--fs-title-xs); font-weight: 400; }
 
+.library-grid .library-sahaba-card {
+  isolation: isolate;
+  background:
+    linear-gradient(135deg, rgba(158, 47, 57, 0.07), transparent 58%),
+    rgba(251, 247, 237, 0.74);
+}
+
+.library-sahaba-card::after {
+  position: absolute;
+  z-index: -1;
+  inset: auto -36px -52px auto;
+  width: 150px;
+  height: 150px;
+  content: "";
+  border: 1px solid rgba(158, 47, 57, 0.14);
+  border-radius: 50%;
+  box-shadow: 0 0 0 20px rgba(158, 47, 57, 0.04), 0 0 0 42px rgba(158, 47, 57, 0.025);
+  transition: opacity 180ms ease, transform 240ms ease;
+}
+
+.library-sahaba-icon {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  flex: 0 0 auto;
+  place-items: center;
+  margin: 18px 0 24px;
+  color: var(--red);
+  background: rgba(158, 47, 57, 0.07);
+  border: 1px solid rgba(158, 47, 57, 0.24);
+  border-radius: 50%;
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, transform 240ms ease;
+}
+
+.library-sahaba-icon svg { width: 58px; height: 58px; overflow: visible; }
+.library-sahaba-sun { fill: #c3913e; }
+.library-sahaba-sail { fill: rgba(158, 47, 57, 0.12); stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
+.library-sahaba-hull { fill: currentColor; }
+.library-sahaba-wave,
+.library-sahaba-page { fill: none; stroke: #c3913e; stroke-width: 2.5; stroke-linecap: round; }
+
+.library-grid .library-sahaba-card h3 { margin-top: 0; }
+.library-sahaba-card:hover::after { opacity: 0.38; transform: scale(1.08); }
+.library-sahaba-card:hover .library-sahaba-icon {
+  color: var(--paper-light);
+  background: rgba(251, 247, 237, 0.1);
+  border-color: rgba(251, 247, 237, 0.38);
+  transform: translateY(-3px) rotate(-2deg);
+}
+.library-sahaba-card:hover .library-sahaba-sun,
+.library-sahaba-card:hover .library-sahaba-wave,
+.library-sahaba-card:hover .library-sahaba-page { fill: none; stroke: #efd6a6; }
+.library-sahaba-card:hover .library-sahaba-sun { fill: #efd6a6; }
+
 .download-feature {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
